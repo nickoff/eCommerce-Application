@@ -3,9 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'airbnb-base',
-  ],
+  extends: ['airbnb-base'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -15,4 +13,4 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'max-lines-per-function': ['error', 40],
   },
-}
+};
