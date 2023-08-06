@@ -23,6 +23,7 @@
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "prettier/prettier": "error",
     "max-lines-per-function": ["error", 40],
+    "class-methods-use-this": "off",
     "no-debugger": "off",
     "no-console": [
       "error",
@@ -41,19 +42,6 @@
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
-    "@typescript-eslint/explicit-member-accessibility": [
-      "error",
-      {
-        "accessibility": "no-public",
-        "overrides": {
-          "accessors": "explicit",
-          "constructors": "off",
-          "methods": "explicit",
-          "properties": "explicit",
-          "parameterProperties": "explicit"
-        }
-      }
-    ],
     "@typescript-eslint/no-empty-function": [
       "error",
       {
