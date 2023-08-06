@@ -4,12 +4,28 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "format": "npx prettier --write .",
-    "start": "webpack serve --open --config webpack.dev.ts",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix --color",
+    "format": "prettier --write .",
+    "start": "webpack serve --open -c webpack.dev.ts",
     "build": "cross-env NODE_ENV=production webpack -c webpack.prod.ts",
-    "test": "jest"
+    "deploy": "npm run build && npx gh-pages -d dist -e eCommerce-Application",
+    "test": "jest",
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.html": "prettier --write",
+    "**/*.scss": "prettier --write"
   },
   "repository": {
     "type": "git",
@@ -40,7 +56,9 @@
     "fork-ts-checker-webpack-plugin": "^8.0.0",
     "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.3",
+    "husky": "^8.0.3",
     "jest": "^29.6.2",
+    "lint-staged": "^13.2.3",
     "mini-css-extract-plugin": "^2.7.6",
     "node-sass": "^9.0.0",
     "prettier": "^3.0.1",
