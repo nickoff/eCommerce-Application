@@ -9,6 +9,7 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "baseUrl": "./",
+    "resolveJsonModule": true,
     "paths": {
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"]
