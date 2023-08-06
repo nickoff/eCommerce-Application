@@ -24,6 +24,19 @@
     "prettier/prettier": "error",
     "max-lines-per-function": ["error", 40],
     "no-debugger": "off",
+    "no-console": [
+      "error",
+      {
+        "allow": ["error"]
+      }
+    ],
+    "no-multiple-empty-lines": [
+      "warn",
+      {
+        "max": 1,
+        "maxEOF": 0
+      }
+    ],
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
@@ -31,7 +44,7 @@
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {
-        "accessibility": "explicit",
+        "accessibility": "no-public",
         "overrides": {
           "accessors": "explicit",
           "constructors": "off",
@@ -39,6 +52,12 @@
           "properties": "explicit",
           "parameterProperties": "explicit"
         }
+      }
+    ],
+    "@typescript-eslint/no-empty-function": [
+      "error",
+      {
+        "allow": ["functions", "arrowFunctions", "methods", "getters", "setters"]
       }
     ]
   }
