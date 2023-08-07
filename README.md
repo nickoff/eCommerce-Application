@@ -40,9 +40,9 @@ By achieving these purposes, the team will gain valuable experience in working t
 ### Getting started:
 1. Clone the repository: <code>git clone https://github.com/nickoff/eCommerce-Application.git</code>
 2. Go to the project directory: <code>cd eCommerce-Application</code>
-3. Install dependencies: <code>npm install</code>
-4. Start the project: <code>npm run start</code>
-5. Switch to the development branch: <code>git switch develop</code>
+3. Switch to the development branch: <code>git switch develop</code>
+4. Install dependencies: <code>npm install</code>
+5. Start the project: <code>npm run start</code>
 6. From the <code>develop</code> branch, create and switch to a branch with the name of your work: <code>git checkout -b feat/main-page</code>
 7. Push changes with the commit “add main page”: <code>git commit -m "feat: add main page"</code>
 
