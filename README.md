@@ -2,7 +2,7 @@
 
 ## Online store based on commercetools
 
-This is a student frontend project for creating an online store based on commercetools. This project was created as part of the RS School JavaScript/Front-end 2023Q1 course.
+This is a student frontend project for creating an online store based on commercetools. This project was created as [part](https://github.com/rolling-scopes-school/tasks/tree/master/tasks/eCommerce-Application) of the [RS School](https://rs.school/) JavaScript/Front-end 2023Q1 course.
 [Commercetools](https://commercetools.com/) is a flexible and powerful e-commerce platform that allows you to create modern online stores using the latest technologies.
 
 ## Project Purposes
@@ -29,12 +29,11 @@ By achieving these purposes, the team will gain valuable experience in working t
 
 * [Kirill Eselev](https://app.rs.school/profile?githubId=eslvkirill)
 
-## Technology Stack
+## Built With
 
 - **HTML:** for structuring the content of the web pages
-- **CSS:** for styling the web pages and making them visually appealing
+- **CSS (with SASS preprocessor):** for styling the web pages and making them visually appealing
 - **TypeScript (TS):** for generating the SPA and adding interactivity to the web pages, handling user interactions, and managing the application state
-- **SASS:** for making it easier to write and maintain the CSS code
 
 ## Installation and launch for development
 
@@ -46,6 +45,42 @@ By achieving these purposes, the team will gain valuable experience in working t
 5. Switch to the development branch: <code>git switch develop</code>
 6. From the <code>develop</code> branch, create and switch to a branch with the name of your work: <code>git checkout -b feat/main-page</code>
 7. Push changes with the commit “add main page”: <code>git commit -m "feat: add main page"</code>
+
+## Available Scripts
+
+In the project directory, you can run:
+
+- <code>npm run start</code>
+
+Runs the app in the development mode.<br />
+Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
+
+The page will reload if you make edits.<br />
+
+- <code>npm run build</code>
+
+Builds the app for production to the <code>dist</code> folder.<br />
+The build is minified and the filenames include the hashes.<br />
+
+- <code>npm run deploy</code>
+
+Builds the app for production and merges the content of the <code>dist</code> folder into the <code>gh-pages</code> branch.<br />
+
+- <code>npm run test</code>
+
+Launches all Jest's tests in the project.<br />
+
+- <code>npm run lint</code>
+
+Checks all the files in the <code>src</code> folder to meet the requirements of the ESlint rules.<br />
+
+- <code>npm run lint:fix</code>
+
+Checks all the files in the <code>src</code> folder to meet the requirements of the ESlint rules and tries to autofix them.<br />
+
+- <code>npm run format</code>
+
+Applies Prettier's code formatting to all the project's files.<br />
 
 ## Deploy
 
