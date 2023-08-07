@@ -1,0 +1,59 @@
+import path from 'path';
+import MiniCssPlugin from 'mini-css-extract-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
+import { resolveTsAliases } from 'resolve-ts-aliases';
+import { Configuration } from 'webpack';
+
+const isDev = process.env.NODE_ENV !== 'production';
+
+const commonConfig: Configuration = {
+  entry: './src/index.ts',
+  output: {
+    filename: isDev ? '[name].js' : '[name].[contenthash].js',
+    assetModuleFilename: 'public/[name].[contenthash][ext][query]',
+    clean: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/i,
+        use: 'ts-loader',
+      },
+      {
+        test: /\.s?css$/i,
+        use: [MiniCssPlugin.loader, 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.svg$/i,
+        type: 'asset/source',
+      },
+    ],
+  },
+  plugins: [
+    new MiniCssPlugin({
+      filename: isDev ? '[name].css' : '[name].[contenthash].css',
+      chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      minify: !isDev,
+    }),
+    new ForkTsCheckerPlugin(),
+    new ESLintPlugin({
+      extensions: ['.ts', '.js'],
+      context: 'src',
+    }),
+  ],
+  resolve: {
+    extensions: ['.ts', '.js'],
+    alias: resolveTsAliases(path.resolve(__dirname, 'tsconfig.json')),
+  },
+};
+
+export default commonConfig;
