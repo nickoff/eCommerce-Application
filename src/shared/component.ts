@@ -1,3 +1,4 @@
+import { element } from 'tsx-vanilla';
 import { SharedCSSClass } from './constants/shared-css-class';
 
 declare global {
@@ -41,25 +42,25 @@ abstract class Component<Props extends ICommonProps = ICommonProps> {
 
   private renderHandler: ProxyHandler<typeof this.render> = {
     apply: (...args) => {
-      const element = Reflect.apply(...args);
+      const el = Reflect.apply(...args);
 
       const { classList } = this.props;
 
       if (classList) {
-        element.classList.add(...classList);
+        el.classList.add(...classList);
       }
 
       if (this.element) {
-        this.element.replaceWith(element);
+        this.element.replaceWith(el);
       }
 
-      this.element = element;
+      this.element = el;
 
       if (this.componentDidRender) {
         this.componentDidRender();
       }
 
-      return element;
+      return el;
     },
   };
 
@@ -71,7 +72,7 @@ abstract class Component<Props extends ICommonProps = ICommonProps> {
     },
   };
 
-  abstract render(): HTMLElement;
+  abstract render(): JSX.Element;
 }
 
 export default Component;

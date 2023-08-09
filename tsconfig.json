@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "element",
+    "jsxFragmentFactory": "fragment",
     "sourceMap": true,
     "target": "es2016",
     "module": "commonjs",
@@ -12,7 +15,8 @@
     "resolveJsonModule": true,
     "paths": {
       "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@shared/*": ["src/shared/*"]
     }
   }
 }
