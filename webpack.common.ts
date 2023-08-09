@@ -18,7 +18,7 @@ const commonConfig: Configuration = {
   module: {
     rules: [
       {
-        test: /\.ts$/i,
+        test: /\.tsx?$/i,
         use: 'ts-loader',
       },
       {
@@ -46,12 +46,12 @@ const commonConfig: Configuration = {
     }),
     new ForkTsCheckerPlugin(),
     new ESLintPlugin({
-      extensions: ['.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js'],
       context: 'src',
     }),
   ],
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js'],
     alias: resolveTsAliases(path.resolve(__dirname, 'tsconfig.json')),
   },
 };
