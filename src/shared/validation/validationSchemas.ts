@@ -16,3 +16,15 @@ export const loginSchema = yup
       .matches(passwordPattern.valid, passwordMessages.valid),
   })
   .required('');
+
+export const passwordSchema = yup.object().shape({
+  input: yup
+    .string()
+    .required(passwordMessages.required)
+    .min(passwordPattern.min, passwordMessages.min)
+    .matches(passwordPattern.number, passwordMessages.number)
+    .matches(passwordPattern.special, passwordMessages.special)
+    .matches(passwordPattern.latin, passwordMessages.lowerCase)
+    .matches(passwordPattern.upperCase, passwordMessages.upperCase)
+    .matches(passwordPattern.valid, passwordMessages.valid),
+});
