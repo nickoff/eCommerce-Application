@@ -29,11 +29,16 @@ By achieving these purposes, the team will gain valuable experience in working t
 
 * [Kirill Eselev](https://app.rs.school/profile?githubId=eslvkirill)
 
-## Built With
+## Built With:
 
 - **HTML:** for structuring the content of the web pages
 - **CSS (with SASS preprocessor):** for styling the web pages and making them visually appealing
 - **TypeScript (TS):** for generating the SPA and adding interactivity to the web pages, handling user interactions, and managing the application state
+- **Jest:** for testing JavaScript, designed to provide confidence in the correct operation of any JavaScript code
+
+## Used tools: 
+
+VS Code, Git, GitHub, Github Projects, Commercetools, Figma, Netlify, Webpack, ESLint, Husky, npm 
 
 ## Installation and launch for development
 
