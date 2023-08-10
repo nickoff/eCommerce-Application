@@ -1,4 +1,5 @@
 @import '../helpers/variables';
+
 // Html Base
 html {
   font-family: $base-font;
@@ -16,7 +17,6 @@ body {
 }
 
 // Headings
-
 h1,
 h2,
 h3,
@@ -64,6 +64,7 @@ h6 {
   letter-spacing: 0.13rem;
 }
 
+// sub-titles
 .overline {
   color: $peru;
   font-size: 1.4rem;
