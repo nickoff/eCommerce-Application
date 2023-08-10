@@ -2,29 +2,51 @@ import { element } from 'tsx-vanilla';
 import { SharedCSSClass } from './constants/shared-css-class';
 
 declare global {
-  interface ICommonProps {
+  interface IProps {
     text?: string;
-    classList?: string[];
+    className?: string;
+  }
+
+  interface Element {
+    getComponent<T extends Component>(): T;
   }
 }
 
-abstract class Component<Props extends ICommonProps = ICommonProps> {
+/**
+ * Prevents the usage of getComponent() method on all Element object except Component's instances
+ */
+Element.prototype.getComponent<never> = function preventUsage(): never {
+  throw new Error(
+    "You can't use getComponent() method on Element object that is not a property of Component's instance",
+  );
+};
+
+abstract class Component<Props extends IProps = IProps> {
   protected element!: HTMLElement;
 
   protected props: Props;
 
-  constructor(props: Props) {
+  constructor(props: Props = {} as Props) {
     this.props = new Proxy(props, this.propChangeHandler);
     this.render = new Proxy(this.render, this.renderHandler);
   }
 
+  abstract render(): JSX.Element;
+
   componentDidRender?(): void;
 
   getContent(): HTMLElement {
-    return this.element;
+    if (this.element) return this.element;
+    throw new Error(
+      'You must render Component object at least once (via Component.render()) before calling Componenet.getContent()',
+    );
   }
 
-  setProps(props: Props): void {
+  getState(): Readonly<Props> {
+    return this.props;
+  }
+
+  setProps(props: Partial<Props>): void {
     Object.assign(this.props, props);
   }
 
@@ -44,10 +66,8 @@ abstract class Component<Props extends ICommonProps = ICommonProps> {
     apply: (...args) => {
       const el = Reflect.apply(...args);
 
-      const { classList } = this.props;
-
-      if (classList) {
-        el.classList.add(...classList);
+      if (this.props.className) {
+        el.className = this.props.className;
       }
 
       if (this.element) {
@@ -55,6 +75,8 @@ abstract class Component<Props extends ICommonProps = ICommonProps> {
       }
 
       this.element = el;
+
+      Object.assign(this.element, { getComponent: () => this });
 
       if (this.componentDidRender) {
         this.componentDidRender();
@@ -71,8 +93,6 @@ abstract class Component<Props extends ICommonProps = ICommonProps> {
       return true;
     },
   };
-
-  abstract render(): JSX.Element;
 }
 
 export default Component;
