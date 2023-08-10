@@ -1,10 +1,26 @@
 // Common colors
-$peru: #d87d4a;
-$very-light-tangelo: #fbaf85;
-$black: #000000;
-$chinese-black: #101010;
+$primary-color: #ffffff;
+$secondary-color: #000000;
+$third-color: #d87d4a;
+
+//bg-colors
+$header-bg-color: #0e0e0e;
+$main-bg-color: $primary-color;
+$footer-bg-color: #101010;
+
+// Generic colors
 $anti-flash-white: #f1f1f1;
 $lotion: #fafafa;
+
+//buttons
+$btn-primary-bg-color: $third-color;
+$btn-secondory-bg-color: $primary-color;
+
+$btn-primary-hover-color: #fbaf85;
+$btn-secondory-hover-color: $secondary-color;
+
+$btn-secondory-text-color: $secondary-color;
+$btn-secondory-text-hover-color: $primary-color;
 
 //Typography
 $base-font: 'Manrope', sans-serif;

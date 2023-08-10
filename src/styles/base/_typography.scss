@@ -4,7 +4,7 @@
 html {
   font-family: $base-font;
   font-weight: $base-font-weight;
-  color: $black;
+  color: $secondary-color;
 
   font-style: normal;
   font-size: 10px;
@@ -66,7 +66,7 @@ h6 {
 
 // sub-titles
 .overline {
-  color: $peru;
+  color: $third-color;
   font-size: 1.4rem;
   line-height: normal;
   letter-spacing: 1rem;
@@ -74,7 +74,7 @@ h6 {
 }
 
 .sub-title {
-  color: $peru;
+  color: $third-color;
   font-size: 1.3rem;
   font-style: normal;
   font-weight: 700;
