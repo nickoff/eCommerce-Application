@@ -31,7 +31,7 @@ const commonConfig: Configuration = {
       },
       {
         test: /\.svg$/i,
-        type: 'asset/source',
+        use: 'svg-loader-js',
       },
     ],
   },
