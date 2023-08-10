@@ -23,7 +23,16 @@ const commonConfig: Configuration = {
       },
       {
         test: /\.s?css$/i,
-        use: [MiniCssPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [
+          MiniCssPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: `@import "./src/styles/helpers";`,
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
