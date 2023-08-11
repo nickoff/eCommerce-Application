@@ -1,14 +1,17 @@
 .user-nav__list {
-  display: flex;
-  align-items: center;
+  @include flex-vertical-center;
   list-style: none;
   gap: 20px;
+  margin: 0;
+  padding: 0;
+
+  @include breakpoint('tablet', 'max') {
+    gap: 10px;
+  }
 }
 
 .user-nav__item {
-  color: #fff;
-  display: flex;
-  align-items: center;
+  @include flex-vertical-center;
 
   svg {
     width: 24px;
@@ -17,7 +20,6 @@
 }
 
 .user-nav__btn {
-  color: inherit;
   background: none;
   border: none;
   cursor: pointer;

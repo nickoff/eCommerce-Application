@@ -4,7 +4,7 @@ import { SharedCSSClass } from './constants/shared-css-class';
 declare global {
   interface IProps {
     text?: string;
-    className?: string;
+    className?: string | string[];
   }
 
   interface Element {
@@ -15,7 +15,7 @@ declare global {
 /**
  * Prevents the usage of getComponent() method on all Element object except Component's instances
  */
-Element.prototype.getComponent<never> = function preventUsage(): never {
+Element.prototype.getComponent = function preventUsage(): never {
   throw new Error(
     "You can't use getComponent() method on Element object that is not a property of Component's instance",
   );
@@ -66,8 +66,14 @@ abstract class Component<Props extends IProps = IProps> {
     apply: (...args) => {
       const el = Reflect.apply(...args);
 
-      if (this.props.className) {
-        el.className = this.props.className;
+      const { className } = this.props;
+
+      if (className) {
+        if (typeof className === 'string') {
+          el.classList.add(...className.split(' '));
+        } else {
+          el.classList.add(...className);
+        }
       }
 
       if (this.element) {

@@ -10,16 +10,18 @@ import { linksConfig } from './config';
 class SiteNav extends Component {
   render(): JSX.Element {
     return (
-      <nav className="site-nav">
-        <ul className="site-nav__list">
-          {linksConfig.map((link) => (
-            <li className="site-nav__item">
-              <a className="site-nav__link" href={link.route}>
-                {link.text}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <nav className={`navbar navbar-expand-md site-nav ${this.props.className ?? ''}`}>
+        <div className="collapse navbar-collapse" id="n-bar">
+          <ul className="navbar-nav site-nav__list">
+            {linksConfig.map((link) => (
+              <li className="nav-item site-nav__item">
+                <a className="nav-link site-nav__link" href={link.route}>
+                  {link.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </nav>
     );
   }

@@ -2,8 +2,8 @@ import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import './user-nav.scss';
 
-import CartIcon from './assets/cart.svg';
-import UserIcon from './assets/user.svg';
+import CartIcon from './assets/cart-icon.svg';
+import UserIcon from './assets/profile-icon.svg';
 
 class UserNav extends Component {
   render(): JSX.Element {
