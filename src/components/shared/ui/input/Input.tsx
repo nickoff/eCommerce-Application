@@ -7,6 +7,7 @@ import { passwordSchema } from '@shared/validation/validationSchemas';
 
 enum Styles {
   input = 'input',
+  input_invalid = 'input_invalid',
 }
 
 export enum InputTypes {
@@ -27,16 +28,50 @@ interface IInputProps extends IProps {
 }
 
 export class Input extends Component<IInputProps> {
-  handleBlur = (event: Event): void => {
+  private validSchema = passwordSchema;
+
+  private inputValue = '';
+
+  private errorMessage = '';
+
+  private handleBlur = (event: Event): void => {
     if (!event.target || !(event.target instanceof HTMLInputElement)) return;
-    const isValid = passwordSchema.isValidSync({ input: event.target.value });
-    if (!isValid) {
-      // eslint-disable-next-line no-console
-      console.log('sorry');
+    try {
+      this.validSchema.validateSync({ input: event.target.value });
+      this.props.isError = false;
+    } catch (error) {
+      this.errorMessage = error as string;
+      this.props.isError = true;
+    }
+  };
+
+  private handleInput = (event: Event): void => {
+    if (!event.target || !(event.target instanceof HTMLInputElement)) return;
+    this.inputValue = event.target.value;
+    this.getContent();
+  };
+
+  private handleFocus = (event: Event): void => {
+    if (!event.target || !(event.target instanceof HTMLInputElement)) return;
+    if (this.props.isError) {
+      event.target.nextSibling?.remove();
     }
   };
 
   render(): JSX.Element {
-    return <input type={this.props.type} className={Styles.input} onblur={this.handleBlur} />;
+    return (
+      <div className={Styles.input}>
+        <p>{this.props.labelText}</p>
+        <input
+          className={Styles.input + (this.props.isError ? ` ${Styles.input_invalid}` : '')}
+          type={this.props.type}
+          onblur={this.handleBlur}
+          oninput={this.handleInput}
+          onfocus={this.handleFocus}
+          value={this.inputValue}
+        />
+        {this.props.isError && <p style={{ color: 'red' }}>{this.errorMessage}</p>}
+      </div>
+    );
   }
 }
