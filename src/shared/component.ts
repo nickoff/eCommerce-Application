@@ -24,7 +24,7 @@ Element.prototype.getComponent = function preventUsage(): never {
 abstract class Component<Props extends IProps = IProps> {
   protected element!: HTMLElement;
 
-  protected props: Props;
+  protected readonly props: Props;
 
   constructor(props: Props = {} as Props) {
     this.props = new Proxy(props, this.propChangeHandler);

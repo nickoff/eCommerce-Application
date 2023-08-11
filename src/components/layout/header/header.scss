@@ -5,12 +5,13 @@
 .header {
   @include flex-vertical-center;
   flex-wrap: wrap;
-  padding-block: 30px;
+  padding-block: 15px;
   color: $default-color;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.2rem;
   line-height: 2.5rem;
+  font-family: $base-font;
 
   a,
   button {
@@ -25,7 +26,11 @@
   @include breakpoint('tablet', 'max') {
     order: 1;
     display: inline-block;
-    // margin-right: auto;
+    margin-right: 20px;
+  }
+
+  @include breakpoint('mobile', 'max') {
+    margin-right: 5px;
   }
 }
 
@@ -35,8 +40,6 @@
   @include breakpoint('tablet', 'max') {
     order: 2;
     margin: 0;
-    position: relative;
-    left: 30px;
   }
 }
 
