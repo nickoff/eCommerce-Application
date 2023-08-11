@@ -1,0 +1,13 @@
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+}
+
+.site-nav__link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}

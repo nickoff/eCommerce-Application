@@ -1,0 +1,18 @@
+.header-wrapper {
+  background: #000;
+}
+
+.header {
+  height: 97px;
+  display: flex;
+  align-items: center;
+  color: $default-color;
+}
+
+.header__logo {
+  margin-right: auto;
+}
+
+.header__user-nav {
+  margin-left: auto;
+}
