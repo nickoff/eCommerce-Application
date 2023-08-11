@@ -15,7 +15,7 @@ declare global {
 /**
  * Prevents the usage of getComponent() method on all Element object except Component's instances
  */
-Element.prototype.getComponent<never> = function preventUsage(): never {
+Element.prototype.getComponent = function preventUsage(): never {
   throw new Error(
     "You can't use getComponent() method on Element object that is not a property of Component's instance",
   );
