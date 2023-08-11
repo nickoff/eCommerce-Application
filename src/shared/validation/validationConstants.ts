@@ -22,4 +22,7 @@ export const passwordMessages = {
 export const emailMessages = {
   required: 'Enter E-mail',
   incorrect: 'E-mail entered incorrectly. Example: example@domain.com',
+  domain: 'Email address must contain a domain name',
+  trim: 'Email address must not contain leading or trailing whitespace',
+  atSymbol: 'Email address must contain an "@" symbol separating local part and domain name',
 };
