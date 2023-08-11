@@ -1,5 +1,6 @@
 import './Input.scss';
 import { element } from 'tsx-vanilla';
+import * as yup from 'yup';
 
 import Component from '@shared/component';
 import { ValidateType } from '@shared/validation';
@@ -40,7 +41,10 @@ export class Input extends Component<IInputProps> {
       this.validSchema.validateSync({ input: event.target.value });
       this.props.isError = false;
     } catch (error) {
-      this.errorMessage = error as string;
+      if (error instanceof yup.ValidationError) {
+        this.errorMessage = error.message;
+      }
+
       this.props.isError = true;
     }
   };
