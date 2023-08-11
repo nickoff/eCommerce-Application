@@ -28,3 +28,17 @@ export const passwordSchema = yup.object().shape({
     .matches(passwordPattern.upperCase, passwordMessages.upperCase)
     .matches(passwordPattern.valid, passwordMessages.valid),
 });
+
+export const emailSchema = yup.object().shape({
+  input: yup
+    .string()
+    .required(emailMessages.required)
+    .email('Email address must be properly formatted')
+    .trim('Email address must not contain leading or trailing whitespace')
+    .test('has-domain', 'Email address must contain a domain name', (value) => !!(value && value.includes('.')))
+    .test(
+      'has-at-symbol',
+      "Email address must contain an '@' symbol separating local part and domain name",
+      (value) => !!(value && value.includes('@')),
+    ),
+});

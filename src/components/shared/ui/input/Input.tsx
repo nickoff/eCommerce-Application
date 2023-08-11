@@ -4,7 +4,7 @@ import * as yup from 'yup';
 
 import Component from '@shared/component';
 import { ValidateType } from '@shared/validation';
-import { passwordSchema } from '@shared/validation/validationSchemas';
+import { getResolver } from '@shared/validation/getResolver';
 
 enum Styles {
   INPUT = 'input',
@@ -30,7 +30,7 @@ interface IInputProps extends IProps {
 }
 
 export class Input extends Component<IInputProps> {
-  private validSchema = passwordSchema;
+  private validSchema = getResolver(this.props.type);
 
   private inputValue = '';
 
@@ -40,7 +40,7 @@ export class Input extends Component<IInputProps> {
     if (!event.target || !(event.target instanceof HTMLInputElement)) return;
 
     try {
-      this.validSchema.validateSync({ input: event.target.value });
+      this.validSchema?.validateSync({ input: event.target.value });
       this.setProps({ isError: false });
     } catch (error) {
       if (error instanceof yup.ValidationError) {
