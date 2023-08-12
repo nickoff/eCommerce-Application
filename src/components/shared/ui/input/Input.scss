@@ -5,7 +5,7 @@
 
   input {
     font-weight: $heading-font-weight;
-    color: $field-default-color;
+    color: $second-color;
     width: 100%;
     border-radius: 8px;
     border: 1px solid $field-default-color;
@@ -13,7 +13,6 @@
 
     &:focus {
       outline: none;
-      color: $second-color;
       border: 1px solid $primary-color;
     }
   }
