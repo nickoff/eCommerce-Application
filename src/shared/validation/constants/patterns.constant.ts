@@ -1,3 +1,5 @@
+export const COUNTRIES = ['Belarus'];
+
 export const PASSWORD_PATTERN = {
   min: 8,
   number: /(?=.*[0-9])/g,
@@ -7,10 +9,12 @@ export const PASSWORD_PATTERN = {
   valid: /[0-9a-zA-Z!@#$%-&*_-]{8,}/g,
 };
 
-export const COUNTRIES = ['Belarus'];
-
 export const NAME_PATTERN = {
   latin: /^[a-zA-Z]+$/g,
+};
+
+export const STREET_PATTERN = {
+  min: 1,
 };
 
 export const DATE_OF_BIRTH_PATTERN = {
@@ -51,4 +55,9 @@ export const DATE_OF_BIRTH_MESSAGES = {
 export const COUNTRY_MESSAGES = {
   required: 'The field is required',
   oneOf: `The field must be one of the following: ${COUNTRIES.join(', ')}`,
+};
+
+export const STREET_MESSAGES = {
+  min: 'The field must be at least 1 characters long',
+  required: 'The field is required',
 };

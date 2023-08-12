@@ -10,6 +10,8 @@ import {
   DATE_OF_BIRTH_MESSAGES,
   COUNTRY_MESSAGES,
   COUNTRIES,
+  STREET_MESSAGES,
+  STREET_PATTERN,
 } from './patterns.constant';
 
 export const LOGIN_SCHEMA = yup
@@ -63,4 +65,8 @@ export const DATE_OF_BIRTH_SCHEMA = yup.object().shape({
 
 export const COUNTRY_SCHEMA = yup.object().shape({
   input: yup.string().required(COUNTRY_MESSAGES.required).oneOf(COUNTRIES, COUNTRY_MESSAGES.oneOf),
+});
+
+export const STREET_SCHEMA = yup.object().shape({
+  input: yup.string().required(STREET_MESSAGES.required).min(STREET_PATTERN.min, STREET_MESSAGES.min),
 });

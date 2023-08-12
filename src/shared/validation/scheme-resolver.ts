@@ -6,6 +6,7 @@ import {
   EMAIL_SCHEMA,
   NAME_SCHEMA,
   PASSWORD_SCHEMA,
+  STREET_SCHEMA,
 } from './constants/schemas.constant';
 
 export const getResolver = (type: string): yup.AnySchema | undefined => {
@@ -24,6 +25,8 @@ export const getResolver = (type: string): yup.AnySchema | undefined => {
       return COUNTRY_SCHEMA;
     case InputName.City:
       return NAME_SCHEMA;
+    case InputName.StreetName:
+      return STREET_SCHEMA;
     default:
       return undefined;
   }
