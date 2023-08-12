@@ -22,15 +22,19 @@ export class Input extends Component<IInputProps> {
   };
 
   private handleInput = (event: Event): void => {
-    if (!event.target || !(event.target instanceof HTMLInputElement)) return;
-    this.inputValue = event.target.value;
+    const input = event.target;
+
+    if (!input || !(input instanceof HTMLInputElement)) return;
+    this.inputValue = input.value;
   };
 
   private handleFocus = (event: Event): void => {
-    if (!event.target || !(event.target instanceof HTMLInputElement)) return;
+    const input = event.target;
+
+    if (!input || !(input instanceof HTMLInputElement)) return;
     if (this.props.isError) {
-      event.target.previousSibling?.childNodes[1]?.remove();
-      event.target.parentElement?.classList.remove(InputStyles.INPUT_INVALID);
+      input.previousSibling?.childNodes[1]?.remove();
+      input.parentElement?.classList.remove(InputStyles.INPUT_INVALID);
     }
   };
 
