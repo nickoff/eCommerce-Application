@@ -7,6 +7,8 @@ export const PASSWORD_PATTERN = {
   valid: /[0-9a-zA-Z!@#$%-&*_-]{8,}/g,
 };
 
+export const COUNTRIES = ['Belarus'];
+
 export const NAME_PATTERN = {
   latin: /^[a-zA-Z]+$/g,
 };
@@ -44,4 +46,9 @@ export const DATE_OF_BIRTH_MESSAGES = {
   max: 'You must be at least 13 years old',
   required: 'The field is required',
   typeError: 'Enter a valid date',
+};
+
+export const COUNTRY_MESSAGES = {
+  required: 'The field is required',
+  oneOf: `The field must be one of the following: ${COUNTRIES.join(', ')}`,
 };

@@ -8,6 +8,8 @@ import {
   NAME_MESSAGES,
   DATE_OF_BIRTH_PATTERN,
   DATE_OF_BIRTH_MESSAGES,
+  COUNTRY_MESSAGES,
+  COUNTRIES,
 } from './patterns.constant';
 
 export const LOGIN_SCHEMA = yup
@@ -57,4 +59,8 @@ export const DATE_OF_BIRTH_SCHEMA = yup.object().shape({
     .typeError(DATE_OF_BIRTH_MESSAGES.typeError)
     .required(DATE_OF_BIRTH_MESSAGES.required)
     .max(DATE_OF_BIRTH_PATTERN.max, DATE_OF_BIRTH_MESSAGES.max),
+});
+
+export const COUNTRY_SCHEMA = yup.object().shape({
+  input: yup.string().required(COUNTRY_MESSAGES.required).oneOf(COUNTRIES, COUNTRY_MESSAGES.oneOf),
 });

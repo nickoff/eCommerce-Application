@@ -88,6 +88,7 @@ export class Input extends Component<IInputProps> {
           placeholder={placeholder || ''}
           disabled={isDisabled}
           required={isRequired}
+          autocomplete={name === InputName.Country ? 'on' : 'off'}
         />
       </div>
     );
