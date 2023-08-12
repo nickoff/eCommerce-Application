@@ -1,0 +1,39 @@
+.input {
+  font-family: $base-font;
+  font-size: 1.2rem;
+  line-height: normal;
+
+  input {
+    font-weight: $heading-font-weight;
+    color: $second-color;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid $field-default-color;
+    padding: 18px 24px;
+
+    &:focus {
+      outline: none;
+      border: 1px solid $primary-color;
+    }
+  }
+
+  &__label {
+    display: flex;
+    justify-content: space-between;
+    p {
+      margin: 0 0 9px;
+
+      &:first-child {
+        font-weight: $heading-font-weight;
+      }
+    }
+  }
+  &_invalid:not(input) {
+    color: $color-error-validation;
+
+    input {
+      border: 2px solid $color-error-validation;
+      color: $second-color;
+    }
+  }
+}

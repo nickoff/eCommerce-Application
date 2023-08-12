@@ -2,7 +2,9 @@
 @import './typography';
 @import './fonts';
 
-html {
+*,
+*:after,
+*:before {
   box-sizing: border-box;
 }
 
