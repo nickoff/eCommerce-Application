@@ -13,7 +13,7 @@
 
     &:focus {
       outline: none;
-      color: $second-primary-color;
+      color: $second-color;
       border: 1px solid $primary-color;
     }
   }
@@ -22,8 +22,8 @@
     display: flex;
     justify-content: space-between;
     p {
-      margin: 0 0 9px; 
-      
+      margin: 0 0 9px;
+
       &:first-child {
         font-weight: $heading-font-weight;
       }
@@ -33,7 +33,7 @@
     color: $color-error-validation;
     input {
       border: 2px solid $color-error-validation;
-      color: $second-primary-color;
+      color: $second-color;
     }
   }
 }
