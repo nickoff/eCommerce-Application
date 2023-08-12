@@ -22,10 +22,11 @@
     display: flex;
     justify-content: space-between;
     p {
-      margin: 0 0 9px 0;
-    }
-    p:first-child {
-      font-weight: $heading-font-weight;
+      margin: 0 0 9px; 
+      
+      &:first-child {
+        font-weight: $heading-font-weight;
+      }
     }
   }
   &_invalid:not(input) {
