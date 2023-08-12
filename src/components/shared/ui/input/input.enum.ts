@@ -5,7 +5,7 @@ export enum InputStyle {
 }
 
 export enum InputType {
-  TEXT = 'text',
-  PASSWORD = 'password',
-  EMAIL = 'email',
+  Text = 'text',
+  Password = 'password',
+  Email = 'email',
 }

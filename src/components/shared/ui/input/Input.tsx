@@ -55,12 +55,12 @@ export class Input extends Component<IInputProps> {
 
   private getType = (nameInput: string): InputType => {
     switch (nameInput) {
-      case InputType.PASSWORD:
-        return InputType.PASSWORD;
-      case InputType.EMAIL:
-        return InputType.EMAIL;
+      case InputType.Password:
+        return InputType.Password;
+      case InputType.Email:
+        return InputType.Email;
       default:
-        return InputType.TEXT;
+        return InputType.Text;
     }
   };
 
