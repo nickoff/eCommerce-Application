@@ -43,9 +43,10 @@ export class Input extends Component<IInputProps> {
   private errorMessage = '';
 
   private handleBlur = (event: Event): void => {
-    if (!event.target || !(event.target instanceof HTMLInputElement)) return;
-
-    this.validation(event.target.value);
+    const input = event.target;
+    
+    if (!input || !(input instanceof HTMLInputElement)) return;
+    this.validation(input.value);
   };
 
   private handleInput = (event: Event): void => {
