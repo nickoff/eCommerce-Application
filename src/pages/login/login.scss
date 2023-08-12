@@ -1,0 +1,36 @@
+@import '../../styles/helpers/variables';
+
+.page-login-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-title {
+  text-align: center;
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+}
+
+input {
+  margin-bottom: 3rem;
+}
+
+.btn-reg {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  background-color: $primary-color;
+  border: none;
+  border-radius: 10%;
+  color: $default-color;
+  transition: 0.3s;
+}
+
+.btn-reg:hover {
+  background-color: $primary-color-hover;
+}
+
+.hidden {
+  display: none;
+}
