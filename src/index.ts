@@ -4,7 +4,7 @@ import { Input } from '@components/shared/ui/input/Input';
 import { InputName } from '@shared/enums';
 
 const newInput = new Input({
-  name: InputName.Country,
+  name: InputName.City,
   labelText: 'First name',
 });
 

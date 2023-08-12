@@ -14,12 +14,16 @@ export const getResolver = (type: string): yup.AnySchema | undefined => {
       return PASSWORD_SCHEMA;
     case InputName.Email:
       return EMAIL_SCHEMA;
-    case InputName.FirstName || InputName.LastName:
+    case InputName.FirstName:
+      return NAME_SCHEMA;
+    case InputName.LastName:
       return NAME_SCHEMA;
     case InputName.DateOfBirth:
       return DATE_OF_BIRTH_SCHEMA;
     case InputName.Country:
       return COUNTRY_SCHEMA;
+    case InputName.City:
+      return NAME_SCHEMA;
     default:
       return undefined;
   }
