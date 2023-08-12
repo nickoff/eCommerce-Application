@@ -1,4 +1,4 @@
-export const passwordPattern = {
+export const PASSWORD_PATTERN = {
   min: 8,
   number: /(?=.*[0-9])/g,
   special: /(?=.*[!@#$%-&*_-])/g,
@@ -7,7 +7,7 @@ export const passwordPattern = {
   valid: /[0-9a-zA-Z!@#$%-&*_-]{8,}/g,
 };
 
-export const passwordMessages = {
+export const PASSWORD_MESSAGES = {
   min: 'Password must be at least 8 characters long',
   number: 'Password must contain at least one digit (0-9)',
   special: 'Password must contain at least one special character (e.g., !@#$%-&*_-)',
@@ -19,7 +19,7 @@ export const passwordMessages = {
   required: 'Enter password',
 };
 
-export const emailMessages = {
+export const EMAIL_MESSAGES = {
   required: 'Enter E-mail',
   incorrect: 'E-mail entered incorrectly. Example: example@domain.com',
   domain: 'Email address must contain a domain name',
