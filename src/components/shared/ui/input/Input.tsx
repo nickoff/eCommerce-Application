@@ -19,18 +19,19 @@ export enum InputTypes {
 }
 
 interface IInputProps extends IProps {
-  type: InputTypes;
+  name: string;
+  type?: HTMLInputElement['type'];
   isDisabled?: boolean;
   placeholder?: string;
   labelText?: string;
   isRequired?: boolean;
   isError?: boolean;
   isPassword?: boolean;
-  validat?: ValidateType;
+  isValidat?: ValidateType;
 }
 
 export class Input extends Component<IInputProps> {
-  private validSchema = getResolver(this.props.type);
+  private validSchema = getResolver(this.props.name);
 
   private inputValue = '';
 
@@ -39,16 +40,7 @@ export class Input extends Component<IInputProps> {
   private handleBlur = (event: Event): void => {
     if (!event.target || !(event.target instanceof HTMLInputElement)) return;
 
-    try {
-      this.validSchema?.validateSync({ input: event.target.value });
-      this.setProps({ isError: false });
-    } catch (error) {
-      if (error instanceof yup.ValidationError) {
-        this.errorMessage = error.message;
-      }
-
-      this.setProps({ isError: true });
-    }
+    this.validation(event.target.value);
   };
 
   private handleInput = (event: Event): void => {
@@ -64,6 +56,30 @@ export class Input extends Component<IInputProps> {
     }
   };
 
+  private validation = (value: string): void => {
+    try {
+      this.validSchema?.validateSync({ input: value });
+      this.setProps({ isError: false });
+    } catch (error) {
+      if (error instanceof yup.ValidationError) {
+        this.errorMessage = error.message;
+      }
+
+      this.setProps({ isError: true });
+    }
+  };
+
+  private getType = (nameInput: string): InputTypes => {
+    switch (nameInput) {
+      case InputTypes.password:
+        return InputTypes.password;
+      case InputTypes.email:
+        return InputTypes.email;
+      default:
+        return InputTypes.text;
+    }
+  };
+
   render(): JSX.Element {
     return (
       <div className={Styles.INPUT + (this.props.isError ? ` ${Styles.INPUT_INVALID}` : '')}>
@@ -74,11 +90,14 @@ export class Input extends Component<IInputProps> {
 
         <input
           className={this.props.isError ? ` ${Styles.INPUT_INVALID}` : ''}
-          type={this.props.type}
+          type={this.getType(this.props.name)}
           onblur={this.handleBlur}
           oninput={this.handleInput}
           onfocus={this.handleFocus}
           value={this.inputValue}
+          placeholder={this.props.placeholder || ''}
+          disabled={this.props.isDisabled}
+          required={this.props.isRequired}
         />
       </div>
     );
