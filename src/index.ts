@@ -1,6 +1,7 @@
 import './styles/main.scss';
 import Header from '@components/layout/header/header';
-import { Input, InputNames } from '@components/shared/ui/input/Input';
+import { Input } from '@components/shared/ui/input/input';
+import { InputNames } from '@shared/enums';
 
 const newInput = new Input({
   name: InputNames.email,

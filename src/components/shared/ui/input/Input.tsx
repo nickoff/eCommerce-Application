@@ -1,39 +1,11 @@
-import './Input.scss';
+import './input.scss';
 import { element } from 'tsx-vanilla';
 import * as yup from 'yup';
 
 import Component from '@shared/component';
-import { ValidateType } from '@shared/validation';
 import { getResolver } from '@shared/validation/getResolver';
-
-enum Styles {
-  INPUT = 'input',
-  INPUT_INVALID = 'input_invalid',
-  INPUT__LABEL = 'input__label',
-}
-
-export enum InputTypes {
-  text = 'text',
-  password = 'password',
-  email = 'email',
-}
-
-export enum InputNames {
-  password = 'password',
-  email = 'email',
-}
-
-interface IInputProps extends IProps {
-  name: InputNames;
-  type?: HTMLInputElement['type'];
-  isDisabled?: boolean;
-  placeholder?: string;
-  labelText?: string;
-  isRequired?: boolean;
-  isError?: boolean;
-  isPassword?: boolean;
-  isValidat?: ValidateType;
-}
+import { InputStyles, InputTypes } from './input.enum';
+import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> {
   private validSchema = getResolver(this.props.name);
@@ -57,7 +29,7 @@ export class Input extends Component<IInputProps> {
     if (!event.target || !(event.target instanceof HTMLInputElement)) return;
     if (this.props.isError) {
       event.target.previousSibling?.childNodes[1]?.remove();
-      event.target.parentElement?.classList.remove(Styles.INPUT_INVALID);
+      event.target.parentElement?.classList.remove(InputStyles.INPUT_INVALID);
     }
   };
 
@@ -87,14 +59,14 @@ export class Input extends Component<IInputProps> {
 
   render(): JSX.Element {
     return (
-      <div className={Styles.INPUT + (this.props.isError ? ` ${Styles.INPUT_INVALID}` : '')}>
-        <div className={Styles.INPUT__LABEL}>
+      <div className={InputStyles.INPUT + (this.props.isError ? ` ${InputStyles.INPUT_INVALID}` : '')}>
+        <div className={InputStyles.INPUT__LABEL}>
           <p>{this.props.labelText}</p>
           {this.props.isError && <p>{this.errorMessage}</p>}
         </div>
 
         <input
-          className={this.props.isError ? ` ${Styles.INPUT_INVALID}` : ''}
+          className={this.props.isError ? ` ${InputStyles.INPUT_INVALID}` : ''}
           type={this.getType(this.props.name)}
           onblur={this.handleBlur}
           oninput={this.handleInput}
