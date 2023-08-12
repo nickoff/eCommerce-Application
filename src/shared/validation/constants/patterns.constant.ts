@@ -20,11 +20,11 @@ export const PASSWORD_MESSAGES = {
   valid: 'Enter a valid password',
   trim: 'Password must not contain leading or trailing whitespace',
   mismatch: 'Passwords do not match',
-  required: 'Enter password',
+  required: 'The field is required. Enter password',
 };
 
 export const EMAIL_MESSAGES = {
-  required: 'Enter E-mail',
+  required: 'The field is required. Enter E-mail',
   incorrect: 'E-mail entered incorrectly. Example: example@domain.com',
   domain: 'Email address must contain a domain name',
   trim: 'Email address must not contain leading or trailing whitespace',
@@ -33,4 +33,5 @@ export const EMAIL_MESSAGES = {
 
 export const NAME_MESSAGES = {
   latin: 'Enter a valid name',
+  required: 'The field is required',
 };

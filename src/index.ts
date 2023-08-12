@@ -4,8 +4,8 @@ import { Input } from '@components/shared/ui/input/Input';
 import { InputName } from '@shared/enums';
 
 const newInput = new Input({
-  name: InputName.Password,
-  labelText: 'Password',
+  name: InputName.FirstName,
+  labelText: 'First name',
 });
 
 document.body.append(new Header().render(), newInput.render());

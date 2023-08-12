@@ -40,5 +40,5 @@ export const EMAIL_SCHEMA = yup.object().shape({
 });
 
 export const NAME_SCHEMA = yup.object().shape({
-  input: yup.string().required().matches(NAME_PATTERN.latin, NAME_MESSAGES.latin),
+  input: yup.string().required(NAME_MESSAGES.required).matches(NAME_PATTERN.latin, NAME_MESSAGES.latin),
 });
