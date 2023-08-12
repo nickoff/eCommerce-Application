@@ -4,7 +4,7 @@ import { SharedCSSClass } from './constants/shared-css-class';
 declare global {
   interface IProps {
     text?: string;
-    className?: string;
+    className?: string | string[];
   }
 
   interface Element {
@@ -24,7 +24,7 @@ Element.prototype.getComponent = function preventUsage(): never {
 abstract class Component<Props extends IProps = IProps> {
   protected element!: HTMLElement;
 
-  protected props: Props;
+  protected readonly props: Props;
 
   constructor(props: Props = {} as Props) {
     this.props = new Proxy(props, this.propChangeHandler);
@@ -66,8 +66,14 @@ abstract class Component<Props extends IProps = IProps> {
     apply: (...args) => {
       const el = Reflect.apply(...args);
 
-      if (this.props.className) {
-        el.className = this.props.className;
+      const { className } = this.props;
+
+      if (className) {
+        if (typeof className === 'string') {
+          el.classList.add(...className.split(' '));
+        } else {
+          el.classList.add(...className);
+        }
       }
 
       if (this.element) {

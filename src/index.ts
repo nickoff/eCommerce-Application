@@ -1,4 +1,5 @@
 import './styles/main.scss';
+import Header from '@components/layout/header/header';
 import { Input, InputTypes } from '@components/shared/ui/input/Input';
 
 const newInput = new Input({
@@ -6,4 +7,4 @@ const newInput = new Input({
   labelText: 'Email',
 });
 
-document.body.append(newInput.render());
+document.body.append(new Header().render(), newInput.render());

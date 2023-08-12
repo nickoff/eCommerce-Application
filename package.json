@@ -33,6 +33,8 @@
   },
   "homepage": "https://github.com/nickoff/eCommerce-Application#readme",
   "devDependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@types/bootstrap": "^5.2.6",
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.8",
     "@types/webpack": "^5.28.1",
@@ -71,6 +73,7 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "bootstrap": "^5.3.1"
   }
 }

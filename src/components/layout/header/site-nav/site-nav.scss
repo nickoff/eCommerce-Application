@@ -1,0 +1,34 @@
+.site-nav {
+  @include flex-vertical-center;
+  padding: 0;
+
+  @include breakpoint('tablet', 'max') {
+    &:not(:has(.show, .collapsing)) {
+      position: absolute;
+    }
+  }
+}
+
+.site-nav__list {
+  @include flex-vertical-center;
+  list-style: none;
+  margin: 0;
+
+  @include breakpoint('tablet', 'max') {
+    padding-top: 15px;
+    gap: 20px;
+  }
+}
+
+.site-nav__item {
+  padding: 15px 10px;
+}
+
+.site-nav__link {
+  @include flex-vertical-center;
+
+  &:hover,
+  &:focus {
+    color: inherit;
+  }
+}
