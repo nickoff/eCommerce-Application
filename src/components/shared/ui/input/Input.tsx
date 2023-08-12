@@ -18,8 +18,13 @@ export enum InputTypes {
   email = 'email',
 }
 
+export enum InputNames {
+  password = 'password',
+  email = 'email',
+}
+
 interface IInputProps extends IProps {
-  name: string;
+  name: InputNames;
   type?: HTMLInputElement['type'];
   isDisabled?: boolean;
   placeholder?: string;

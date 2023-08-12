@@ -1,9 +1,9 @@
 import './styles/main.scss';
 import Header from '@components/layout/header/header';
-import { Input } from '@components/shared/ui/input/Input';
+import { Input, InputNames } from '@components/shared/ui/input/Input';
 
 const newInput = new Input({
-  name: 'login',
+  name: InputNames.email,
   labelText: 'Password',
 });
 
