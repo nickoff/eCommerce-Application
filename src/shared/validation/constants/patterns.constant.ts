@@ -7,6 +7,10 @@ export const PASSWORD_PATTERN = {
   valid: /[0-9a-zA-Z!@#$%-&*_-]{8,}/g,
 };
 
+export const NAME_PATTERN = {
+  latin: /^[a-zA-Z]+$/g,
+};
+
 export const PASSWORD_MESSAGES = {
   min: 'Password must be at least 8 characters long',
   number: 'Password must contain at least one digit (0-9)',
@@ -25,4 +29,8 @@ export const EMAIL_MESSAGES = {
   domain: 'Email address must contain a domain name',
   trim: 'Email address must not contain leading or trailing whitespace',
   atSymbol: 'Email address must contain an "@" symbol separating local part and domain name',
+};
+
+export const NAME_MESSAGES = {
+  latin: 'Enter a valid name',
 };

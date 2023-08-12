@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { PASSWORD_PATTERN, PASSWORD_MESSAGES, EMAIL_MESSAGES } from './patterns.constant';
+import { PASSWORD_PATTERN, PASSWORD_MESSAGES, EMAIL_MESSAGES, NAME_PATTERN, NAME_MESSAGES } from './patterns.constant';
 
 export const LOGIN_SCHEMA = yup
   .object({
@@ -37,4 +37,8 @@ export const EMAIL_SCHEMA = yup.object().shape({
     .trim(EMAIL_MESSAGES.trim)
     .test('has-domain', EMAIL_MESSAGES.domain, (value) => !!(value && value.includes('.')))
     .test('has-at-symbol', EMAIL_MESSAGES.atSymbol, (value) => !!(value && value.includes('@'))),
+});
+
+export const NAME_SCHEMA = yup.object().shape({
+  input: yup.string().required().matches(NAME_PATTERN.latin, NAME_MESSAGES.latin),
 });

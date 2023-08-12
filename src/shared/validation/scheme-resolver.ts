@@ -1,13 +1,15 @@
 import * as yup from 'yup';
-import { TFormResolver } from './enums/form-resolver.enum';
-import { EMAIL_SCHEMA, PASSWORD_SCHEMA } from './constants/schemas.constant';
+import { InputName } from '@shared/enums';
+import { EMAIL_SCHEMA, NAME_SCHEMA, PASSWORD_SCHEMA } from './constants/schemas.constant';
 
 export const getResolver = (type: string): yup.AnySchema | undefined => {
   switch (type) {
-    case TFormResolver.PASSWORD:
+    case InputName.Password:
       return PASSWORD_SCHEMA;
-    case TFormResolver.EMAIL:
+    case InputName.Email:
       return EMAIL_SCHEMA;
+    case InputName.FirstName || InputName.LastName:
+      return NAME_SCHEMA;
     default:
       return undefined;
   }
