@@ -11,6 +11,10 @@ export const NAME_PATTERN = {
   latin: /^[a-zA-Z]+$/g,
 };
 
+export const DATE_OF_BIRTH_PATTERN = {
+  max: new Date(new Date().setFullYear(new Date().getFullYear() - 13)),
+};
+
 export const PASSWORD_MESSAGES = {
   min: 'Password must be at least 8 characters long',
   number: 'Password must contain at least one digit (0-9)',
@@ -34,4 +38,10 @@ export const EMAIL_MESSAGES = {
 export const NAME_MESSAGES = {
   latin: 'Enter a valid name',
   required: 'The field is required',
+};
+
+export const DATE_OF_BIRTH_MESSAGES = {
+  max: 'You must be at least 13 years old',
+  required: 'The field is required',
+  typeError: 'Enter a valid date',
 };

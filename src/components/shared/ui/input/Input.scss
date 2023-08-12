@@ -16,6 +16,10 @@
       outline: none;
       border: 1px solid $primary-color;
     }
+
+    &::placeholder {
+      color: $field-default-color;
+    }
   }
 
   &__label {

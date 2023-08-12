@@ -1,6 +1,14 @@
 import * as yup from 'yup';
 
-import { PASSWORD_PATTERN, PASSWORD_MESSAGES, EMAIL_MESSAGES, NAME_PATTERN, NAME_MESSAGES } from './patterns.constant';
+import {
+  PASSWORD_PATTERN,
+  PASSWORD_MESSAGES,
+  EMAIL_MESSAGES,
+  NAME_PATTERN,
+  NAME_MESSAGES,
+  DATE_OF_BIRTH_PATTERN,
+  DATE_OF_BIRTH_MESSAGES,
+} from './patterns.constant';
 
 export const LOGIN_SCHEMA = yup
   .object({
@@ -41,4 +49,12 @@ export const EMAIL_SCHEMA = yup.object().shape({
 
 export const NAME_SCHEMA = yup.object().shape({
   input: yup.string().required(NAME_MESSAGES.required).matches(NAME_PATTERN.latin, NAME_MESSAGES.latin),
+});
+
+export const DATE_OF_BIRTH_SCHEMA = yup.object().shape({
+  input: yup
+    .date()
+    .typeError(DATE_OF_BIRTH_MESSAGES.typeError)
+    .required(DATE_OF_BIRTH_MESSAGES.required)
+    .max(DATE_OF_BIRTH_PATTERN.max, DATE_OF_BIRTH_MESSAGES.max),
 });

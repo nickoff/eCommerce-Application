@@ -4,6 +4,7 @@ import * as yup from 'yup';
 
 import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
+import { InputName } from '@shared/enums';
 import { InputStyle, InputType } from './input.enum';
 import { IInputProps } from './input.interface';
 
@@ -59,6 +60,8 @@ export class Input extends Component<IInputProps> {
         return InputType.Password;
       case InputType.Email:
         return InputType.Email;
+      case InputName.DateOfBirth:
+        return InputType.Date;
       default:
         return InputType.Text;
     }
