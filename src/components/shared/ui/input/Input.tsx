@@ -4,7 +4,7 @@ import * as yup from 'yup';
 
 import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
-import { InputStyles, InputTypes } from './input.enum';
+import { InputStyle, InputType } from './input.enum';
 import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> {
@@ -33,7 +33,7 @@ export class Input extends Component<IInputProps> {
     if (!input || !(input instanceof HTMLInputElement)) return;
     if (isError) {
       input.previousSibling?.childNodes[1]?.remove();
-      input.parentElement?.classList.remove(InputStyles.INPUT_INVALID);
+      input.parentElement?.classList.remove(InputStyle.INPUT_INVALID);
     }
   };
 
@@ -53,14 +53,14 @@ export class Input extends Component<IInputProps> {
     }
   };
 
-  private getType = (nameInput: string): InputTypes => {
+  private getType = (nameInput: string): InputType => {
     switch (nameInput) {
-      case InputTypes.password:
-        return InputTypes.password;
-      case InputTypes.email:
-        return InputTypes.email;
+      case InputType.PASSWORD:
+        return InputType.PASSWORD;
+      case InputType.EMAIL:
+        return InputType.EMAIL;
       default:
-        return InputTypes.text;
+        return InputType.TEXT;
     }
   };
 
@@ -68,14 +68,15 @@ export class Input extends Component<IInputProps> {
     const { name, isError, labelText, placeholder, isDisabled, isRequired } = this.props;
 
     return (
-      <div className={`${InputStyles.INPUT} ${this.props.isError ? InputStyles.INPUT_INVALID : ''}`}>
-        <div className={InputStyles.INPUT__LABEL}>
+      <div className={`${InputStyle.INPUT} ${this.props.isError ? InputStyle.INPUT_INVALID : ''}`}>
+        <div className={InputStyle.INPUT__LABEL}>
           <p>{labelText}</p>
           {isError && <p>{this.errorMessage}</p>}
         </div>
 
         <input
-          className={isError ? ` ${InputStyles.INPUT_INVALID}` : ''}
+          className={isError ? ` ${InputStyle.INPUT_INVALID}` : ''}
+          name={name}
           type={this.getType(name)}
           onblur={this.handleBlur}
           oninput={this.handleInput}

@@ -1,1 +1,1 @@
-export { InputNames } from './input.enum';
+export { InputName } from './input.enum';
