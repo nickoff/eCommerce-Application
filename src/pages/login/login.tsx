@@ -23,9 +23,9 @@ class PageLogin extends Component {
         <h2 className="page-title">{LoginPageText.Title}</h2>
         {emailInput.render()}
         {pasInput.render()}
-        <span className="sign-text sign-text__in">
-          <a className="sign-link sign-link__in" href="#">
-            sign up
+        <span className="sign-text sign-text__up">
+          <a className="sign-link sign-link__up" href="#">
+            {LoginPageText.Link}
           </a>
         </span>
         <button className="sign-btn sign-btn__in">{LoginPageText.Button}</button>

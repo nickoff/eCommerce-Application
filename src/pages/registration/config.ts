@@ -1,6 +1,7 @@
-enum LoginPageText {
-  Title = 'Please sign in to continue',
-  Button = 'Sign in',
+enum RegPageText {
+  Title = 'Please sign up to continue',
+  Button = 'Sign Up',
+  Link = 'Sign in',
 }
 
-export default LoginPageText;
+export default RegPageText;

@@ -1,6 +1,7 @@
 enum LoginPageText {
   Title = 'Please sign in to continue',
-  Button = 'Sign in',
+  Button = 'Sign In',
+  Link = 'Sign up',
 }
 
 export default LoginPageText;
