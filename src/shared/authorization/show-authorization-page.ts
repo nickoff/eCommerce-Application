@@ -1,19 +1,19 @@
 import { MouseEvtName } from '@shared/constants/events';
 
 const showAuthorizationPage = (): void => {
-  const loginPage: HTMLElement = <HTMLElement>document.querySelector('.page-login');
-  const regPage: HTMLElement = <HTMLElement>document.querySelector('.page-reg');
+  const loginForm: HTMLElement = <HTMLElement>document.querySelector('.form-login');
+  const regForm: HTMLElement = <HTMLElement>document.querySelector('.form-reg');
 
   document.addEventListener(MouseEvtName.CLICK, (e) => {
     const { target } = e;
     if (target instanceof HTMLElement) {
       if (target.textContent?.toLocaleLowerCase() === 'sign in') {
-        loginPage.classList.remove('hidden');
-        regPage.classList.add('hidden');
+        loginForm.classList.toggle('hidden');
+        regForm.classList.add('hidden');
       }
       if (target.textContent?.toLocaleLowerCase() === 'sign up') {
-        regPage.classList.remove('hidden');
-        loginPage.classList.add('hidden');
+        regForm.classList.toggle('hidden');
+        loginForm.classList.add('hidden');
       }
     }
   });
