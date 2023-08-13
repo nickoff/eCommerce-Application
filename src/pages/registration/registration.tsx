@@ -19,16 +19,11 @@ const pasInput = new Input({
 class PageLogin extends Component {
   render(): JSX.Element {
     return (
-      <div className="page-login sign-wrapper hidden">
+      <div className="page-login-wrapper hidden">
         <h2 className="page-title">{LoginPageText.Title}</h2>
         {emailInput.render()}
         {pasInput.render()}
-        <span className="sign-text sign-text__in">
-          <a className="sign-link sign-link__in" href="#">
-            sign up
-          </a>
-        </span>
-        <button className="sign-btn sign-btn__in">{LoginPageText.Button}</button>
+        <button className="btn-reg">{LoginPageText.Button}</button>
       </div>
     );
   }

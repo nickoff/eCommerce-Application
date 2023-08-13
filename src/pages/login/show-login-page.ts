@@ -1,13 +1,16 @@
 import { MouseEvtName } from '@shared/constants/events';
 
-const showLoginPage = (): void => {
-  const btnSignIn: HTMLElement = <HTMLElement>document.querySelector('.user-menu__dropdown-item');
+const showLoginOrRegPage = (): void => {
+  const loginPage: HTMLElement = <HTMLElement>document.querySelector('.page-login');
 
-  const loginPage: HTMLElement = <HTMLElement>document.querySelector('.page-login-wrapper');
-
-  btnSignIn.addEventListener(MouseEvtName.CLICK, () => {
-    loginPage.classList.toggle('hidden');
+  document.addEventListener(MouseEvtName.CLICK, (e) => {
+    const { target } = e;
+    if (target instanceof HTMLElement) {
+      if (target.textContent === 'Sign In') {
+        loginPage.classList.toggle('hidden');
+      }
+    }
   });
 };
 
-export default showLoginPage;
+export default showLoginOrRegPage;
