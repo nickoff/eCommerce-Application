@@ -1,4 +1,4 @@
-export const COUNTRIES = ['Belarus', 'Russia', 'Ukraine', 'Kazakhstan'];
+export const COUNTRIES = ['Belarus', 'Russia', 'Kazakhstan'];
 
 export const PASSWORD_PATTERN = {
   min: 8,
@@ -23,6 +23,10 @@ export const DATE_OF_BIRTH_PATTERN = {
 
 export const PHONE_PATTERN = {
   valid: /^(\+|8)[0-9]{9,}$/g,
+};
+
+export const POSTAL_CODE_PATTERN = {
+  valid: /^\d{6}$/g,
 };
 
 export const PASSWORD_MESSAGES = {
@@ -69,4 +73,9 @@ export const STREET_MESSAGES = {
 export const PHONE_MESSAGES = {
   required: 'The field is required',
   valid: 'Enter a valid phone number',
+};
+
+export const POSTAL_CODE_MESSAGES = {
+  required: 'The field is required',
+  valid: 'Enter a valid postal code',
 };

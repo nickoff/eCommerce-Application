@@ -14,6 +14,8 @@ import {
   STREET_PATTERN,
   PHONE_MESSAGES,
   PHONE_PATTERN,
+  POSTAL_CODE_PATTERN,
+  POSTAL_CODE_MESSAGES,
 } from './patterns.constant';
 
 export const LOGIN_SCHEMA = yup
@@ -75,4 +77,8 @@ export const STREET_SCHEMA = yup.object().shape({
 
 export const PHONE_SCHEMA = yup.object().shape({
   input: yup.string().required(PHONE_MESSAGES.required).matches(PHONE_PATTERN.valid, PHONE_MESSAGES.valid),
+});
+
+export const POSTAL_CODE_SCHEMA = yup.object().shape({
+  input: yup.string().required(PHONE_MESSAGES.required).matches(POSTAL_CODE_PATTERN.valid, POSTAL_CODE_MESSAGES.valid),
 });
