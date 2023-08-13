@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
 import { InputName } from '@shared/enums';
+import { qs } from '@shared/utils/dom-helpers';
 import { InputStyle, InputType } from './input.enum';
 import { IInputProps } from './input.interface';
 
@@ -13,29 +14,26 @@ export class Input extends Component<IInputProps> {
 
   private errorMessage = '';
 
-  private handleBlur = (event: Event): void => {
-    const input = event.target;
+  private input!: HTMLInputElement;
 
-    if (!input || !(input instanceof HTMLInputElement) || !Object.values(InputName).includes(input.name as InputName))
-      return;
-    this.validation(input.value);
+  componentDidRender(): void {
+    this.input = qs<HTMLInputElement>('input', this.getContent());
+  }
+
+  private handleBlur = (): void => {
+    this.validation(this.input.value);
   };
 
-  private handleInput = (event: Event): void => {
-    const input = event.target;
-
-    if (!input || !(input instanceof HTMLInputElement)) return;
-    this.inputValue = input.value;
+  private handleInput = (): void => {
+    this.inputValue = this.input.value;
   };
 
-  private handleFocus = (event: Event): void => {
-    const input = event.target;
+  private handleFocus = (): void => {
     const { isError } = this.props;
 
-    if (!input || !(input instanceof HTMLInputElement)) return;
     if (isError) {
-      input.previousSibling?.childNodes[1]?.remove();
-      input.parentElement?.classList.remove(InputStyle.INPUT_INVALID);
+      this.input.previousSibling?.childNodes[1]?.remove();
+      this.input.parentElement?.classList.remove(InputStyle.INPUT_INVALID);
     }
   };
 
