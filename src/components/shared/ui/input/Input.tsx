@@ -16,7 +16,8 @@ export class Input extends Component<IInputProps> {
   private handleBlur = (event: Event): void => {
     const input = event.target;
 
-    if (!input || !(input instanceof HTMLInputElement)) return;
+    if (!input || !(input instanceof HTMLInputElement) || !Object.values(InputName).includes(input.name as InputName))
+      return;
     this.validation(input.value);
   };
 
