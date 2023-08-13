@@ -9,7 +9,6 @@ import {
   DATE_OF_BIRTH_PATTERN,
   DATE_OF_BIRTH_MESSAGES,
   COUNTRY_MESSAGES,
-  COUNTRIES,
   STREET_MESSAGES,
   STREET_PATTERN,
   PHONE_MESSAGES,
@@ -17,6 +16,7 @@ import {
   POSTAL_CODE_PATTERN,
   POSTAL_CODE_MESSAGES,
 } from './patterns.constant';
+import { Country } from '../../enums/country.enum';
 
 export const LOGIN_SCHEMA = yup
   .object({
@@ -68,7 +68,7 @@ export const DATE_OF_BIRTH_SCHEMA = yup.object().shape({
 });
 
 export const COUNTRY_SCHEMA = yup.object().shape({
-  input: yup.string().required(COUNTRY_MESSAGES.required).oneOf(COUNTRIES, COUNTRY_MESSAGES.oneOf),
+  input: yup.string().required(COUNTRY_MESSAGES.required).oneOf(Object.values(Country), COUNTRY_MESSAGES.oneOf),
 });
 
 export const STREET_SCHEMA = yup.object().shape({

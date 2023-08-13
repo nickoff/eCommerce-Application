@@ -1,4 +1,4 @@
-export const COUNTRIES = ['Belarus', 'Russia', 'Kazakhstan'];
+import { Country } from '@shared/enums';
 
 export const PASSWORD_PATTERN = {
   min: 8,
@@ -62,7 +62,7 @@ export const DATE_OF_BIRTH_MESSAGES = {
 
 export const COUNTRY_MESSAGES = {
   required: 'The field is required',
-  oneOf: `The field must be one of the following: ${COUNTRIES.join(', ')}`,
+  oneOf: `The field must be one of the following: ${Object.values(Country).join(', ')}`,
 };
 
 export const STREET_MESSAGES = {

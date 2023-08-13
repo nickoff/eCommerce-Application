@@ -1,5 +1,4 @@
 import { InputName } from '@shared/enums';
-import { ValidateType } from '@shared/validation';
 
 export interface IInputProps extends IProps {
   name: InputName | string;
@@ -10,5 +9,4 @@ export interface IInputProps extends IProps {
   isRequired?: boolean;
   isError?: boolean;
   isPassword?: boolean;
-  isValidat?: ValidateType;
 }
