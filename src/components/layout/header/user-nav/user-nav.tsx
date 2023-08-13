@@ -2,11 +2,18 @@ import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import './user-nav.scss';
 import 'bootstrap/js/dist/dropdown';
+import { Store } from '@app/store';
 
 import CartIcon from './assets/cart-icon.svg';
 import UserIcon from './assets/profile-icon.svg';
+import UserDropdownMenu from './user-menu/user-menu';
 
 class UserNav extends Component {
+  constructor(...args: IProps[]) {
+    super(...args);
+    Store.getInstance().subscribe('customer', this);
+  }
+
   render(): JSX.Element {
     return (
       <nav className="user-nav">
@@ -21,18 +28,7 @@ class UserNav extends Component {
             >
               {UserIcon}
             </button>
-            <ul className="dropdown-menu dropdown-menu-end user-menu__dropdown">
-              <li>
-                <a href="#" className="dropdown-item user-menu__dropdown-item">
-                  Sign In
-                </a>
-              </li>
-              <li>
-                <a href="#" className="dropdown-item user-menu__dropdown-item">
-                  Sign Up
-                </a>
-              </li>
-            </ul>
+            {new UserDropdownMenu().render()}
           </li>
         </ul>
       </nav>
