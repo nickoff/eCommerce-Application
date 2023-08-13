@@ -15,5 +15,5 @@ export interface INewCustomer extends ICustomerCredentials {
   lastName: string;
   shippingAddress: IAddress;
   billingAddress?: IAddress;
-  dateOfBirth?: string;
+  dateOfBirth?: Date;
 }

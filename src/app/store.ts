@@ -9,7 +9,7 @@ interface IState {
 }
 
 export class Store {
-  private state: IState;
+  private readonly state: IState;
 
   private observers: {
     [K in keyof IState]?: Component[];
@@ -56,6 +56,10 @@ export class Store {
     } else {
       localStorage.removeItem(StorageKey.CustomerID);
     }
+  }
+
+  getState(): IState {
+    return this.state;
   }
 
   subscribe(property: keyof IState, observer: Component): void {

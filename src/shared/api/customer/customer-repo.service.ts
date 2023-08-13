@@ -4,6 +4,7 @@ import { isHttpErrorType } from '@shared/utils/type-guards';
 
 import { INewCustomer, ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import apiRoot from '../api-root';
+import { stringifyDate } from './stringify-date';
 
 class CustomerRepoService {
   static async createCustomer(customerDraft: CustomerDraft): Promise<Customer | HttpErrorType> {
@@ -79,11 +80,18 @@ class CustomerRepoService {
       lastName,
       email,
       password,
-      dateOfBirth,
       addresses,
       defaultShippingAddress: 0,
-      defaultBillingAddress: billingAddress ? 1 : undefined,
+      defaultBillingAddress: 0,
     };
+
+    if (dateOfBirth) {
+      Object.assign(customerDraft, { dateOfBirth: stringifyDate(dateOfBirth) });
+    }
+
+    if (billingAddress) {
+      Object.assign(customerDraft, { defaultBillingAddress: 1 });
+    }
 
     return customerDraft;
   }
