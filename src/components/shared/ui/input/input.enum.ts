@@ -9,4 +9,5 @@ export enum InputType {
   Password = 'password',
   Email = 'email',
   Date = 'date',
+  Phone = 'tel',
 }

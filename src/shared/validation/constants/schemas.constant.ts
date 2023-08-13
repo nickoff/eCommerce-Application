@@ -12,6 +12,8 @@ import {
   COUNTRIES,
   STREET_MESSAGES,
   STREET_PATTERN,
+  PHONE_MESSAGES,
+  PHONE_PATTERN,
 } from './patterns.constant';
 
 export const LOGIN_SCHEMA = yup
@@ -69,4 +71,8 @@ export const COUNTRY_SCHEMA = yup.object().shape({
 
 export const STREET_SCHEMA = yup.object().shape({
   input: yup.string().required(STREET_MESSAGES.required).min(STREET_PATTERN.min, STREET_MESSAGES.min),
+});
+
+export const PHONE_SCHEMA = yup.object().shape({
+  input: yup.string().required(PHONE_MESSAGES.required).matches(PHONE_PATTERN.valid, PHONE_MESSAGES.valid),
 });

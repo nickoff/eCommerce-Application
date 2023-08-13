@@ -8,4 +8,5 @@ export enum InputName {
   City = 'city',
   PostalCode = 'postalCode',
   Country = 'country',
+  Phone = 'phone',
 }

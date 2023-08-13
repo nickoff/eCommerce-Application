@@ -21,6 +21,10 @@ export const DATE_OF_BIRTH_PATTERN = {
   max: new Date(new Date().setFullYear(new Date().getFullYear() - 13)),
 };
 
+export const PHONE_PATTERN = {
+  valid: /^(\+|8)[0-9]{9,}$/g,
+};
+
 export const PASSWORD_MESSAGES = {
   min: 'Password must be at least 8 characters long',
   number: 'Password must contain at least one digit (0-9)',
@@ -60,4 +64,9 @@ export const COUNTRY_MESSAGES = {
 export const STREET_MESSAGES = {
   min: 'The field must be at least 1 characters long',
   required: 'The field is required',
+};
+
+export const PHONE_MESSAGES = {
+  required: 'The field is required',
+  valid: 'Enter a valid phone number',
 };
