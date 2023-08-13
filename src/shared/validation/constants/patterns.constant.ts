@@ -1,4 +1,4 @@
-export const COUNTRIES = ['Belarus'];
+export const COUNTRIES = ['Belarus', 'Russia', 'Ukraine', 'Kazakhstan'];
 
 export const PASSWORD_PATTERN = {
   min: 8,
