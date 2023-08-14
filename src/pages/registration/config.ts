@@ -1,5 +1,5 @@
 import { InputName } from '@shared/enums/input.enum';
-import { Input } from '@components/shared/ui/input/Input';
+import { Input } from '@components/shared/ui/input/input';
 
 enum RegPageText {
   Title = 'Please sign up to continue',

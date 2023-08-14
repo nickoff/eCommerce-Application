@@ -1,6 +1,6 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
-import { Input } from '@components/shared/ui/input/Input';
+import { Input } from '@components/shared/ui/input/input';
 import { InputName } from '@shared/enums/input.enum';
 import './login.scss';
 
