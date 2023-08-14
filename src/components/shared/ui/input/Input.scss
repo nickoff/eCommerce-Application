@@ -2,6 +2,7 @@
   font-family: $base-font;
   font-size: 1.2rem;
   line-height: normal;
+  width: 100%;
 
   input {
     font-weight: $heading-font-weight;
@@ -11,9 +12,17 @@
     border: 1px solid $field-default-color;
     padding: 18px 24px;
 
+    &:hover {
+      border: 1px solid $primary-color;
+    }
+
     &:focus {
       outline: none;
       border: 1px solid $primary-color;
+    }
+
+    &::placeholder {
+      color: $field-default-color;
     }
   }
 

@@ -4,7 +4,9 @@ import * as yup from 'yup';
 
 import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
-import { InputStyles, InputTypes } from './input.enum';
+import { InputName } from '@shared/enums';
+import { qs } from '@shared/utils/dom-helpers';
+import { InputStyle, InputType } from './input.enum';
 import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> {
@@ -12,28 +14,26 @@ export class Input extends Component<IInputProps> {
 
   private errorMessage = '';
 
-  private handleBlur = (event: Event): void => {
-    const input = event.target;
+  private input!: HTMLInputElement;
 
-    if (!input || !(input instanceof HTMLInputElement)) return;
-    this.validation(input.value);
+  componentDidRender(): void {
+    this.input = qs<HTMLInputElement>('input', this.getContent());
+  }
+
+  private handleBlur = (): void => {
+    this.validation(this.input.value);
   };
 
-  private handleInput = (event: Event): void => {
-    const input = event.target;
-
-    if (!input || !(input instanceof HTMLInputElement)) return;
-    this.inputValue = input.value;
+  private handleInput = (): void => {
+    this.inputValue = this.input.value;
   };
 
-  private handleFocus = (event: Event): void => {
-    const input = event.target;
+  private handleFocus = (): void => {
     const { isError } = this.props;
 
-    if (!input || !(input instanceof HTMLInputElement)) return;
     if (isError) {
-      input.previousSibling?.childNodes[1]?.remove();
-      input.parentElement?.classList.remove(InputStyles.INPUT_INVALID);
+      this.input.previousSibling?.childNodes[1]?.remove();
+      this.input.parentElement?.classList.remove(InputStyle.INPUT_INVALID);
     }
   };
 
@@ -53,14 +53,16 @@ export class Input extends Component<IInputProps> {
     }
   };
 
-  private getType = (nameInput: string): InputTypes => {
+  private getType = (nameInput: string): InputType => {
     switch (nameInput) {
-      case InputTypes.password:
-        return InputTypes.password;
-      case InputTypes.email:
-        return InputTypes.email;
+      case InputType.Password:
+        return InputType.Password;
+      case InputType.Email:
+        return InputType.Email;
+      case InputName.DateOfBirth:
+        return InputType.Date;
       default:
-        return InputTypes.text;
+        return InputType.Text;
     }
   };
 
@@ -68,14 +70,15 @@ export class Input extends Component<IInputProps> {
     const { name, isError, labelText, placeholder, isDisabled, isRequired } = this.props;
 
     return (
-      <div className={`${InputStyles.INPUT} ${this.props.isError ? InputStyles.INPUT_INVALID : ''}`}>
-        <div className={InputStyles.INPUT__LABEL}>
+      <div className={`${InputStyle.INPUT} ${this.props.isError ? InputStyle.INPUT_INVALID : ''}`}>
+        <div className={InputStyle.INPUT__LABEL}>
           <p>{labelText}</p>
           {isError && <p>{this.errorMessage}</p>}
         </div>
 
         <input
-          className={isError ? ` ${InputStyles.INPUT_INVALID}` : ''}
+          className={isError ? ` ${InputStyle.INPUT_INVALID}` : ''}
+          name={name}
           type={this.getType(name)}
           onblur={this.handleBlur}
           oninput={this.handleInput}
@@ -84,6 +87,7 @@ export class Input extends Component<IInputProps> {
           placeholder={placeholder || ''}
           disabled={isDisabled}
           required={isRequired}
+          autocomplete={name === InputName.Country ? 'country-name' : 'off'}
         />
       </div>
     );
