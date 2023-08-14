@@ -11,13 +11,24 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "resolveJsonModule": true,
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "camelCaseOnly",
+          "additionalData": "@import '@sass-helpers';"
+        }
+      }
+    ],
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"],
-      "@app/*": ["src/app/*"],
-      "@shared/*": ["src/shared/*"]
+      "@/*": ["*"],
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"],
+      "@app/*": ["app/*"],
+      "@shared/*": ["shared/*"],
+      "@sass-helpers": ["styles/helpers/_index"]
     }
   }
 }

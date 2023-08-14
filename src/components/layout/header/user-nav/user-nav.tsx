@@ -1,9 +1,9 @@
 import { element } from 'tsx-vanilla';
+import cx from 'clsx';
 import Component from '@shared/component';
-import './user-nav.scss';
-import 'bootstrap/js/dist/dropdown';
 import { Store } from '@app/store';
-
+import 'bootstrap/js/dist/dropdown';
+import s from './user-nav.module.scss';
 import CartIcon from './assets/cart-icon.svg';
 import UserIcon from './assets/profile-icon.svg';
 import UserDropdownMenu from './user-menu/user-menu';
@@ -16,14 +16,14 @@ class UserNav extends Component {
 
   render(): JSX.Element {
     return (
-      <nav className="user-nav">
-        <ul className="user-nav__list">
-          <li className="user-nav__item">
-            <button className="user-nav__link">{CartIcon}</button>
+      <nav>
+        <ul className={s.userNavList}>
+          <li className={s.userNavItem}>
+            <button className={s.userNavLink}>{CartIcon}</button>
           </li>
-          <li className="dropdown user-nav__item user-menu">
+          <li className={cx('dropdown', s.userNavItem)}>
             <button
-              className="dropdown-toggle user-nav__link user-menu__toggle"
+              className={cx('dropdown-toggle', s.userNavLink, s.userMenuToggle)}
               dataset={{ bsToggle: 'dropdown', bsOffset: '4,30' }}
             >
               {UserIcon}
