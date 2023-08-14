@@ -1,8 +1,7 @@
-import { InputNames } from '@shared/enums';
-import { ValidateType } from '@shared/validation';
+import { InputName } from '@shared/enums';
 
 export interface IInputProps extends IProps {
-  name: InputNames;
+  name: InputName | string;
   type?: HTMLInputElement['type'];
   isDisabled?: boolean;
   placeholder?: string;
@@ -10,5 +9,4 @@ export interface IInputProps extends IProps {
   isRequired?: boolean;
   isError?: boolean;
   isPassword?: boolean;
-  isValidat?: ValidateType;
 }
