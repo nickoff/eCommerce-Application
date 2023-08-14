@@ -1,7 +1,7 @@
 @import '../../styles/helpers/variables';
 @import '../login/login.scss';
 
-.billing-wrapper {
+.billing-title {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,4 +16,12 @@
 
 .sign-btn__up {
   margin-bottom: 2rem;
+}
+
+.sign-text__up {
+  font-size: 1.2rem;
+}
+
+.input:last-child {
+  margin-bottom: 1rem;
 }

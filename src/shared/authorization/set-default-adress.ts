@@ -10,10 +10,10 @@ const setDefaultAdress = (): void => {
     if (billingCheckbox.checked) {
       shipingInputs.forEach((input, index) => {
         input.addEventListener('change', () => {
-          bilingInputs[index + 1].value = input.value;
+          bilingInputs[index].value = input.value;
         });
-        bilingInputs[index + 1].value = input.value;
-        bilingInputs[index + 1].disabled = true;
+        bilingInputs[index].value = input.value;
+        bilingInputs[index].disabled = true;
       });
     } else {
       bilingInputs.forEach((input, index) => {

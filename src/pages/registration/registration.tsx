@@ -15,14 +15,15 @@ class PageReg extends Component {
           {InputShippingAddressItems.map((item) => item.render())};
         </div>
         <div className="adress adress-billing">
-          <div className="billing-wrapper">
+          <div className="billing-title">
             <h3>{RegPageText.TitleBillingAdress}</h3>
             <p className="billing-label">{RegPageText.LableForCheckBox}</p>
             <input type="checkbox" className="billing-checkbox" />
           </div>
-          {InputBillingAddressItems.map((item) => item.render())};
+          <div className="billing-wrapper">{InputBillingAddressItems.map((item) => item.render())};</div>
         </div>
         <span className="sign-text sign-text__up">
+          {RegPageText.Span}
           <a className="sign-link sign-link__up" href="#">
             {RegPageText.Link}
           </a>

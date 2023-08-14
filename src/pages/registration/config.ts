@@ -5,7 +5,7 @@ enum RegPageText {
   Title = 'Please sign up to continue',
   Button = 'Sign Up',
   Link = 'Sign in',
-  Span = 'Already registered?',
+  Span = 'Already registered? ',
   LableForEmail = 'Email address',
   LableForPas = 'Password',
   LableForFirstName = 'First name',
