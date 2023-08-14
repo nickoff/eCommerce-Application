@@ -1,42 +1,89 @@
-import { InputNames } from '@shared/enums/input.enum';
+import { InputName } from '@shared/enums/input.enum';
+import { Input } from '@components/shared/ui/input/Input';
 
 enum RegPageText {
   Title = 'Please sign up to continue',
   Button = 'Sign Up',
   Link = 'Sign in',
   Span = 'Already registered?',
-  LableForEmail = 'Enter your email address',
-  LableForPas = 'Enter your password',
-  LableForFirstName = 'Your first name',
-  LableForLastName = 'Your last name',
-  LableForDateOfBirth = 'Your date of birth',
-  LableForStreet = 'Your street',
-  LableForCity = 'Your city',
-  LableForCode = 'Your postal code',
-  LableForCountry = 'Your country',
+  LableForEmail = 'Email address',
+  LableForPas = 'Password',
+  LableForFirstName = 'First name',
+  LableForLastName = 'Last name',
+  LableForDateOfBirth = 'Date of birth',
+  LableForStreet = 'Street',
+  LableForCity = 'City',
+  LableForCode = 'Ppostal code',
+  LableForCountry = 'Country',
+  LableForCheckBox = ' [ Set from shipping address ]',
+  LableForPhone = 'Phone number',
+  TitleShipingAdress = 'Shipping address',
+  TitleBillingAdress = 'Billing address',
 }
 
 const InputItems = [
-  {
-    name: InputNames.email,
+  new Input({
+    name: InputName.Email,
     labelText: RegPageText.LableForEmail,
-  },
-  {
-    name: InputNames.password,
+  }),
+  new Input({
+    name: InputName.Password,
     labelText: RegPageText.LableForPas,
-  },
-  {
-    name: InputNames.password,
+  }),
+  new Input({
+    name: InputName.FirstName,
     labelText: RegPageText.LableForFirstName,
-  },
-  {
-    name: InputNames.password,
+  }),
+  new Input({
+    name: InputName.LastName,
     labelText: RegPageText.LableForLastName,
-  },
-  {
-    name: InputNames.password,
+  }),
+  new Input({
+    name: InputName.Phone,
+    labelText: RegPageText.LableForPhone,
+  }),
+  new Input({
+    name: InputName.DateOfBirth,
     labelText: RegPageText.LableForDateOfBirth,
-  },
+  }),
 ];
 
-export { RegPageText, InputItems };
+const InputShippingAddressItems = [
+  new Input({
+    name: InputName.Country,
+    labelText: RegPageText.LableForCountry,
+  }),
+  new Input({
+    name: InputName.City,
+    labelText: RegPageText.LableForCity,
+  }),
+  new Input({
+    name: InputName.StreetName,
+    labelText: RegPageText.LableForStreet,
+  }),
+  new Input({
+    name: InputName.PostalCode,
+    labelText: RegPageText.LableForCode,
+  }),
+];
+
+const InputBillingAddressItems = [
+  new Input({
+    name: InputName.Country,
+    labelText: RegPageText.LableForCountry,
+  }),
+  new Input({
+    name: InputName.City,
+    labelText: RegPageText.LableForCity,
+  }),
+  new Input({
+    name: InputName.StreetName,
+    labelText: RegPageText.LableForStreet,
+  }),
+  new Input({
+    name: InputName.PostalCode,
+    labelText: RegPageText.LableForCode,
+  }),
+];
+
+export { RegPageText, InputItems, InputShippingAddressItems, InputBillingAddressItems };

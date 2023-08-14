@@ -1,6 +1,6 @@
 import { MouseEvtName } from '@shared/constants/events';
 
-const showAuthorizationPage = (): void => {
+const showEntryOrLoginPage = (): void => {
   const loginForm: HTMLElement = <HTMLElement>document.querySelector('.form-login');
   const regForm: HTMLElement = <HTMLElement>document.querySelector('.form-reg');
 
@@ -19,4 +19,4 @@ const showAuthorizationPage = (): void => {
   });
 };
 
-export default showAuthorizationPage;
+export default showEntryOrLoginPage;

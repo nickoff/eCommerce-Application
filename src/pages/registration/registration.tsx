@@ -1,48 +1,26 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
-import { Input } from '@components/shared/ui/input/Input';
-import { InputNames } from '@shared/enums/input.enum';
 import './registration.scss';
 
-import { RegPageText, InputItems } from './config';
-
-const emailInput = new Input({
-  name: InputNames.email,
-  labelText: RegPageText.LableForEmail,
-});
-
-const pasInput = new Input({
-  name: InputNames.password,
-  labelText: RegPageText.LableForPas,
-});
-
-const firstNameInput = new Input({
-  name: InputNames.password,
-  labelText: RegPageText.LableForFirstName,
-});
-
-const lastNameInput = new Input({
-  name: InputNames.password,
-  labelText: RegPageText.LableForLastName,
-});
-
-const dateOfBrithInput = new Input({
-  name: InputNames.password,
-  labelText: RegPageText.LableForDateOfBirth,
-});
+import { RegPageText, InputItems, InputShippingAddressItems, InputBillingAddressItems } from './config';
 
 class PageReg extends Component {
   render(): JSX.Element {
     return (
       <form className="form-reg sign-wrapper hidden">
         <h2 className="page-title">{RegPageText.Title}</h2>
-        {emailInput.render()}
-        {pasInput.render()}
-        {firstNameInput.render()}
-        {lastNameInput.render()}
-        {dateOfBrithInput.render()}
+        {InputItems.map((item) => item.render())};
         <div className="adress adress-shiping">
-          <h4>shiping adress</h4>
+          <h3>{RegPageText.TitleShipingAdress}</h3>
+          {InputShippingAddressItems.map((item) => item.render())};
+        </div>
+        <div className="adress adress-billing">
+          <div className="billing-wrapper">
+            <h3>{RegPageText.TitleBillingAdress}</h3>
+            <p className="billing-label">{RegPageText.LableForCheckBox}</p>
+            <input type="checkbox" className="billing-checkbox" />
+          </div>
+          {InputBillingAddressItems.map((item) => item.render())};
         </div>
         <span className="sign-text sign-text__up">
           <a className="sign-link sign-link__up" href="#">
