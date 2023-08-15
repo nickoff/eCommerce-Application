@@ -34,6 +34,35 @@
     'shipping    billing'
     'para        para'
     'submit-btn  submit-btn';
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 580px) {
+    grid-template-areas:
+      'first-name  last-name'
+      'email       email'
+      'pwd         pwd-confirm'
+      'birth       phone'
+      'shipping    shipping'
+      'billing     billing'
+      'para        para'
+      'submit-btn  submit-btn';
+  }
+
+  @include breakpoint($mobile, $max) {
+    grid-template-areas:
+      'first-name'
+      'last-name'
+      'email'
+      'pwd'
+      'pwd-confirm'
+      'birth'
+      'phone'
+      'shipping'
+      'billing'
+      'para'
+      'submit-btn';
+    grid-template-columns: 1fr;
+  }
 }
 
 .first-name {
