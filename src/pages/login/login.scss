@@ -1,0 +1,55 @@
+@import '../../styles/helpers/variables';
+
+.sign-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 45rem;
+  margin: 0 auto;
+}
+
+.address {
+  width: 100%;
+}
+
+h3 {
+  color: $primary-color;
+  text-align: center;
+}
+
+.page-title {
+  text-align: center;
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+}
+
+input:not([type='checkbox']) {
+  width: 100%;
+  padding: 1.2rem 2.4rem;
+  margin-bottom: 3rem;
+}
+
+.sign-btn {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  background-color: $primary-color;
+  border: none;
+  border-radius: 10%;
+  color: $default-color;
+  transition: 0.3s;
+}
+
+.hidden {
+  display: none;
+}
+
+.sign-text {
+  align-self: flex-end;
+}
+
+.sign-link {
+  color: $second-color;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}

@@ -28,6 +28,7 @@
       "@assets/*": ["assets/*"],
       "@app/*": ["app/*"],
       "@shared/*": ["shared/*"],
+      "@pages/*": ["pages/*"],
       "@sass-helpers": ["styles/helpers/_index"]
     }
   }
