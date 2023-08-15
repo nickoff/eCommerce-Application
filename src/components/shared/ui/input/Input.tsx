@@ -16,22 +16,31 @@ export class Input extends Component<IInputProps> {
 
   private input!: HTMLInputElement;
 
+  private isAfterInputHandler: boolean = false;
+
   componentDidRender(): void {
     this.input = qs<HTMLInputElement>('input', this.getContent());
   }
 
   private handleBlur = (): void => {
-    this.validation(this.input.value);
+    if (!this.isAfterInputHandler) {
+      this.validation(this.input.value);
+    }
   };
 
   private handleInput = (): void => {
+    this.isAfterInputHandler = true;
     this.inputValue = this.input.value;
     this.validation(this.input.value);
+    this.input.focus();
   };
 
   private handleFocus = (): void => {
-    const { isError } = this.props;
+    if (this.input.value) {
+      return;
+    }
 
+    const { isError } = this.props;
     if (isError) {
       this.input.previousSibling?.childNodes[1]?.remove();
       this.input.parentElement?.classList.remove(InputStyle.INPUT_INVALID);
@@ -51,6 +60,8 @@ export class Input extends Component<IInputProps> {
       }
 
       this.setProps({ isError: true });
+    } finally {
+      this.isAfterInputHandler = false;
     }
   };
 
