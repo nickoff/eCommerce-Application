@@ -3,7 +3,7 @@ import MiniCssPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
-import { resolveTsAliases } from 'resolve-ts-aliases';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import { Configuration } from 'webpack';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -22,14 +22,36 @@ const commonConfig: Configuration = {
         use: 'ts-loader',
       },
       {
+        test: /\.module.s?css$/i,
+        use: [
+          MiniCssPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                exportLocalsConvention: 'camelCaseOnly',
+                localIdentName: '[local]_[hash:base64:10]',
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: '@import "@sass-helpers";',
+            },
+          },
+        ],
+      },
+      {
         test: /\.s?css$/i,
+        exclude: /\.module.s?css$/i,
         use: [
           MiniCssPlugin.loader,
           'css-loader',
           {
             loader: 'sass-loader',
             options: {
-              additionalData: `@import "./src/styles/helpers";`,
+              additionalData: '@import "@sass-helpers";',
             },
           },
         ],
@@ -60,8 +82,11 @@ const commonConfig: Configuration = {
     }),
   ],
   resolve: {
+    plugins: [new TsconfigPathsPlugin()],
     extensions: ['.tsx', '.ts', '.js'],
-    alias: resolveTsAliases(path.resolve(__dirname, 'tsconfig.json')),
+    alias: {
+      '@sass-helpers': path.resolve(__dirname, './src/styles/helpers'),
+    },
   },
 };
 
