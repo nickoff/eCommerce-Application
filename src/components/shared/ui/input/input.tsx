@@ -49,7 +49,7 @@ export class Input extends Component<IInputProps> {
     const { isError } = this.props;
 
     if (isError) {
-      this.input.previousSibling?.childNodes[1]?.remove();
+      this.input.nextSibling?.remove();
       this.input.parentElement?.classList.remove(s.inputInvalid);
     }
   };
@@ -92,7 +92,6 @@ export class Input extends Component<IInputProps> {
       <div className={cx(s.input, isError && s.inputInvalid)}>
         <div className={s.inputLabel}>
           <p>{labelText}</p>
-          {isError && <p>{this.errorMessage}</p>}
         </div>
 
         <input
@@ -108,6 +107,7 @@ export class Input extends Component<IInputProps> {
           required={isRequired}
           autocomplete={name === InputName.Country ? 'country-name' : 'off'}
         />
+        {isError && <p>{this.errorMessage}</p>}
       </div>
     );
   }
