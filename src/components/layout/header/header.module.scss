@@ -23,13 +23,13 @@
 .header__hamburger {
   display: none;
 
-  @include breakpoint('tablet', 'max') {
+  @include breakpoint($tablet, $max) {
     order: 1;
     display: inline-block;
     margin-right: 20px;
   }
 
-  @include breakpoint('mobile', 'max') {
+  @include breakpoint($mobile, $max) {
     margin-right: 5px;
   }
 }
@@ -37,14 +37,14 @@
 .header__logo {
   margin-right: auto;
 
-  @include breakpoint('tablet', 'max') {
+  @include breakpoint($tablet, $max) {
     order: 2;
     margin: 0;
   }
 }
 
 .header__site-nav {
-  @include breakpoint('tablet', 'max') {
+  @include breakpoint($tablet, $max) {
     width: 100%;
     order: 4;
     margin-right: auto;
@@ -54,7 +54,7 @@
 .header__user-nav {
   margin-left: auto;
 
-  @include breakpoint('tablet', 'max') {
+  @include breakpoint($tablet, $max) {
     order: 3;
   }
 }
