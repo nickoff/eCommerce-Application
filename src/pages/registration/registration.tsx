@@ -10,13 +10,13 @@ class PageReg extends Component {
       <form className="form-reg sign-wrapper hidden">
         <h2 className="page-title">{RegPageText.Title}</h2>
         {InputItems.map((item) => item.render())};
-        <div className="adress adress-shiping">
-          <h3>{RegPageText.TitleShipingAdress}</h3>
+        <div className="address address-shiping">
+          <h3>{RegPageText.TitleShipingAddress}</h3>
           {InputShippingAddressItems.map((item) => item.render())};
         </div>
-        <div className="adress adress-billing">
+        <div className="address address-billing">
           <div className="billing-title">
-            <h3>{RegPageText.TitleBillingAdress}</h3>
+            <h3>{RegPageText.TitleBillingAddress}</h3>
             <p className="billing-label">{RegPageText.LableForCheckBox}</p>
             <input type="checkbox" className="billing-checkbox" />
           </div>

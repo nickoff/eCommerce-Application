@@ -2,7 +2,7 @@ const setDefaultAdress = (): void => {
   const billingCheckbox: HTMLInputElement = <HTMLInputElement>document.querySelector('.billing-checkbox');
 
   billingCheckbox.addEventListener('change', () => {
-    const shipingWrapper: HTMLElement = <HTMLElement>document.querySelector('.adress-shiping');
+    const shipingWrapper: HTMLElement = <HTMLElement>document.querySelector('.address-shiping');
     const billingWrapper: HTMLElement = <HTMLElement>document.querySelector('.billing-wrapper');
     const shipingInputs = shipingWrapper.querySelectorAll('input');
     const bilingInputs = billingWrapper.querySelectorAll('input');

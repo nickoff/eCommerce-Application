@@ -13,12 +13,12 @@ enum RegPageText {
   LableForDateOfBirth = 'Date of birth',
   LableForStreet = 'Street',
   LableForCity = 'City',
-  LableForCode = 'Ppostal code',
+  LableForCode = 'Postal code',
   LableForCountry = 'Country',
   LableForCheckBox = ' [ Set from shipping address ]',
   LableForPhone = 'Phone number',
-  TitleShipingAdress = 'Shipping address',
-  TitleBillingAdress = 'Billing address',
+  TitleShipingAddress = 'Shipping address',
+  TitleBillingAddress = 'Billing address',
 }
 
 const InputItems = [
