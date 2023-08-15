@@ -26,6 +26,7 @@ export class Input extends Component<IInputProps> {
 
   private handleInput = (): void => {
     this.inputValue = this.input.value;
+    this.validation(this.input.value);
   };
 
   private handleFocus = (): void => {
