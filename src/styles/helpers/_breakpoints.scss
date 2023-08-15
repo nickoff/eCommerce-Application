@@ -1,9 +1,11 @@
-$breakpoints: (
-  mobile: 374.98px,
-  tablet: 767.98px,
-);
+$mobile: 'mobile';
+$tablet: 'tablet';
+$max: 'max';
+$min: 'min';
 
-@mixin breakpoint($breakpoint: md, $key: max) {
+$breakpoints: (#{$mobile}: 374.98px, #{$tablet}: 767.98px);
+
+@mixin breakpoint($breakpoint: md, $key: $max) {
   @media (#{$key}-width: map-get($breakpoints, $breakpoint)) {
     @content;
   }
