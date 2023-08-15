@@ -1,12 +1,13 @@
-import './input.scss';
 import { element } from 'tsx-vanilla';
+import cx from 'clsx';
 import * as yup from 'yup';
 
 import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
 import { InputName } from '@shared/enums';
 import { qs } from '@shared/utils/dom-helpers';
-import { InputStyle, InputType } from './input.enum';
+import s from './input.module.scss';
+import { InputType } from './input.enum';
 import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> {
@@ -16,24 +17,35 @@ export class Input extends Component<IInputProps> {
 
   private input!: HTMLInputElement;
 
+  private isAfterInputHandler = false;
+
   componentDidRender(): void {
     this.input = qs<HTMLInputElement>('input', this.getContent());
   }
 
   private handleBlur = (): void => {
-    this.validation(this.input.value);
+    if (!this.isAfterInputHandler) {
+      this.validation(this.input.value);
+    }
   };
 
   private handleInput = (): void => {
+    this.isAfterInputHandler = true;
     this.inputValue = this.input.value;
+    this.validation(this.input.value);
+    this.input.focus();
   };
 
   private handleFocus = (): void => {
+    if (this.input.value) {
+      return;
+    }
+
     const { isError } = this.props;
 
     if (isError) {
       this.input.previousSibling?.childNodes[1]?.remove();
-      this.input.parentElement?.classList.remove(InputStyle.INPUT_INVALID);
+      this.input.parentElement?.classList.remove(s.inputInvalid);
     }
   };
 
@@ -50,6 +62,8 @@ export class Input extends Component<IInputProps> {
       }
 
       this.setProps({ isError: true });
+    } finally {
+      this.isAfterInputHandler = false;
     }
   };
 
@@ -70,14 +84,14 @@ export class Input extends Component<IInputProps> {
     const { name, isError, labelText, placeholder, isDisabled, isRequired } = this.props;
 
     return (
-      <div className={`${InputStyle.INPUT} ${this.props.isError ? InputStyle.INPUT_INVALID : ''}`}>
-        <div className={InputStyle.INPUT__LABEL}>
+      <div className={cx(s.input, isError && s.inputInvalid)}>
+        <div className={s.inputLabel}>
           <p>{labelText}</p>
           {isError && <p>{this.errorMessage}</p>}
         </div>
 
         <input
-          className={isError ? ` ${InputStyle.INPUT_INVALID}` : ''}
+          className={cx(isError && s.inputInvalid)}
           name={name}
           type={this.getType(name)}
           onblur={this.handleBlur}
