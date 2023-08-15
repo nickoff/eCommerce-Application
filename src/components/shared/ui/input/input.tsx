@@ -1,12 +1,13 @@
-import './input.scss';
 import { element } from 'tsx-vanilla';
+import cx from 'clsx';
 import * as yup from 'yup';
 
 import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
 import { InputName } from '@shared/enums';
 import { qs } from '@shared/utils/dom-helpers';
-import { InputStyle, InputType } from './input.enum';
+import s from './input.module.scss';
+import { InputType } from './input.enum';
 import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> {
@@ -16,7 +17,7 @@ export class Input extends Component<IInputProps> {
 
   private input!: HTMLInputElement;
 
-  private isAfterInputHandler: boolean = false;
+  private isAfterInputHandler = false;
 
   componentDidRender(): void {
     this.input = qs<HTMLInputElement>('input', this.getContent());
@@ -41,9 +42,10 @@ export class Input extends Component<IInputProps> {
     }
 
     const { isError } = this.props;
+
     if (isError) {
       this.input.previousSibling?.childNodes[1]?.remove();
-      this.input.parentElement?.classList.remove(InputStyle.INPUT_INVALID);
+      this.input.parentElement?.classList.remove(s.inputInvalid);
     }
   };
 
@@ -82,14 +84,14 @@ export class Input extends Component<IInputProps> {
     const { name, isError, labelText, placeholder, isDisabled, isRequired } = this.props;
 
     return (
-      <div className={`${InputStyle.INPUT} ${this.props.isError ? InputStyle.INPUT_INVALID : ''}`}>
-        <div className={InputStyle.INPUT__LABEL}>
+      <div className={cx(s.input, isError && s.inputInvalid)}>
+        <div className={s.inputLabel}>
           <p>{labelText}</p>
           {isError && <p>{this.errorMessage}</p>}
         </div>
 
         <input
-          className={isError ? ` ${InputStyle.INPUT_INVALID}` : ''}
+          className={cx(isError && s.inputInvalid)}
           name={name}
           type={this.getType(name)}
           onblur={this.handleBlur}
