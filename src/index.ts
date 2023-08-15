@@ -4,8 +4,7 @@ import Main from '@components/layout/main/main';
 import showEntryOrLoginPage from '@shared/authorization/show-entry-or-login-page';
 import setDefaultAdress from '@shared/authorization/set-default-adress';
 
-document.body.append(new Header().render());
-document.body.append(new Main().render());
+document.body.append(new Header().render(), new Main().render());
 
 showEntryOrLoginPage();
 setDefaultAdress();
