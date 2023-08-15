@@ -6,15 +6,17 @@ const showEntryOrLoginPage = (): void => {
 
   document.addEventListener(MouseEvtName.CLICK, (e) => {
     const { target } = e;
-    if (target instanceof HTMLElement) {
-      if (target.textContent?.toLocaleLowerCase() === 'sign in') {
-        loginForm.classList.toggle('hidden');
-        regForm.classList.add('hidden');
-      }
-      if (target.textContent?.toLocaleLowerCase() === 'sign up') {
-        regForm.classList.toggle('hidden');
-        loginForm.classList.add('hidden');
-      }
+
+    if (!(target instanceof HTMLElement)) return;
+
+    if (target.textContent?.toLocaleLowerCase() === 'sign in') {
+      loginForm.classList.toggle('hidden');
+      regForm.classList.add('hidden');
+    }
+
+    if (target.textContent?.toLocaleLowerCase() === 'sign up') {
+      regForm.classList.toggle('hidden');
+      loginForm.classList.add('hidden');
     }
   });
 };
