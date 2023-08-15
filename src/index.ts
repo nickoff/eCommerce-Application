@@ -10,7 +10,7 @@ Store.getInstance()
   .init()
   .then(() => {
     document.body.append(new Header().render(), new Main().render());
-  });
 
-showEntryOrLoginPage();
-setDefaultAdress();
+    showEntryOrLoginPage();
+    setDefaultAdress();
+  });
