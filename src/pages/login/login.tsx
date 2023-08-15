@@ -2,7 +2,9 @@ import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { Input } from '@components/shared/ui/input/input';
 import { InputName } from '@shared/enums/input.enum';
-import './login.scss';
+// import cx from 'clsx';
+import Button from '@components/shared/ui/button/button';
+import s from './login.module.scss';
 
 import LoginPageText from './config';
 
@@ -19,19 +21,20 @@ const pasInput = new Input({
 class PageLogin extends Component {
   render(): JSX.Element {
     return (
-      <form className="form-login sign-wrapper hidden" action=" ">
-        <h2 className="page-title">{LoginPageText.Title}</h2>
-        {emailInput.render()}
-        {pasInput.render()}
-        <span className="sign-text sign-text__up">
-          <a className="sign-link sign-link__up" href="#">
-            {LoginPageText.Link}
-          </a>
-        </span>
-        <button className="sign-btn sign-btn__in" type="submit">
-          {LoginPageText.Button}
-        </button>
-      </form>
+      <div className={s.pageWrapper}>
+        <h2 className={s.pageTitle}>{LoginPageText.Title}</h2>
+        <form className={s.form}>
+          {emailInput.render()}
+          {pasInput.render()}
+          <span className={s.signText}>
+            Not registered yet?
+            <a className={s.signLink} href="#">
+              {LoginPageText.Link}
+            </a>
+          </span>
+          <Button onClick={(): null => null} content={'Sign In'} />
+        </form>
+      </div>
     );
   }
 }

@@ -18,17 +18,22 @@
         "name": "typescript-plugin-css-modules",
         "options": {
           "classnameTransform": "camelCaseOnly",
-          "additionalData": "@import '@sass-helpers';"
+          "additionalData": "@import '@sass-helpers';",
+          "rendererOptions": {
+            "sass": {
+              "includePaths": ["@styles/_shared.module.scss"]
+            }
+          }
         }
       }
     ],
     "paths": {
-      "@/*": ["*"],
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@app/*": ["app/*"],
       "@shared/*": ["shared/*"],
       "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"],
       "@sass-helpers": ["styles/helpers/_index"]
     }
   }

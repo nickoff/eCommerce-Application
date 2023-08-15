@@ -19,6 +19,11 @@ export class Input extends Component<IInputProps> {
 
   private isAfterInputHandler = false;
 
+  clear(): void {
+    this.input.value = '';
+    this.inputValue = '';
+  }
+
   componentDidRender(): void {
     this.input = qs<HTMLInputElement>('input', this.getContent());
   }

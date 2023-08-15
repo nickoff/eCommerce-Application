@@ -1,33 +1,20 @@
-@import '../../styles/helpers/variables';
-
-.sign-wrapper {
+.form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   max-width: 45rem;
   margin: 0 auto;
+  gap: 20px;
 }
 
 .address {
   width: 100%;
 }
 
-h3 {
-  color: $primary-color;
-  text-align: center;
-}
-
 .page-title {
   text-align: center;
-  margin-top: 3rem;
-  margin-bottom: 5rem;
-}
-
-input:not([type='checkbox']) {
-  width: 100%;
-  padding: 1.2rem 2.4rem;
-  margin-bottom: 3rem;
+  margin-bottom: 30px;
 }
 
 .sign-btn {
@@ -46,10 +33,14 @@ input:not([type='checkbox']) {
 
 .sign-text {
   align-self: flex-end;
+  font-size: 1.4rem;
 }
 
 .sign-link {
   color: $second-color;
-  font-size: 1.2rem;
-  text-transform: uppercase;
+  margin-left: 3px;
+}
+
+.page-wrapper {
+  padding-block: 30px;
 }

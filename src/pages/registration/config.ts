@@ -1,89 +1,54 @@
 import { InputName } from '@shared/enums/input.enum';
 import { Input } from '@components/shared/ui/input/input';
 
-enum RegPageText {
-  Title = 'Please sign up to continue',
-  Button = 'Sign Up',
-  Link = 'Sign in',
-  Span = 'Already registered? ',
-  LableForEmail = 'Email address',
-  LableForPas = 'Password',
-  LableForFirstName = 'First name',
-  LableForLastName = 'Last name',
-  LableForDateOfBirth = 'Date of birth',
-  LableForStreet = 'Street',
-  LableForCity = 'City',
-  LableForCode = 'Postal code',
-  LableForCountry = 'Country',
-  LableForCheckBox = ' [ Set from shipping address ]',
-  LableForPhone = 'Phone number',
-  TitleShipingAddress = 'Shipping address',
-  TitleBillingAddress = 'Billing address',
-}
-
-const InputItems = [
-  new Input({
-    name: InputName.Email,
-    labelText: RegPageText.LableForEmail,
-  }),
-  new Input({
-    name: InputName.Password,
-    labelText: RegPageText.LableForPas,
-  }),
-  new Input({
+export const controls = {
+  firstName: new Input({
     name: InputName.FirstName,
-    labelText: RegPageText.LableForFirstName,
+    labelText: 'First name',
   }),
-  new Input({
+  lastName: new Input({
     name: InputName.LastName,
-    labelText: RegPageText.LableForLastName,
+    labelText: 'Last name',
   }),
-  new Input({
+  email: new Input({
+    name: InputName.Email,
+    labelText: 'Email address',
+  }),
+  password: new Input({
+    name: InputName.Password,
+    labelText: 'Password',
+  }),
+  passwordConfirm: new Input({
+    name: InputName.Password,
+    labelText: 'Confirm Password',
+  }),
+  phone: new Input({
     name: InputName.Phone,
-    labelText: RegPageText.LableForPhone,
+    labelText: 'Phone number',
   }),
-  new Input({
+  dateOfBirth: new Input({
     name: InputName.DateOfBirth,
-    labelText: RegPageText.LableForDateOfBirth,
+    labelText: 'Date of birth',
   }),
-];
+};
 
-const InputShippingAddressItems = [
-  new Input({
-    name: InputName.Country,
-    labelText: RegPageText.LableForCountry,
-  }),
-  new Input({
-    name: InputName.City,
-    labelText: RegPageText.LableForCity,
-  }),
-  new Input({
-    name: InputName.StreetName,
-    labelText: RegPageText.LableForStreet,
-  }),
-  new Input({
-    name: InputName.PostalCode,
-    labelText: RegPageText.LableForCode,
-  }),
-];
-
-const InputBillingAddressItems = [
-  new Input({
-    name: InputName.Country,
-    labelText: RegPageText.LableForCountry,
-  }),
-  new Input({
-    name: InputName.City,
-    labelText: RegPageText.LableForCity,
-  }),
-  new Input({
-    name: InputName.StreetName,
-    labelText: RegPageText.LableForStreet,
-  }),
-  new Input({
-    name: InputName.PostalCode,
-    labelText: RegPageText.LableForCode,
-  }),
-];
-
-export { RegPageText, InputItems, InputShippingAddressItems, InputBillingAddressItems };
+export function newAdressControls(): Input[] {
+  return [
+    new Input({
+      name: InputName.Country,
+      labelText: 'Country',
+    }),
+    new Input({
+      name: InputName.City,
+      labelText: 'City',
+    }),
+    new Input({
+      name: InputName.StreetName,
+      labelText: 'Street',
+    }),
+    new Input({
+      name: InputName.PostalCode,
+      labelText: 'Postal code',
+    }),
+  ];
+}

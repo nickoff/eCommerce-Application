@@ -3,11 +3,11 @@
   padding-inline: 15px;
   margin: auto;
 
-  @include breakpoint('mobile', 'max') {
+  @include breakpoint($mobile, $max) {
     padding-inline: 10px;
   }
 }
 
-button:hover {
-  background-color: $primary-color-hover;
+a:any-link {
+  color: $second-color;
 }
