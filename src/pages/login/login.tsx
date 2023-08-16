@@ -1,18 +1,18 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
-import { Input } from '@components/shared/ui/input/Input';
-import { InputNames } from '@shared/enums/input.enum';
+import { Input } from '@components/shared/ui/input/input';
+import { InputName } from '@shared/enums/input.enum';
 import './login.scss';
 
 import LoginPageText from './config';
 
 const emailInput = new Input({
-  name: InputNames.email,
+  name: InputName.Email,
   labelText: LoginPageText.LableForEmail,
 });
 
 const pasInput = new Input({
-  name: InputNames.password,
+  name: InputName.Password,
   labelText: LoginPageText.LableForPas,
 });
 
