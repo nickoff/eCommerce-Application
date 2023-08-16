@@ -11,7 +11,9 @@ import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> {
   private inputValue = '';
+
   private errorMessage = '';
+
   private input!: HTMLInputElement;
 
   private isAfterInputHandler = false;
