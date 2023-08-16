@@ -10,4 +10,5 @@ export interface IInputProps extends IProps {
   isError?: boolean;
   isPassword?: boolean;
   isRegEmail?: boolean;
+  noValidationRequired?: boolean;
 }
