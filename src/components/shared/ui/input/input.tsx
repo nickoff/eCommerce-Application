@@ -1,7 +1,6 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import * as yup from 'yup';
-
 import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
 import { InputName } from '@shared/enums';
@@ -12,9 +11,7 @@ import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> {
   private inputValue = '';
-
   private errorMessage = '';
-
   private input!: HTMLInputElement;
 
   private isAfterInputHandler = false;
