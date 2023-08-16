@@ -1,0 +1,130 @@
+.sign-btn__up {
+  margin-bottom: 2rem;
+}
+
+.sign-text__up {
+  font-size: 1.2rem;
+}
+
+.page-wrapper {
+  padding-block: 30px;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.address-heading {
+  color: $primary-color;
+  margin: 0;
+}
+
+.form {
+  margin: auto;
+  max-width: 600px;
+  display: grid;
+  row-gap: 10px;
+  column-gap: 20px;
+  grid-template-areas:
+    'first-name  last-name'
+    'email       email'
+    'pwd         pwd-confirm'
+    'birth       phone'
+    'shipping    billing'
+    'para        para'
+    'submit-btn  submit-btn';
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 580px) {
+    grid-template-areas:
+      'first-name  last-name'
+      'email       email'
+      'pwd         pwd-confirm'
+      'birth       phone'
+      'shipping    shipping'
+      'billing     billing'
+      'para        para'
+      'submit-btn  submit-btn';
+  }
+
+  @include breakpoint($mobile, $max) {
+    grid-template-areas:
+      'first-name'
+      'last-name'
+      'email'
+      'pwd'
+      'pwd-confirm'
+      'birth'
+      'phone'
+      'shipping'
+      'billing'
+      'para'
+      'submit-btn';
+    grid-template-columns: 1fr;
+  }
+}
+
+.first-name {
+  grid-area: first-name;
+}
+
+.last-name {
+  grid-area: last-name;
+}
+
+.email {
+  grid-area: email;
+}
+
+.pwd {
+  grid-area: pwd;
+}
+
+.pwd-сonfirm {
+  grid-area: pwd-confirm;
+}
+
+.birth {
+  grid-area: birth;
+}
+
+.phone {
+  grid-area: phone;
+}
+
+.shipping {
+  grid-area: shipping;
+}
+
+.billing {
+  grid-area: billing;
+  position: relative;
+}
+
+.billing-label {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  @include flex-vertical-center;
+  gap: 5px;
+  font-size: 1.2rem;
+}
+
+.shipping,
+.billing {
+  @include flex-column;
+  gap: 20px;
+}
+
+.para {
+  margin: 0;
+  grid-area: para;
+  justify-self: center;
+  font-size: 1.4rem;
+}
+
+.submit-btn {
+  grid-area: submit-btn;
+  justify-self: center;
+}

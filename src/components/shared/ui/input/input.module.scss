@@ -3,6 +3,7 @@
   font-size: 1.2rem;
   line-height: normal;
   width: 100%;
+  min-height: 78px;
 
   input {
     font-weight: $heading-font-weight;
@@ -10,7 +11,7 @@
     width: 100%;
     border-radius: 8px;
     border: 1px solid $field-default-color;
-    padding: 18px 24px;
+    padding: 8px 24px;
 
     &:hover {
       border: 1px solid $primary-color;
@@ -27,22 +28,29 @@
   }
 
   &__label {
+    position: relative;
     display: flex;
     justify-content: space-between;
+
     p {
-      margin: 0 0 9px;
+      margin: 0 0 5px;
 
       &:first-child {
         font-weight: $heading-font-weight;
       }
     }
   }
+
   &_invalid:not(input) {
     color: $color-error-validation;
 
     input {
-      border: 2px solid $color-error-validation;
+      border: 1px solid $color-error-validation;
       color: $second-color;
     }
   }
+}
+
+.error__message {
+  margin-bottom: 0;
 }

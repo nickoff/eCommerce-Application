@@ -38,11 +38,11 @@ export const PASSWORD_MESSAGES = {
   valid: 'Enter a valid password',
   trim: 'Password must not contain leading or trailing whitespace',
   mismatch: 'Passwords do not match',
-  required: 'The field is required. Enter password',
+  required: 'The field is required',
 };
 
 export const EMAIL_MESSAGES = {
-  required: 'The field is required. Enter E-mail',
+  required: 'The field is required',
   incorrect: 'E-mail entered incorrectly. Example: example@domain.com',
   domain: 'Email address must contain a domain name',
   trim: 'Email address must not contain leading or trailing whitespace',
@@ -62,7 +62,7 @@ export const DATE_OF_BIRTH_MESSAGES = {
 
 export const COUNTRY_MESSAGES = {
   required: 'The field is required',
-  oneOf: `The field must be one of the following: ${Object.values(Country).join(', ')}`,
+  oneOf: `One of: ${Object.values(Country).join(', ')}`,
 };
 
 export const STREET_MESSAGES = {
