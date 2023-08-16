@@ -13,7 +13,14 @@ export class Input extends Component<IInputProps> {
   private inputValue = '';
   private errorMessage = '';
   private input!: HTMLInputElement;
+
   private isAfterInputHandler = false;
+
+  clear(): void {
+    this.input.value = '';
+    this.inputValue = '';
+  }
+
   componentDidRender(): void {
     this.input = qs<HTMLInputElement>('input', this.getContent());
   }
@@ -35,11 +42,11 @@ export class Input extends Component<IInputProps> {
     if (this.input.value) {
       return;
     }
-    
+
     const { isError } = this.props;
 
     if (isError) {
-      this.input.previousSibling?.childNodes[1]?.remove();
+      this.input.nextSibling?.remove();
       this.input.parentElement?.classList.remove(s.inputInvalid);
     }
   };
@@ -82,7 +89,6 @@ export class Input extends Component<IInputProps> {
       <div className={cx(s.input, isError && s.inputInvalid)}>
         <div className={s.inputLabel}>
           <p>{labelText}</p>
-          {isError && <p>{this.errorMessage}</p>}
         </div>
 
         <input
@@ -98,6 +104,7 @@ export class Input extends Component<IInputProps> {
           required={isRequired}
           autocomplete={name === InputName.Country ? 'country-name' : 'off'}
         />
+        {isError && <p className={s.errorMessage}>{this.errorMessage}</p>}
       </div>
     );
   }

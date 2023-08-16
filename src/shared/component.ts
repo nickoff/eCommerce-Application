@@ -26,6 +26,10 @@ abstract class Component<Props extends IProps = IProps> {
 
   protected readonly props: Props;
 
+  protected elementAttributes: Record<string, string> = {};
+
+  protected elementClasses: string[] = [];
+
   constructor(props: Props = {} as Props) {
     this.props = new Proxy(props, this.propChangeHandler);
     this.render = new Proxy(this.render, this.renderHandler);
@@ -50,6 +54,32 @@ abstract class Component<Props extends IProps = IProps> {
     Object.assign(this.props, props);
   }
 
+  attr(attrs: Record<string, string>): this {
+    Object.assign(this.elementAttributes, attrs);
+
+    Object.entries(attrs).forEach(([key, value]) => {
+      this.element.setAttribute(key, value);
+    });
+
+    return this;
+  }
+
+  class(classes: string[] | string): this {
+    let arr = classes;
+
+    if (typeof arr === 'string') {
+      arr = arr.split(' ');
+    }
+
+    this.elementClasses.push(...arr);
+
+    if (this.element) {
+      this.element.classList.add(...classes);
+    }
+
+    return this;
+  }
+
   hide(): void {
     this.element.classList.add(SharedCSSClass.Hidden);
   }
@@ -62,25 +92,32 @@ abstract class Component<Props extends IProps = IProps> {
     this.element.remove();
   }
 
+  private applyClasses(): void {
+    const { className } = this.props;
+
+    if (className) {
+      if (typeof className === 'string') {
+        this.element.classList.add(...className.split(' '));
+      } else {
+        this.element.classList.add(...className);
+      }
+    }
+
+    this.element.classList.add(...this.elementClasses);
+  }
+
   private renderHandler: ProxyHandler<typeof this.render> = {
     apply: (...args) => {
       const el = Reflect.apply(...args);
-
-      const { className } = this.props;
-
-      if (className) {
-        if (typeof className === 'string') {
-          el.classList.add(...className.split(' '));
-        } else {
-          el.classList.add(...className);
-        }
-      }
 
       if (this.element) {
         this.element.replaceWith(el);
       }
 
       this.element = el;
+
+      this.attr(this.elementAttributes);
+      this.applyClasses();
 
       Object.assign(this.element, { getComponent: () => this });
 

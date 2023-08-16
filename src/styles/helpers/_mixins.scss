@@ -3,6 +3,11 @@
   align-items: center;
 }
 
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 @mixin outline-on-focus {
   &:focus {
     outline: 5px auto -moz-mac-focusring;
