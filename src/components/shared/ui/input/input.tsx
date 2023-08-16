@@ -107,13 +107,7 @@ export class Input extends Component<IInputProps> {
           required={isRequired}
           autocomplete={name === InputName.Country ? 'country-name' : 'off'}
         />
-        {isError ? (
-          <p className={s.errorMessage}>{this.errorMessage}</p>
-        ) : (
-          <p className={s.errorMessage}>
-            <br />
-          </p>
-        )}
+        {isError && <p className={s.errorMessage}>{this.errorMessage}</p>}
       </div>
     );
   }

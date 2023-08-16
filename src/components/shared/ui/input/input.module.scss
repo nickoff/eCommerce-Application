@@ -3,6 +3,7 @@
   font-size: 1.2rem;
   line-height: normal;
   width: 100%;
+  min-height: 78px;
 
   input {
     font-weight: $heading-font-weight;
@@ -32,15 +33,10 @@
     justify-content: space-between;
 
     p {
-      margin: 0 0 9px;
+      margin: 0 0 5px;
 
       &:first-child {
         font-weight: $heading-font-weight;
-      }
-
-      &:nth-child(2) {
-        position: absolute;
-        right: 0;
       }
     }
   }
