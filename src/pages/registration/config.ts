@@ -13,6 +13,7 @@ export const controls = {
   email: new Input({
     name: InputName.Email,
     labelText: 'Email address',
+    isRegEmail: true,
   }),
   password: new Input({
     name: InputName.Password,
