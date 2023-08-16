@@ -13,7 +13,7 @@
     border: 1px solid $field-default-color;
     padding: 8px 24px;
 
-    &:hover {
+    &:hover:not([disabled]) {
       border: 1px solid $primary-color;
     }
 
