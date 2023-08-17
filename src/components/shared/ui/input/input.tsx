@@ -5,6 +5,7 @@ import Component from '@shared/component';
 import { getResolver } from '@shared/validation';
 import { InputName } from '@shared/enums';
 import { qs } from '@shared/utils/dom-helpers';
+import CustomerRepoService from '@shared/api/customer/customer-repo.service';
 import s from './input.module.scss';
 import { InputType } from './input.enum';
 import { IInputProps } from './input.interface';
@@ -28,12 +29,26 @@ export class Input extends Component<IInputProps> {
   }
 
   private handleBlur = (): void => {
-    if (!this.isAfterInputHandler) {
-      this.validation();
-    }
+    if (
+      this.isAfterInputHandler ||
+      this.props.noValidationRequired ||
+      !this.validation() ||
+      !(this.input.type === InputType.Email && this.props.isRegEmail)
+    )
+      return;
+
+    CustomerRepoService.checkExistingEmail(this.input.value).then((result) => {
+      if (result) {
+        this.errorMessage = 'Email already exists';
+        this.setProps({ isError: true });
+      } else {
+        this.setProps({ isError: false });
+      }
+    });
   };
 
   private handleInput = (): void => {
+    if (this.props.noValidationRequired) return;
     this.isAfterInputHandler = true;
     this.inputValue = this.input.value;
     this.validation();
@@ -53,19 +68,22 @@ export class Input extends Component<IInputProps> {
     }
   };
 
-  validation = (): void => {
+  validation = (): boolean => {
     const { name } = this.props;
     const validSchema = getResolver(name);
 
     try {
       validSchema?.validateSync({ input: this.input.value });
       this.setProps({ isError: false });
+      this.errorMessage = '';
+      return true;
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         this.errorMessage = error.message;
       }
 
       this.setProps({ isError: true });
+      return false;
     } finally {
       this.isAfterInputHandler = false;
     }
