@@ -1,17 +1,17 @@
-.input {
+.select {
   font-family: $base-font;
   font-size: 1.2rem;
   line-height: normal;
   width: 100%;
   min-height: 78px;
 
-  input {
+  select {
     font-weight: $heading-font-weight;
     color: $second-color;
     width: 100%;
     border-radius: 8px;
     border: 1px solid $field-default-color;
-    padding: 8px 24px;
+    padding: 7px 24px;
 
     &:hover:not([disabled]) {
       border: 1px solid $primary-color;
@@ -22,33 +22,25 @@
       border: 1px solid $primary-color;
     }
 
-    &::placeholder {
-      color: $field-default-color;
+    &[disabled] {
+      background-color: rgba(239, 239, 239, 0.3);
     }
   }
 
-  &__label {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-
-    p {
-      margin: 0 0 5px;
-
-      &:first-child {
-        font-weight: $heading-font-weight;
-      }
-    }
-  }
-
-  &_invalid:not(input) {
+  &--invalid {
     color: $color-error-validation;
 
-    input {
+    select {
       border: 1px solid $color-error-validation;
       color: $second-color;
     }
   }
+}
+
+.select-label {
+  margin-bottom: 5px;
+  display: inline-block;
+  font-weight: $heading-font-weight;
 }
 
 .error__message {

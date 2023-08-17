@@ -12,11 +12,13 @@ import LoginPageText from './config';
 const emailInput = new Input({
   name: InputName.Email,
   labelText: LoginPageText.LableForEmail,
+  isRequired: true,
 });
 
 const pasInput = new Input({
   name: InputName.Password,
   labelText: LoginPageText.LableForPas,
+  isRequired: true,
 });
 
 class PageLogin extends Component {
