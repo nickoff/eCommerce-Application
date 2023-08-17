@@ -24,8 +24,8 @@
     "prettier/prettier": "error",
     "max-lines-per-function": ["error", 40],
     "class-methods-use-this": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "element" }],
-    "no-unused-vars": ["error", { "varsIgnorePattern": "element" }],
+    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "element", "argsIgnorePattern": "_" }],
+    "no-unused-vars": ["error", { "varsIgnorePattern": "element", "argsIgnorePattern": "_" }],
     "no-debugger": "off",
     "no-console": [
       "error",
