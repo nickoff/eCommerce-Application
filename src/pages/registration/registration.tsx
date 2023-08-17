@@ -3,6 +3,7 @@ import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import { Input } from '@components/shared/ui/input/input';
 import Button from '@components/shared/ui/button/button';
+import { formDataBuilder } from '@shared/utils/formData-builder';
 import s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
 
@@ -49,7 +50,7 @@ class PageReg extends Component {
           <p className={s.para}>
             Already registered? <a href="#">Sign In</a>
           </p>
-          <Button className={s.submitBtn} onClick={(): null => null} content={'Sign Up'} />
+          <Button className={s.submitBtn} onClick={this.onClickSubmit} content={'Sign Up'} />
         </form>
       </div>
     );
@@ -60,6 +61,16 @@ class PageReg extends Component {
       i.clear();
       i.setProps({ isDisabled: !i.getState().isDisabled, isError: false });
     });
+  }
+
+  private onClickSubmit(e: Event): void {
+    e.preventDefault();
+    if (e.target) {
+      const { form } = e.target as HTMLButtonElement;
+      if (form) {
+        formDataBuilder(form);
+      }
+    }
   }
 }
 

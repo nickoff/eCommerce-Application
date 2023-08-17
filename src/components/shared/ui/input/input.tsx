@@ -29,14 +29,14 @@ export class Input extends Component<IInputProps> {
 
   private handleBlur = (): void => {
     if (!this.isAfterInputHandler) {
-      this.validation(this.input.value);
+      this.validation();
     }
   };
 
   private handleInput = (): void => {
     this.isAfterInputHandler = true;
     this.inputValue = this.input.value;
-    this.validation(this.input.value);
+    this.validation();
     this.input.focus();
   };
 
@@ -53,12 +53,12 @@ export class Input extends Component<IInputProps> {
     }
   };
 
-  private validation = (value: string): void => {
+  validation = (): void => {
     const { name } = this.props;
     const validSchema = getResolver(name);
 
     try {
-      validSchema?.validateSync({ input: value });
+      validSchema?.validateSync({ input: this.input.value });
       this.setProps({ isError: false });
     } catch (error) {
       if (error instanceof yup.ValidationError) {
