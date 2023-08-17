@@ -1,5 +1,6 @@
 import { element } from 'tsx-vanilla';
 import { SharedCSSClass } from './constants/shared-css-class';
+import { COMPONENT_ROOT_ATTR } from './constants/misc';
 
 declare global {
   interface IProps {
@@ -12,13 +13,14 @@ declare global {
   }
 }
 
-/**
- * Prevents the usage of getComponent() method on all Element object except Component's instances
- */
-Element.prototype.getComponent = function preventUsage(): never {
-  throw new Error(
-    "You can't use getComponent() method on Element object that is not a property of Component's instance",
-  );
+Element.prototype.getComponent = function get<T extends Component>(): T {
+  const component = this.closest(`[${COMPONENT_ROOT_ATTR}]`)?.getComponent<T>();
+
+  if (component) {
+    return component;
+  }
+
+  throw new Error('Element has no reference to any Component');
 };
 
 abstract class Component<Props extends IProps = IProps> {
@@ -119,9 +121,7 @@ abstract class Component<Props extends IProps = IProps> {
       this.attr(this.elementAttributes);
       this.applyClasses();
 
-      [this.element, ...this.element.children].forEach((elem) => {
-        Object.assign(elem, { getComponent: () => this });
-      });
+      Object.assign(this.element, { getComponent: () => this });
 
       if (this.componentDidRender) {
         this.componentDidRender();

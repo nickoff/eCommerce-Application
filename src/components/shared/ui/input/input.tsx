@@ -7,6 +7,7 @@ import { InputName } from '@shared/enums';
 import { qs } from '@shared/utils/dom-helpers';
 import CustomerRepoService from '@shared/api/customer/customer-repo.service';
 import { IFormControl } from '@shared/interfaces/form-control.interface';
+import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
 import s from './input.module.scss';
 import { InputType } from './input.enum';
 import { IInputProps } from './input.interface';
@@ -111,7 +112,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
     const { name, isError, labelText, placeholder, isDisabled, isRequired } = this.props;
 
     return (
-      <div className={cx(s.input, isError && s.inputInvalid)}>
+      <div className={cx(s.input, isError && s.inputInvalid)} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <div className={s.inputLabel}>
           <p>{labelText}</p>
         </div>
