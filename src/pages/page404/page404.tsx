@@ -2,10 +2,10 @@ import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import cx from 'clsx';
 import Routes from '@app/router/routes';
-import s from './error.module.scss';
+import s from './page404.module.scss';
 import ErrorPageText from './config';
 
-class PageError extends Component {
+class Page404 extends Component {
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
@@ -19,4 +19,4 @@ class PageError extends Component {
   }
 }
 
-export default PageError;
+export default Page404;

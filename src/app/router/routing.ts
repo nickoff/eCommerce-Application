@@ -3,7 +3,7 @@ import Navigo from 'navigo';
 import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
-import PageError from '@pages/error/error';
+import Page404 from '@pages/page404/page404';
 import Routes from './routes';
 
 const router = new Navigo('/');
@@ -19,7 +19,7 @@ const initRouter = (): void => {
     .resolve();
 
   router.notFound(() => {
-    Main.setProps({ page: new PageError() });
+    Main.setProps({ page: new Page404() });
   });
 };
 export { initRouter, router };
