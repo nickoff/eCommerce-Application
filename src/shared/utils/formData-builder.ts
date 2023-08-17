@@ -1,8 +1,7 @@
-/* eslint-disable prefer-const */
 import { Input } from '@components/shared/ui/input/input';
 import Select from '@components/shared/ui/select/select';
 
-type ObjectData = Record<string, string | File | number | boolean | Date>;
+type ObjectData = Record<string, string | number | boolean | Date | string[]>;
 
 export function formDataBuilder(form: HTMLFormElement): ObjectData {
   let hasErrors = false;
@@ -17,19 +16,30 @@ export function formDataBuilder(form: HTMLFormElement): ObjectData {
       }
     }
     if (el instanceof HTMLInputElement && el.disabled !== true) {
-      if (!(el.parentElement?.getComponent() as Input).validation()) {
-        hasErrors = true;
+      const instanceInput = el.parentElement?.getComponent() as Input;
+      if (instanceInput && !instanceInput.noValidationRequired) {
+        if (!instanceInput.validation()) {
+          hasErrors = true;
+        }
       }
     }
   });
-
   const data: ObjectData = {};
   if (!hasErrors) {
-    const formData = new FormData(form);
-    formData.forEach((value, key) => {
-      data[key] = value;
+    arrInput.forEach((value) => {
+      const inputValue = value as HTMLInputElement;
+      if (data[inputValue.name]) {
+        if (Array.isArray(data[inputValue.name])) {
+          (data[inputValue.name] as string[]).push(inputValue.value);
+        } else {
+          data[inputValue.name] = [data[inputValue.name] as string, inputValue.value];
+        }
+      } else {
+        data[inputValue.name] = inputValue.value;
+      }
     });
   }
-
+  // eslint-disable-next-line no-console
+  console.log(data);
   return data;
 }

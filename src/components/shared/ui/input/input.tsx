@@ -19,6 +19,8 @@ export class Input extends Component<IInputProps> {
 
   private isAfterInputHandler = false;
 
+  noValidationRequired = this.props.noValidationRequired;
+
   clear(): void {
     this.input.value = '';
     this.inputValue = '';
@@ -31,7 +33,7 @@ export class Input extends Component<IInputProps> {
   private handleBlur = (): void => {
     if (
       this.isAfterInputHandler ||
-      this.props.noValidationRequired ||
+      this.noValidationRequired ||
       !this.validation() ||
       !(this.input.type === InputType.Email && this.props.isRegEmail)
     )

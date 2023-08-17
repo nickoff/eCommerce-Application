@@ -18,6 +18,7 @@ class PageReg extends Component {
 
     this.addressToggler = document.createElement('input');
     this.addressToggler.type = 'checkbox';
+    this.addressToggler.name = 'useShippingAddress';
   }
 
   componentDidRender(): void {
