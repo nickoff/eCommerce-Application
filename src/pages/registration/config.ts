@@ -1,7 +1,7 @@
 import { InputName } from '@shared/enums/input.enum';
 import { Input } from '@components/shared/ui/input/input';
 import Select from '@components/shared/ui/select/select';
-import { FormControl } from '@shared/types';
+import { type FormControlType } from '@shared/types';
 
 export const controls = {
   firstName: new Input({
@@ -44,7 +44,7 @@ export const controls = {
   }),
 };
 
-export function newAdressControls(): FormControl[] {
+export function newAdressControls(): FormControlType[] {
   return [
     new Select({
       name: InputName.Country,

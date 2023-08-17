@@ -119,7 +119,9 @@ abstract class Component<Props extends IProps = IProps> {
       this.attr(this.elementAttributes);
       this.applyClasses();
 
-      Object.assign(this.element, { getComponent: () => this });
+      [this.element, ...this.element.children].forEach((elem) => {
+        Object.assign(elem, { getComponent: () => this });
+      });
 
       if (this.componentDidRender) {
         this.componentDidRender();

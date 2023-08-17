@@ -19,6 +19,10 @@ class Select extends Component<ISelectProps> {
     });
   }
 
+  isValid(): boolean {
+    return this.select.selectedIndex !== 0;
+  }
+
   componentDidRender(): void {
     this.select = qs('select', this.getContent());
     this.options = [...this.select.options];

@@ -2,12 +2,12 @@ import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import Button from '@components/shared/ui/button/button';
-import { FormControl } from '@shared/types';
+import { type FormControlType } from '@shared/types';
 import s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
 
 class PageReg extends Component {
-  private billingControls: FormControl[];
+  private billingControls: FormControlType[];
 
   private addressToggler: HTMLInputElement;
 
@@ -63,7 +63,7 @@ class PageReg extends Component {
     );
   }
 
-  private toggleControls(inputs: FormControl[]): void {
+  private toggleControls(inputs: FormControlType[]): void {
     inputs.forEach((i) => {
       i.clear();
       i.setProps({ isDisabled: !i.getState().isDisabled, isError: false });
