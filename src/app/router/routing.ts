@@ -4,17 +4,17 @@ import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
-import Routes from './routes';
+import Route from './routes';
 
 const router = new Navigo('/');
 
 const initRouter = (): void => {
   router
     .on({
-      [Routes.Home]: () => Main.setProps({ page: new PageHome() }),
-      [Routes.Default]: () => Main.setProps({ page: new PageHome() }),
-      [Routes.Login]: () => Main.setProps({ page: new PageLogin() }),
-      [Routes.Registration]: () => Main.setProps({ page: new PageReg() }),
+      [Route.Home]: () => Main.setProps({ page: new PageHome() }),
+      [Route.Default]: () => Main.setProps({ page: new PageHome() }),
+      [Route.Login]: () => Main.setProps({ page: new PageLogin() }),
+      [Route.Registration]: () => Main.setProps({ page: new PageReg() }),
     })
     .resolve();
 

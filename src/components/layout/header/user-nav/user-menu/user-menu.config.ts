@@ -1,6 +1,6 @@
-import Routes from '@app/router/routes';
+import Route from '@app/router/routes';
 
 export const anonymConfig = [
-  { text: 'Sign In', href: Routes.Login },
-  { text: 'Sign Up', href: Routes.Registration },
+  { text: 'Sign In', href: Route.Login },
+  { text: 'Sign Up', href: Route.Registration },
 ];
