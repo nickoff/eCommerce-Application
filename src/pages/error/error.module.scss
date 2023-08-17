@@ -1,6 +1,9 @@
 @import '../../styles/helpers/variables';
 
 .page-wrapper {
+  margin: auto;
+  max-width: 50rem;
+  height: 37rem;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -8,11 +11,9 @@
   justify-content: center;
 }
 
-.pagePic {
-  width: 60rem;
-  height: 44.6rem;
-  max-width: 80%;
-  max-height: 80%;
+.page-pic {
+  height: 100%;
+  width: 100%;
   background-image: url('./assets/404.png');
   background-position: center;
   background-repeat: no-repeat;

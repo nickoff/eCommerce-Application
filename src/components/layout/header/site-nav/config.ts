@@ -1,6 +1,6 @@
 enum LinkText {
   Home = 'HOME',
-  Headphones = 'Headphones,',
+  Headphones = 'HEADPHONES',
   Speakers = 'SPEAKERS',
   Earphones = 'EARPHONES',
 }

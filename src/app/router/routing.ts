@@ -15,8 +15,11 @@ const initRouter = (): void => {
       [Routes.Default]: () => Main.setProps({ page: new PageHome() }),
       [Routes.Login]: () => Main.setProps({ page: new PageLogin() }),
       [Routes.Registration]: () => Main.setProps({ page: new PageReg() }),
-      [Routes.Error]: () => Main.setProps({ page: new PageError() }),
     })
     .resolve();
+
+  router.notFound(() => {
+    Main.setProps({ page: new PageError() });
+  });
 };
 export { initRouter, router };
