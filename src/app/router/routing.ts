@@ -11,6 +11,7 @@ const initRouter = (): void => {
   router
     .on({
       [Routes.Home]: () => Main.setProps({ page: new PageHome() }),
+      [Routes.Default]: () => Main.setProps({ page: new PageHome() }),
       [Routes.Login]: () => Main.setProps({ page: new PageLogin() }),
       [Routes.Registration]: () => Main.setProps({ page: new PageReg() }),
     })
