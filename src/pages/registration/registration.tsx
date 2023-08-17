@@ -81,7 +81,7 @@ class PageReg extends Component {
       if (form) {
         const customer = formDataBuilder(form);
         if (!customer.email) return;
-        await AuthService.register(customer, (ok) => console.log(ok));
+        await AuthService.register(customer, (err) => console.log(err));
       }
     }
   }
