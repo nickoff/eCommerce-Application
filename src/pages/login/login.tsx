@@ -4,6 +4,7 @@ import { Input } from '@components/shared/ui/input/input';
 import { InputName } from '@shared/enums/input.enum';
 // import cx from 'clsx';
 import Button from '@components/shared/ui/button/button';
+import Routes from '@app/router/routes';
 import s from './login.module.scss';
 
 import LoginPageText from './config';
@@ -28,7 +29,7 @@ class PageLogin extends Component {
           {pasInput.render()}
           <span className={s.signText}>
             Not registered yet?
-            <a className={s.signLink} href="#">
+            <a className={s.signLink} href={Routes.Registration} attributes={{ 'data-navigo': '' }}>
               {LoginPageText.Link}
             </a>
           </span>

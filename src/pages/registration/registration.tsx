@@ -3,6 +3,7 @@ import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import { Input } from '@components/shared/ui/input/input';
 import Button from '@components/shared/ui/button/button';
+import Routes from '@app/router/routes';
 import s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
 
@@ -47,7 +48,10 @@ class PageReg extends Component {
             {render(this.billingInputs)}
           </div>
           <p className={s.para}>
-            Already registered? <a href="#">Sign In</a>
+            Already registered?{' '}
+            <a href={Routes.Login} attributes={{ 'data-navigo': '' }}>
+              Sign In
+            </a>
           </p>
           <Button className={s.submitBtn} onClick={(): null => null} content={'Sign Up'} />
         </form>
