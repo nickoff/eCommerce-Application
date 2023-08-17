@@ -1,8 +1,9 @@
+/* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import Button from '@components/shared/ui/button/button';
-import Routes from '@app/router/routes';
+import Route from '@app/router/routes';
 import { FormControl } from '@shared/types';
 import s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
