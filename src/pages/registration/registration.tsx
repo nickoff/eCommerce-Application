@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import Button from '@components/shared/ui/button/button';
 import { formDataBuilder } from '@shared/utils/formData-builder';
 import { FormControl } from '@shared/types';
+import AuthService from '@app/auth.service';
 import s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
 
@@ -72,12 +74,14 @@ class PageReg extends Component {
     });
   }
 
-  private onClickSubmit(e: Event): void {
+  private async onClickSubmit(e: Event): Promise<void> {
     e.preventDefault();
     if (e.target) {
       const { form } = e.target as HTMLButtonElement;
       if (form) {
-        formDataBuilder(form);
+        const customer = formDataBuilder(form);
+        if (!customer.email) return;
+        await AuthService.register(customer, (ok) => console.log(ok));
       }
     }
   }

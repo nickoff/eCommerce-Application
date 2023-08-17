@@ -25,8 +25,6 @@ function formRegValidator(form: HTMLFormElement): boolean {
       }
     }
   });
-  // eslint-disable-next-line no-console
-  console.log(hasErrors);
   return hasErrors;
 }
 
@@ -64,21 +62,19 @@ export function formDataBuilder(form: HTMLFormElement): INewCustomer {
           dataDraft[inputValue.name] = [dataDraft[inputValue.name] as string, inputValue.value];
         }
       } else {
-        dataDraft[inputValue.name] = inputValue.value;
+        dataDraft[inputValue.name] = inputValue.type === 'checkbox' ? inputValue.checked : inputValue.value;
       }
     });
   }
 
   const data: INewCustomer = {
     shippingAddress: getShippingAddress(dataDraft),
-    billingAddress: dataDraft.useShippingAddress === 'on' ? undefined : getBillingAddress(dataDraft),
+    billingAddress: dataDraft.useShippingAddress ? undefined : getBillingAddress(dataDraft),
     firstName: dataDraft.firstName as string,
     lastName: dataDraft.lastName as string,
     email: dataDraft.email as string,
+    dateOfBirth: new Date(dataDraft.dateOfBirth as string),
     password: Array.isArray(dataDraft.password) ? dataDraft.password[0] : (dataDraft.password as string),
   };
-
-  // eslint-disable-next-line no-console
-  console.log(data);
   return data;
 }
