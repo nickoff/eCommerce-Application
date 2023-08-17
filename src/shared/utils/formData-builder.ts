@@ -1,5 +1,8 @@
+/* eslint-disable prefer-const */
 import { Input } from '@components/shared/ui/input/input';
 import Select from '@components/shared/ui/select/select';
+
+type ObjectData = Record<string, string | File | number | boolean | Date>;
 
 export function formDataBuilder(form: HTMLFormElement): void {
   let hasErrors = false;
@@ -19,7 +22,14 @@ export function formDataBuilder(form: HTMLFormElement): void {
       }
     }
   });
+  const data: ObjectData = {};
+  if (!hasErrors) {
+    const formData = new FormData(form);
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
 
-  // eslint-disable-next-line no-console
-  console.log(hasErrors);
+    // eslint-disable-next-line no-console
+    console.log(data);
+  }
 }
