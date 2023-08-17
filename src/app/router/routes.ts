@@ -3,6 +3,7 @@ enum Routes {
   Login = '/login',
   Registration = '/registration',
   Default = '',
+  Error = '/*',
 }
 
 export default Routes;
