@@ -7,6 +7,7 @@ import Button from '@components/shared/ui/button/button';
 import { qs } from '@shared/utils/dom-helpers';
 import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
+import Route from '@app/router/routes';
 import s from './login.module.scss';
 
 import LoginPageText from './config';
@@ -42,7 +43,7 @@ class PageLogin extends Component {
           {pasInput.render()}
           <span className={s.signText}>
             Not registered yet?
-            <a className={s.signLink} href="#">
+            <a className={s.signLink} href={Route.Registration} attributes={{ 'data-navigo': '' }}>
               {LoginPageText.Link}
             </a>
           </span>

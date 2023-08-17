@@ -1,8 +1,10 @@
+/* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import Button from '@components/shared/ui/button/button';
 import { type FormControlType } from '@shared/types';
+import Route from '@app/router/routes';
 import s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
 
@@ -55,7 +57,10 @@ class PageReg extends Component {
             {render(this.billingControls)}
           </div>
           <p className={s.para}>
-            Already registered? <a href="#">Sign In</a>
+            Already registered?{' '}
+            <a href={Route.Login} attributes={{ 'data-navigo': '' }}>
+              Sign In
+            </a>
           </p>
           <Button className={s.submitBtn} onClick={(): null => null} content={'Sign Up'} />
         </form>

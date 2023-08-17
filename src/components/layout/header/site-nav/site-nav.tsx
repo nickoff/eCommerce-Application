@@ -16,7 +16,7 @@ class SiteNav extends Component {
           <ul className={cx('navbar-nav', s.siteNavList)}>
             {linksConfig.map((link) => (
               <li className={cx('nav-item', s.siteNavItem)}>
-                <a className={cx('nav-link', s.siteNavLink)} href={link.route}>
+                <a className={cx('nav-link', s.siteNavLink)} href={link.route} attributes={{ 'data-navigo': '' }}>
                   {link.text}
                 </a>
               </li>
