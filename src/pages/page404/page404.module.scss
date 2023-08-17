@@ -1,0 +1,29 @@
+@import '../../styles/helpers/variables';
+
+.page-wrapper {
+  margin: auto;
+  max-width: 50rem;
+  height: 37rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-pic {
+  height: 100%;
+  width: 100%;
+  background-image: url('./assets/404.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.page-title {
+  text-align: center;
+}
+
+a {
+  font-size: 1.6rem;
+}

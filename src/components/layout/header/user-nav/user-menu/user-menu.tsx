@@ -25,10 +25,10 @@ class UserDropdownMenu extends Component {
           </li>
         ) : (
           anonymConfig.map((item) => (
-            <li>
-              <button className={cx('dropdown-item', s.userMenuDropdownItem)} onclick={item.onclick}>
+            <li className={cx('dropdown-item', s.userMenuDropdownItem)}>
+              <a className={s.userMenuDropdownLink} href={item.href} attributes={{ 'data-navigo': '' }}>
                 {item.text}
-              </button>
+              </a>
             </li>
           ))
         )}
