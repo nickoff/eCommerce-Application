@@ -49,7 +49,7 @@ class Select extends Component<ISelectProps> {
     );
   }
 
-  private toggleRequiredError(): void {
+  toggleRequiredError(): void {
     if (!this.props.isRequired) {
       return;
     }
