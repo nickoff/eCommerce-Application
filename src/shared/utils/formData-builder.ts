@@ -4,7 +4,7 @@ import Select from '@components/shared/ui/select/select';
 
 type ObjectData = Record<string, string | File | number | boolean | Date>;
 
-export function formDataBuilder(form: HTMLFormElement): void {
+export function formDataBuilder(form: HTMLFormElement): ObjectData {
   let hasErrors = false;
   const arrInput = Array.from(form.elements).filter(
     (el) => el instanceof HTMLInputElement || el instanceof HTMLSelectElement,
@@ -22,14 +22,14 @@ export function formDataBuilder(form: HTMLFormElement): void {
       }
     }
   });
+
   const data: ObjectData = {};
   if (!hasErrors) {
     const formData = new FormData(form);
     formData.forEach((value, key) => {
       data[key] = value;
     });
-
-    // eslint-disable-next-line no-console
-    console.log(data);
   }
+
+  return data;
 }
