@@ -31,7 +31,6 @@
 }
 
 .user-menu__dropdown-item {
-  padding: 10px 25px;
   font-size: $base-font-size;
   font-weight: $base-font-weight;
   color: $default-color !important;
@@ -39,5 +38,14 @@
 
   &:hover {
     background-color: $primary-color-hover;
+  }
+}
+
+.user-menu__dropdown-link {
+  display: block;
+  padding: 10px 25px;
+
+  &:is(:active, :focus) {
+    outline: none;
   }
 }
