@@ -7,7 +7,7 @@ enum LinkText {
 
 export const linksConfig = [
   { text: LinkText.Home, route: 'home' },
-  { text: LinkText.Headphones, route: 'headphones' },
-  { text: LinkText.Speakers, route: 'speakers' },
-  { text: LinkText.Earphones, route: 'earphones' },
+  { text: LinkText.Headphones, route: '#' },
+  { text: LinkText.Speakers, route: '#' },
+  { text: LinkText.Earphones, route: '#' },
 ];
