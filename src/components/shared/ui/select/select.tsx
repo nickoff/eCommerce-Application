@@ -35,8 +35,8 @@ class Select extends Component<ISelectProps> {
           name={name}
           required={isRequired}
           disabled={isDisabled}
-          onblur={(): void => this.toggleRequiredError()}
-          onchange={(): void => this.toggleRequiredError()}
+          onblur={(): boolean => this.toggleRequiredError()}
+          onchange={(): boolean => this.toggleRequiredError()}
         >
           {options.map((opt, index) => (
             <option value={opt.value} selected={selectedOption === index} disabled={opt.isDisabled}>
@@ -49,18 +49,18 @@ class Select extends Component<ISelectProps> {
     );
   }
 
-  toggleRequiredError(): void {
-    if (!this.props.isRequired) {
-      return;
-    }
-
-    if (!this.options.some((opt) => opt.selected && !opt.disabled)) {
+  toggleRequiredError(): boolean {
+    if (this.props.isRequired) {
+      if (this.options.some((opt) => opt.selected && !opt.disabled)) {
+        this.errorPara.textContent = '';
+        this.element.classList.remove(s.selectInvalid);
+        return true;
+      }
       this.errorPara.textContent = 'This field is required';
       this.element.classList.add(s.selectInvalid);
-    } else {
-      this.errorPara.textContent = '';
-      this.element.classList.remove(s.selectInvalid);
+      return false;
     }
+    return false;
   }
 }
 
