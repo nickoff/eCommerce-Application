@@ -2,6 +2,7 @@ import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
+import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
 import s from './select.module.scss';
 import { type ISelectProps } from './select.interface';
 
@@ -19,6 +20,10 @@ class Select extends Component<ISelectProps> {
     });
   }
 
+  isValid(): boolean {
+    return this.select.selectedIndex !== 0;
+  }
+
   componentDidRender(): void {
     this.select = qs('select', this.getContent());
     this.options = [...this.select.options];
@@ -29,7 +34,7 @@ class Select extends Component<ISelectProps> {
     const { name, options, isRequired, isDisabled, className, selectedOption, labelText } = this.props;
 
     return (
-      <div className={cx(s.select, className)}>
+      <div className={cx(s.select, className)} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <span className={s.selectLabel}>{labelText}</span>
         <select
           name={name}

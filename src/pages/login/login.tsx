@@ -2,8 +2,11 @@ import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { Input } from '@components/shared/ui/input/input';
 import { InputName } from '@shared/enums/input.enum';
-// import cx from 'clsx';
+import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import Button from '@components/shared/ui/button/button';
+import { qs } from '@shared/utils/dom-helpers';
+import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
+import AuthService from '@app/auth.service';
 import Route from '@app/router/routes';
 import s from './login.module.scss';
 
@@ -22,6 +25,15 @@ const pasInput = new Input({
 });
 
 class PageLogin extends Component {
+  private form!: HTMLFormElement;
+
+  private msgPara!: HTMLParagraphElement;
+
+  componentDidRender(): void {
+    this.form = qs('form', this.getContent());
+    this.msgPara = qs(`.${s.loginMsg}`, this.getContent());
+  }
+
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
@@ -35,9 +47,34 @@ class PageLogin extends Component {
               {LoginPageText.Link}
             </a>
           </span>
-          <Button onClick={(): null => null} content={'Sign In'} />
+          <p className={s.loginMsg}></p>
+          <Button onClick={this.onFormSubmit.bind(this)} content={'Sign In'} />
         </form>
       </div>
+    );
+  }
+
+  private async onFormSubmit(e: Event): Promise<void> {
+    e.preventDefault();
+
+    if (!isFormValid(this.form)) {
+      return;
+    }
+
+    const credentials = buildFormData<ICustomerCredentials>(this.form);
+
+    const onSucces = (): void => {
+      this.msgPara.innerHTML = "You've logged in";
+    };
+
+    const onError = (): void => {
+      this.msgPara.innerHTML = 'Wrong email or password';
+    };
+
+    await AuthService.login(
+      credentials,
+      () => onSucces(),
+      () => onError(),
     );
   }
 }
