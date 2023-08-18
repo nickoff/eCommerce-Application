@@ -6,11 +6,13 @@ import { getResolver } from '@shared/validation';
 import { InputName } from '@shared/enums';
 import { qs } from '@shared/utils/dom-helpers';
 import CustomerRepoService from '@shared/api/customer/customer-repo.service';
+import { IFormControl } from '@shared/interfaces/form-control.interface';
+import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
 import s from './input.module.scss';
 import { InputType } from './input.enum';
 import { IInputProps } from './input.interface';
 
-export class Input extends Component<IInputProps> {
+export class Input extends Component<IInputProps> implements IFormControl {
   private inputValue = '';
 
   private errorMessage = '';
@@ -24,6 +26,10 @@ export class Input extends Component<IInputProps> {
   clear(): void {
     this.input.value = '';
     this.inputValue = '';
+  }
+
+  isValid(): boolean {
+    return this.validation();
   }
 
   componentDidRender(): void {
@@ -108,7 +114,7 @@ export class Input extends Component<IInputProps> {
     const { name, isError, labelText, placeholder, isDisabled, isRequired } = this.props;
 
     return (
-      <div className={cx(s.input, isError && s.inputInvalid)}>
+      <div className={cx(s.input, isError && s.inputInvalid)} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <div className={s.inputLabel}>
           <p>{labelText}</p>
         </div>
