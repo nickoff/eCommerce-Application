@@ -1,16 +1,18 @@
 import { IFormControl } from '@shared/interfaces/form-control.interface';
 
-export function isFormValid(form: HTMLFormElement): boolean {
+export async function isFormValid(form: HTMLFormElement): Promise<boolean> {
   const controls = [...form.elements];
 
   let result = true;
 
-  controls.forEach((ctrl) => {
-    if (['INPUT', 'SELECT'].includes(ctrl.tagName)) {
-      const isValid = ctrl.getComponent<IFormControl>().isValid();
-      if (!isValid) result = false;
-    }
-  });
+  await Promise.all(
+    controls.map(async (ctrl) => {
+      if (['INPUT', 'SELECT'].includes(ctrl.tagName)) {
+        const isValid = await ctrl.getComponent<IFormControl>().isValid();
+        if (!isValid) result = false;
+      }
+    }),
+  );
 
   return result;
 }

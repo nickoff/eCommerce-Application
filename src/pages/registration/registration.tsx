@@ -4,8 +4,6 @@ import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import Button from '@components/shared/ui/button/button';
-import { formDataBuilder } from '@shared/utils/formData-builder';
-import AuthService from '@app/auth.service';
 import { type FormControlType } from '@shared/types';
 import Route from '@app/router/routes';
 import s from './registration.module.scss';
@@ -66,7 +64,7 @@ class PageReg extends Component {
               Sign In
             </a>
           </p>
-          <Button className={s.submitBtn} onClick={this.onClickSubmit} content={'Sign Up'} />
+          <Button className={s.submitBtn} onClick={(): boolean => false} content={'Sign Up'} />
         </form>
       </div>
     );
@@ -75,20 +73,8 @@ class PageReg extends Component {
   private toggleControls(inputs: FormControlType[]): void {
     inputs.forEach((i) => {
       i.clear();
-      i.setProps({ isDisabled: !i.getState().isDisabled, isError: false });
+      i.setProps({ disabled: !i.getState().disabled });
     });
-  }
-
-  private async onClickSubmit(e: Event): Promise<void> {
-    e.preventDefault();
-    if (e.target) {
-      const { form } = e.target as HTMLButtonElement;
-      if (form) {
-        const customer = formDataBuilder(form);
-        if (!customer.email) return;
-        await AuthService.register(customer, (err) => console.log(err));
-      }
-    }
   }
 }
 

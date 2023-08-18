@@ -45,18 +45,20 @@ class CustomerRepoService {
     return customer;
   }
 
-  @extractHttpError
-  static async checkExistingEmail(email: string): Promise<boolean | HttpErrorType> {
-    const response = await apiRoot
-      .customers()
-      .get({
-        queryArgs: {
-          where: `email="${email}"`,
-        },
-      })
-      .execute();
-
-    return !!response.body.results.length;
+  static async isEmailUnique(email: string): Promise<boolean> {
+    try {
+      const response = await apiRoot
+        .customers()
+        .get({
+          queryArgs: {
+            where: `email="${email}"`,
+          },
+        })
+        .execute();
+      return !response.body.results.length;
+    } catch {
+      return true;
+    }
   }
 
   static createCustomerDraft(customerData: INewCustomer): CustomerDraft {

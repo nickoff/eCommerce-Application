@@ -1,14 +1,12 @@
-import { InputName } from '@shared/enums';
+import { StringSchema, DateSchema } from 'yup';
+import { InputType } from '@shared/enums';
 
 export interface IInputProps extends IProps {
-  name: InputName | string;
-  type?: HTMLInputElement['type'];
-  isDisabled?: boolean;
+  name: string;
+  type?: InputType;
   placeholder?: string;
-  labelText?: string;
-  isRequired?: boolean;
-  isError?: boolean;
-  isPassword?: boolean;
-  isRegEmail?: boolean;
-  noValidationRequired?: boolean;
+  label?: string;
+  required?: boolean;
+  disabled?: boolean;
+  validationSchema?: StringSchema | DateSchema;
 }

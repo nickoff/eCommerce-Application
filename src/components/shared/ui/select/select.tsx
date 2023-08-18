@@ -3,10 +3,11 @@ import cx from 'clsx';
 import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
 import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
+import { IFormControl } from '@shared/interfaces/form-control.interface';
 import s from './select.module.scss';
 import { type ISelectProps } from './select.interface';
 
-class Select extends Component<ISelectProps> {
+class Select extends Component<ISelectProps> implements IFormControl {
   private select!: HTMLSelectElement;
 
   private options!: HTMLOptionElement[];
@@ -21,7 +22,12 @@ class Select extends Component<ISelectProps> {
   }
 
   isValid(): boolean {
-    return this.select.selectedIndex !== 0;
+    if (!this.props.required) {
+      return true;
+    }
+
+    this.toggleRequiredError();
+    return this.isValueSelected();
   }
 
   componentDidRender(): void {
@@ -31,20 +37,20 @@ class Select extends Component<ISelectProps> {
   }
 
   render(): JSX.Element {
-    const { name, options, isRequired, isDisabled, className, selectedOption, labelText } = this.props;
+    const { name, options, required, disabled, className, selectedOption, labelText } = this.props;
 
     return (
       <div className={cx(s.select, className)} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <span className={s.selectLabel}>{labelText}</span>
         <select
           name={name}
-          required={isRequired}
-          disabled={isDisabled}
-          onblur={(): boolean => this.toggleRequiredError()}
-          onchange={(): boolean => this.toggleRequiredError()}
+          required={required}
+          disabled={disabled}
+          onblur={this.toggleRequiredError.bind(this)}
+          onchange={this.toggleRequiredError.bind(this)}
         >
           {options.map((opt, index) => (
-            <option value={opt.value} selected={selectedOption === index} disabled={opt.isDisabled}>
+            <option value={opt.value} selected={selectedOption === index} disabled={opt.disabled}>
               {opt.content}
             </option>
           ))}
@@ -54,18 +60,22 @@ class Select extends Component<ISelectProps> {
     );
   }
 
-  toggleRequiredError(): boolean {
-    if (this.props.isRequired) {
-      if (this.options.some((opt) => opt.selected && !opt.disabled)) {
-        this.errorPara.textContent = '';
-        this.element.classList.remove(s.selectInvalid);
-        return true;
-      }
+  private toggleRequiredError(): void {
+    if (!this.props.required) {
+      return;
+    }
+
+    if (this.isValueSelected()) {
+      this.errorPara.textContent = '';
+      this.element.classList.remove(s.selectInvalid);
+    } else {
       this.errorPara.textContent = 'This field is required';
       this.element.classList.add(s.selectInvalid);
-      return false;
     }
-    return false;
+  }
+
+  private isValueSelected(): boolean {
+    return this.select.selectedIndex !== 0;
   }
 }
 

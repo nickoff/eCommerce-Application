@@ -1,6 +1,5 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
-import { Input } from '@components/shared/ui/input/input';
 import { InputName } from '@shared/enums/input.enum';
 import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import Button from '@components/shared/ui/button/button';
@@ -8,20 +7,21 @@ import { qs } from '@shared/utils/dom-helpers';
 import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
 import Route from '@app/router/routes';
+import { Input } from '@components/shared/ui/input/input';
 import s from './login.module.scss';
 
 import LoginPageText from './config';
 
 const emailInput = new Input({
   name: InputName.Email,
-  labelText: LoginPageText.LableForEmail,
-  isRequired: true,
+  label: LoginPageText.LableForEmail,
+  required: true,
 });
 
 const pasInput = new Input({
   name: InputName.Password,
-  labelText: LoginPageText.LableForPas,
-  isRequired: true,
+  label: LoginPageText.LableForPas,
+  required: true,
 });
 
 class PageLogin extends Component {
