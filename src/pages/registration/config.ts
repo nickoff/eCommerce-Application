@@ -3,7 +3,6 @@ import Select from '@components/shared/ui/select/select';
 import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
-import { qs } from '@shared/utils/dom-helpers';
 
 const pwdInput = new Input({
   name: InputName.Password,
@@ -22,11 +21,8 @@ const confirmPwdInput = new Input({
   additionalValidationContext: { getPwdValue: pwdInput.getValue.bind(pwdInput) },
 });
 
-pwdInput.componentDidRender = new Proxy(pwdInput.componentDidRender, {
-  apply: (...args): void => {
-    Reflect.apply(...args);
-    qs('input', pwdInput.getContent()).addEventListener('input', () => confirmPwdInput.isValid());
-  },
+pwdInput.afterRender((component) => {
+  component.input.addEventListener('input', () => confirmPwdInput.isValid());
 });
 
 export const controls = {
@@ -65,10 +61,10 @@ export const controls = {
   }),
 };
 
-export function newAdressControls(): FormControlType[] {
+export function newAdressControls(variant: 'Billing' | 'Shipping'): FormControlType[] {
   return [
     new Select({
-      name: InputName.Country,
+      name: `${InputName.Country}${variant}`,
       options: [
         { value: '', content: '', disabled: true },
         { value: 'RU', content: 'Russia' },
@@ -80,19 +76,19 @@ export function newAdressControls(): FormControlType[] {
       required: true,
     }),
     new Input({
-      name: InputName.City,
+      name: `${InputName.City}${variant}`,
       label: 'City',
       required: true,
       validationSchema: Schema.NO_SPECIAL_SCHEMA,
     }),
     new Input({
-      name: InputName.StreetName,
+      name: `${InputName.StreetName}${variant}`,
       label: 'Street',
       required: true,
       validationSchema: Schema.DEFAULT_STRING_SCHEMA,
     }),
     new Input({
-      name: InputName.PostalCode,
+      name: `${InputName.PostalCode}${variant}`,
       label: 'Postal code',
       required: true,
       validationSchema: Schema.POSTAL_CODE_SCHEMA,
