@@ -8,7 +8,7 @@ interface IState {
   customer: Customer | null;
 }
 
-export class Store {
+export default class Store {
   private readonly state: IState;
 
   private observers: {

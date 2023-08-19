@@ -1,7 +1,7 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import Component from '@shared/component';
-import { Store } from '@app/store';
+import Store from '@app/store';
 import AuthService from '@app/auth.service';
 import { anonymConfig } from './user-menu.config';
 import s from './user-menu.module.scss';

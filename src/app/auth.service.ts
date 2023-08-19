@@ -3,7 +3,7 @@ import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 import CustomerRepoService from '@shared/api/customer/customer-repo.service';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import { type Customer } from '@commercetools/platform-sdk';
-import { Store } from './store';
+import Store from './store';
 
 class AuthService {
   static async register(

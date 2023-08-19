@@ -6,6 +6,7 @@ import { qs } from '@shared/utils/dom-helpers';
 import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
 import Route from '@app/router/routes';
+import { router } from '@app/router/routing';
 import s from './login.module.scss';
 import { controls, LoginPageText } from './config';
 
@@ -50,6 +51,7 @@ class PageLogin extends Component {
 
     const onSucces = (): void => {
       this.msgPara.innerHTML = "You've logged in";
+      setTimeout(() => router.navigate(Route.Home), 500);
     };
 
     const onError = (): void => {

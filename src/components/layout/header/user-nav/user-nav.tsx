@@ -1,7 +1,7 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import Component from '@shared/component';
-import { Store } from '@app/store';
+import Store from '@app/store';
 import 'bootstrap/js/dist/dropdown';
 import s from './user-nav.module.scss';
 import CartIcon from './assets/cart-icon.svg';
