@@ -21,6 +21,10 @@ export class Input extends Component<IInputProps> implements IFormControl {
     this.errorPara.classList.add(s.errorMessage);
   }
 
+  getValue(): string {
+    return this.input.value;
+  }
+
   clear(): void {
     this.input.value = '';
   }
@@ -55,7 +59,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
   }
 
   private async validate(): Promise<void> {
-    const { validationSchema: schema, required } = this.props;
+    const { validationSchema: schema, required, additionalValidationContext } = this.props;
     const { value } = this.input;
 
     if (!schema) {
@@ -68,7 +72,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
     }
 
     try {
-      await schema.validate(value, { context: { required } });
+      await schema.validate(value, { context: { required, ...additionalValidationContext } });
       if (this.hasError) this.removeError();
     } catch (error) {
       if (error instanceof ValidationError) {

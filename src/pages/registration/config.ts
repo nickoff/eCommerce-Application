@@ -3,6 +3,31 @@ import Select from '@components/shared/ui/select/select';
 import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
+import { qs } from '@shared/utils/dom-helpers';
+
+const pwdInput = new Input({
+  name: InputName.Password,
+  type: InputType.Password,
+  label: 'Password',
+  required: true,
+  validationSchema: Schema.PASSWORD_SCHEMA,
+});
+
+const confirmPwdInput = new Input({
+  name: InputName.Password,
+  type: InputType.Password,
+  label: 'Confirm Password',
+  required: true,
+  validationSchema: Schema.PASSWORD_CONFIRM_SCHEMA,
+  additionalValidationContext: { getPwdValue: pwdInput.getValue.bind(pwdInput) },
+});
+
+pwdInput.componentDidRender = new Proxy(pwdInput.componentDidRender, {
+  apply: (...args): void => {
+    Reflect.apply(...args);
+    qs('input', pwdInput.getContent()).addEventListener('input', () => confirmPwdInput.isValid());
+  },
+});
 
 export const controls = {
   firstName: new Input({
@@ -24,19 +49,8 @@ export const controls = {
     required: true,
     validationSchema: Schema.EMAIL_UNIQUE_SCHEMA,
   }),
-  password: new Input({
-    name: InputName.Password,
-    type: InputType.Password,
-    label: 'Password',
-    required: true,
-    validationSchema: Schema.PASSWORD_SCHEMA,
-  }),
-  passwordConfirm: new Input({
-    name: InputName.Password,
-    type: InputType.Password,
-    label: 'Confirm Password',
-    required: true,
-  }),
+  password: pwdInput,
+  passwordConfirm: confirmPwdInput,
   phone: new Input({
     name: InputName.Phone,
     type: InputType.Phone,

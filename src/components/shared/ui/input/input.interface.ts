@@ -9,4 +9,5 @@ export interface IInputProps extends IProps {
   required?: boolean;
   disabled?: boolean;
   validationSchema?: StringSchema | DateSchema;
+  additionalValidationContext?: object;
 }
