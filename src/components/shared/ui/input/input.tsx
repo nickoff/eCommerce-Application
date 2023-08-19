@@ -4,6 +4,7 @@ import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
 import { IFormControl } from '@shared/interfaces/form-control.interface';
 import { InputType } from '@shared/enums';
+import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
 import s from './input.module.scss';
 import { IInputProps } from './input.interface';
 
@@ -31,7 +32,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
 
   async isValid(): Promise<boolean> {
     await this.validate();
-    return this.hasError;
+    return !this.hasError;
   }
 
   componentDidRender(): void {
@@ -42,7 +43,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
     const { name, label, type, placeholder, disabled, required } = this.props;
 
     return (
-      <div className={s.input}>
+      <div className={s.input} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <span className={s.inputLabel}>{label}</span>
 
         <input
