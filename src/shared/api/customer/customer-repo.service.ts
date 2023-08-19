@@ -3,7 +3,6 @@ import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 
 import { INewCustomer, ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import apiRoot from '../api-root';
-import { stringifyDate } from './stringify-date';
 import extractHttpError from '../extract-http-error.decorator';
 
 class CustomerRepoService {
@@ -62,12 +61,21 @@ class CustomerRepoService {
   }
 
   static createCustomerDraft(customerData: INewCustomer): CustomerDraft {
-    const { firstName, lastName, email, password, dateOfBirth, shippingAddress, billingAddress } = customerData;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      dateOfBirth,
+      useShippingAddress,
+      isDefaultBilling,
+      isDefaultShipping,
+    } = customerData;
 
-    const addresses: BaseAddress[] = [shippingAddress];
+    const addresses = [this.createBaseAddress(customerData, 'Shipping')];
 
-    if (billingAddress) {
-      addresses.push(billingAddress);
+    if (!useShippingAddress) {
+      addresses.push(this.createBaseAddress(customerData, 'Billing'));
     }
 
     const customerDraft: CustomerDraft = {
@@ -75,20 +83,30 @@ class CustomerRepoService {
       lastName,
       email,
       password,
+      dateOfBirth,
       addresses,
-      defaultShippingAddress: 0,
-      defaultBillingAddress: 0,
     };
 
-    if (dateOfBirth) {
-      Object.assign(customerDraft, { dateOfBirth: stringifyDate(dateOfBirth) });
+    if (isDefaultShipping) {
+      Object.assign(customerDraft, { defaultShippingAddress: 0 });
     }
 
-    if (billingAddress) {
+    if (isDefaultBilling && useShippingAddress) {
+      Object.assign(customerDraft, { defaultBillingAddress: 0 });
+    } else if (isDefaultBilling) {
       Object.assign(customerDraft, { defaultBillingAddress: 1 });
     }
 
     return customerDraft;
+  }
+
+  private static createBaseAddress(data: INewCustomer, addressType: 'Billing' | 'Shipping'): BaseAddress {
+    return {
+      country: data[`country${addressType}`] ?? '',
+      city: data[`city${addressType}`],
+      streetName: data[`street${addressType}`],
+      postalCode: data[`postalCode${addressType}`],
+    };
   }
 }
 

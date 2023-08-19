@@ -4,12 +4,12 @@ import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
 import { IFormControl } from '@shared/interfaces/form-control.interface';
 import { InputType } from '@shared/enums';
-import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
+import { COMPONENT_ROOT_ATTR, COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
 import s from './input.module.scss';
 import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> implements IFormControl {
-  private input!: HTMLInputElement;
+  input!: HTMLInputElement;
 
   private errorPara: HTMLParagraphElement;
 
@@ -35,7 +35,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
     return !this.hasError;
   }
 
-  componentDidRender(): void {
+  protected componentDidRender(): void {
     this.input = qs('input', this.getContent());
   }
 
@@ -53,6 +53,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
           placeholder={placeholder ?? ''}
           disabled={disabled}
           required={required}
+          attributes={{ [COMPONENT_CHILD_ATTR]: '' }}
         />
         {this.errorPara}
       </div>
@@ -60,12 +61,13 @@ export class Input extends Component<IInputProps> implements IFormControl {
   }
 
   private async validate(): Promise<void> {
-    const { validationSchema: schema, required, additionalValidationContext } = this.props;
-    const { value } = this.input;
+    const { validationSchema: schema, required, disabled, additionalValidationContext } = this.props;
 
-    if (!schema) {
+    if (disabled || !schema) {
       return;
     }
+
+    const { value } = this.input;
 
     if (!value && !required) {
       if (this.hasError) this.removeError();

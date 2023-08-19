@@ -4,9 +4,9 @@ export enum InputName {
   FirstName = 'firstName',
   LastName = 'lastName',
   DateOfBirth = 'dateOfBirth',
-  StreetName = 'streetName',
+  StreetName = 'street',
   City = 'city',
-  PostalCode = 'postalCode',
+  PostalCode = 'postal',
   Country = 'country',
   Phone = 'phone',
 }

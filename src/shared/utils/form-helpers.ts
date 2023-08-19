@@ -1,4 +1,5 @@
 import { IFormControl } from '@shared/interfaces/form-control.interface';
+import { COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
 
 export async function isFormValid(form: HTMLFormElement): Promise<boolean> {
   const controls = [...form.elements];
@@ -6,9 +7,9 @@ export async function isFormValid(form: HTMLFormElement): Promise<boolean> {
   let result = true;
 
   await Promise.all(
-    controls.map(async (ctrl) => {
-      if (['INPUT', 'SELECT'].includes(ctrl.tagName)) {
-        const isValid = await ctrl.getComponent<IFormControl>().isValid();
+    controls.map(async (ctrlEl) => {
+      if (ctrlEl.hasAttribute(COMPONENT_CHILD_ATTR)) {
+        const isValid = await ctrlEl.getComponent<IFormControl>().isValid();
         if (!isValid) result = false;
       }
     }),

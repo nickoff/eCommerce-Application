@@ -2,7 +2,7 @@ import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
-import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
+import { COMPONENT_ROOT_ATTR, COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
 import { IFormControl } from '@shared/interfaces/form-control.interface';
 import s from './select.module.scss';
 import { type ISelectProps } from './select.interface';
@@ -22,7 +22,9 @@ class Select extends Component<ISelectProps> implements IFormControl {
   }
 
   isValid(): boolean {
-    if (!this.props.required) {
+    const { required, disabled } = this.props;
+
+    if (!required || disabled) {
       return true;
     }
 
@@ -48,6 +50,7 @@ class Select extends Component<ISelectProps> implements IFormControl {
           disabled={disabled}
           onblur={this.toggleRequiredError.bind(this)}
           onchange={this.toggleRequiredError.bind(this)}
+          attributes={{ [COMPONENT_CHILD_ATTR]: '' }}
         >
           {options.map((opt, index) => (
             <option value={opt.value} selected={selectedOption === index} disabled={opt.disabled}>
