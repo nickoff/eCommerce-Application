@@ -2,11 +2,12 @@ import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
-import { COMPONENT_ROOT_ATTR } from '@shared/constants/misc';
+import { COMPONENT_ROOT_ATTR, COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
+import { IFormControl } from '@shared/interfaces/form-control.interface';
 import s from './select.module.scss';
 import { type ISelectProps } from './select.interface';
 
-class Select extends Component<ISelectProps> {
+class Select extends Component<ISelectProps> implements IFormControl {
   private select!: HTMLSelectElement;
 
   private options!: HTMLOptionElement[];
@@ -21,7 +22,14 @@ class Select extends Component<ISelectProps> {
   }
 
   isValid(): boolean {
-    return this.select.selectedIndex !== 0;
+    const { required, disabled } = this.props;
+
+    if (!required || disabled) {
+      return true;
+    }
+
+    this.toggleRequiredError();
+    return this.isValueSelected();
   }
 
   componentDidRender(): void {
@@ -31,20 +39,21 @@ class Select extends Component<ISelectProps> {
   }
 
   render(): JSX.Element {
-    const { name, options, isRequired, isDisabled, className, selectedOption, labelText } = this.props;
+    const { name, options, required, disabled, className, selectedOption, labelText } = this.props;
 
     return (
       <div className={cx(s.select, className)} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <span className={s.selectLabel}>{labelText}</span>
         <select
           name={name}
-          required={isRequired}
-          disabled={isDisabled}
-          onblur={(): void => this.toggleRequiredError()}
-          onchange={(): void => this.toggleRequiredError()}
+          required={required}
+          disabled={disabled}
+          onblur={this.toggleRequiredError.bind(this)}
+          onchange={this.toggleRequiredError.bind(this)}
+          attributes={{ [COMPONENT_CHILD_ATTR]: '' }}
         >
           {options.map((opt, index) => (
-            <option value={opt.value} selected={selectedOption === index} disabled={opt.isDisabled}>
+            <option value={opt.value} selected={selectedOption === index} disabled={opt.disabled}>
               {opt.content}
             </option>
           ))}
@@ -55,17 +64,21 @@ class Select extends Component<ISelectProps> {
   }
 
   private toggleRequiredError(): void {
-    if (!this.props.isRequired) {
+    if (!this.props.required) {
       return;
     }
 
-    if (!this.options.some((opt) => opt.selected && !opt.disabled)) {
-      this.errorPara.textContent = 'This field is required';
-      this.element.classList.add(s.selectInvalid);
-    } else {
+    if (this.isValueSelected()) {
       this.errorPara.textContent = '';
       this.element.classList.remove(s.selectInvalid);
+    } else {
+      this.errorPara.textContent = 'This field is required';
+      this.element.classList.add(s.selectInvalid);
     }
+  }
+
+  private isValueSelected(): boolean {
+    return this.select.selectedIndex !== 0;
   }
 }
 

@@ -13,6 +13,8 @@ declare global {
   }
 }
 
+type Callback<T extends Component> = (component: T) => void;
+
 Element.prototype.getComponent = function get<T extends Component>(): T {
   const component = this.closest(`[${COMPONENT_ROOT_ATTR}]`)?.getComponent<T>();
 
@@ -39,7 +41,25 @@ abstract class Component<Props extends IProps = IProps> {
 
   abstract render(): JSX.Element;
 
-  componentDidRender?(): void;
+  afterRender(callback: Callback<this> | Callback<this>[]): void {
+    if (!this.componentDidRender) {
+      this.componentDidRender = (): null => null;
+    }
+
+    this.componentDidRender = new Proxy(this.componentDidRender, {
+      apply: (...args): void => {
+        Reflect.apply(...args);
+
+        if (Array.isArray(callback)) {
+          callback.forEach((cb) => cb(this));
+        } else {
+          callback(this);
+        }
+      },
+    });
+  }
+
+  protected componentDidRender?(): void;
 
   getContent(): HTMLElement {
     if (this.element) return this.element;

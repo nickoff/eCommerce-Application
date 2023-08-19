@@ -1,3 +1,3 @@
-export { InputName } from './input.enum';
-export { Country } from './country.enum';
-export { StorageKey } from './storage-key.enum';
+export * from './input.enum';
+export * from './country.enum';
+export * from './storage-key.enum';

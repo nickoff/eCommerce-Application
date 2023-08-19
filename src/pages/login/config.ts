@@ -1,4 +1,8 @@
-enum LoginPageText {
+import { Input } from '@components/shared/ui/input/input';
+import { InputName, InputType } from '@shared/enums';
+import { DEFAULT_STRING_SCHEMA, EMAIL_SCHEMA } from '@shared/validation/constants/schemas.constant';
+
+export enum LoginPageText {
   Title = 'Please sign in to continue',
   Button = 'Sign In',
   Link = 'Sign up',
@@ -6,4 +10,20 @@ enum LoginPageText {
   LableForPas = 'Your password',
 }
 
-export default LoginPageText;
+export const controls = {
+  email: new Input({
+    name: InputName.Email,
+    type: InputType.Email,
+    label: LoginPageText.LableForEmail,
+    required: true,
+    validationSchema: EMAIL_SCHEMA,
+  }),
+
+  password: new Input({
+    name: InputName.Password,
+    type: InputType.Password,
+    label: LoginPageText.LableForPas,
+    required: true,
+    validationSchema: DEFAULT_STRING_SCHEMA,
+  }),
+};
