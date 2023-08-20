@@ -3,9 +3,9 @@ import Layout from '@components/layout/layout';
 import Store from './store';
 
 export default class App {
-  constructor() {
+  static async init(): Promise<void> {
+    await Store.getInstance().init();
     document.body.append(Layout());
     initRouter();
-    Store.getInstance().init();
   }
 }

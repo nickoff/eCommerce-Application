@@ -14,11 +14,6 @@ import UserIcon from '../assets/profile-icon.svg';
 class UserMenu extends Component {
   private dropdown!: bs.Dropdown;
 
-  constructor(...args: IProps[]) {
-    super(...args);
-    Store.getInstance().subscribe('customer', this);
-  }
-
   protected componentDidRender(): void {
     this.dropdown = new bs.Dropdown(qs('.dropdown-toggle', this.getContent()));
   }

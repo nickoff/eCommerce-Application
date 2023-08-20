@@ -1,11 +1,10 @@
-/* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import cx from 'clsx';
 import { type FormControlType } from '@shared/types';
-import { Route } from '@app/router';
+import { Route, router } from '@app/router';
 import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import { qs } from '@shared/utils/dom-helpers';
 import { INewCustomer } from '@shared/interfaces/customer.interface';
@@ -105,9 +104,8 @@ class PageReg extends Component {
 
     AuthService.register(formData, () => {
       this.msgPara.textContent = "You've signed up";
+      setTimeout(() => router.navigate(Route.Home), 500);
     });
-
-    console.log(formData);
   }
 }
 

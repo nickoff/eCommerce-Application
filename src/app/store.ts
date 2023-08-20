@@ -42,14 +42,18 @@ export default class Store {
     });
   }
 
-  async init(): Promise<void> {
-    const savedCustomerID = localStorage.getItem(StorageKey.CustomerID);
+  private getCachedCustomerId(): string | null {
+    return localStorage.getItem(StorageKey.CustomerID);
+  }
 
-    if (!savedCustomerID) {
+  async init(): Promise<void> {
+    const cachedCustomerID = this.getCachedCustomerId();
+
+    if (!cachedCustomerID) {
       return;
     }
 
-    const result = await CustomerRepoService.getCustomerById(savedCustomerID);
+    const result = await CustomerRepoService.getCustomerById(cachedCustomerID);
 
     if (!isHttpErrorType(result)) {
       this.setState({ customer: result });
