@@ -1,11 +1,10 @@
-import Header from '@components/layout/header/header';
-import Main from '@components/layout/main/main';
 import { initRouter } from '@app/router/routing';
+import Layout from '@components/layout/layout';
 import Store from './store';
 
 export default class App {
   constructor() {
-    document.body.append(new Header().render(), Main.render());
+    document.body.append(Layout());
     initRouter();
     Store.getInstance().init();
   }

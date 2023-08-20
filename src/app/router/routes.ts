@@ -1,4 +1,4 @@
-enum Route {
+export enum Route {
   Home = '/home',
   Login = '/login',
   Registration = '/registration',
@@ -7,5 +7,3 @@ enum Route {
   Earphones = '/earphones',
   Default = '',
 }
-
-export default Route;

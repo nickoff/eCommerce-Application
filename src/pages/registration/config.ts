@@ -3,6 +3,7 @@ import Select from '@components/shared/ui/select/select';
 import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
+import { AddressType } from '@shared/enums/address.enum';
 
 const pwdInput = new Input({
   name: InputName.Password,
@@ -57,11 +58,12 @@ export const controls = {
     name: InputName.DateOfBirth,
     type: InputType.Date,
     label: 'Date of birth',
+    required: true,
     validationSchema: Schema.DATE_OF_BIRTH_SCHEMA,
   }),
 };
 
-export function newAdressControls(variant: 'Billing' | 'Shipping'): FormControlType[] {
+export function newAdressControls(variant: AddressType): FormControlType[] {
   return [
     new Select({
       name: `${InputName.Country}${variant}`,

@@ -2,6 +2,7 @@ import { BaseAddress, type Customer, type CustomerDraft } from '@commercetools/p
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 
 import { INewCustomer, ICustomerCredentials } from '@shared/interfaces/customer.interface';
+import { AddressType } from '@shared/enums/address.enum';
 import apiRoot from '../api-root';
 import extractHttpError from '../extract-http-error.decorator';
 
@@ -72,10 +73,10 @@ class CustomerRepoService {
       isDefaultShipping,
     } = customerData;
 
-    const addresses = [this.createBaseAddress(customerData, 'Shipping')];
+    const addresses = [this.createBaseAddress(customerData, AddressType.Shipping)];
 
     if (!useShippingAddress) {
-      addresses.push(this.createBaseAddress(customerData, 'Billing'));
+      addresses.push(this.createBaseAddress(customerData, AddressType.Billing));
     }
 
     const customerDraft: CustomerDraft = {
@@ -100,7 +101,7 @@ class CustomerRepoService {
     return customerDraft;
   }
 
-  private static createBaseAddress(data: INewCustomer, addressType: 'Billing' | 'Shipping'): BaseAddress {
+  private static createBaseAddress(data: INewCustomer, addressType: AddressType): BaseAddress {
     return {
       country: data[`country${addressType}`] ?? '',
       city: data[`city${addressType}`],

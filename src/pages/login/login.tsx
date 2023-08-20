@@ -1,13 +1,14 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
-import Button from '@components/shared/ui/button/button';
+import cx from 'clsx';
 import { qs } from '@shared/utils/dom-helpers';
 import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
-import Route from '@app/router/routes';
+import { Route } from '@app/router';
 import { router } from '@app/router/routing';
-import s from './login.module.scss';
+import * as s from './login.module.scss';
+import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import { controls, LoginPageText } from './config';
 
 class PageLogin extends Component {
@@ -29,12 +30,14 @@ class PageLogin extends Component {
           {controls.password.render()}
           <span className={s.signText}>
             Not registered yet?
-            <a className={s.signLink} href={Route.Registration} attributes={{ 'data-navigo': '' }}>
+            <a className={s.signLink} href={Route.Registration} dataset={{ navigo: '' }}>
               {LoginPageText.Link}
             </a>
           </span>
           <p className={s.loginMsg}></p>
-          <Button onClick={this.onFormSubmit.bind(this)} content={'Sign In'} />
+          <button className={cx(btn, btnFilled, s.submitBtn)} onclick={this.onFormSubmit.bind(this)}>
+            SIGN IN
+          </button>
         </form>
       </div>
     );

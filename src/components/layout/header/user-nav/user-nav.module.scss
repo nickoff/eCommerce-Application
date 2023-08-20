@@ -1,4 +1,4 @@
-.user-nav__list {
+.nav__list {
   @include flex-vertical-center;
   list-style: none;
   margin: 0;
@@ -6,38 +6,35 @@
 }
 
 .user-nav__item {
-  @include flex-vertical-center;
-  padding: 15px 10px;
-
-  svg {
-    width: 26px;
-    height: auto;
-  }
+  margin-inline: 10px;
 
   &:first-of-type {
-    @include breakpoint($tablet, $max) {
-      padding-inline: 0;
-    }
+    margin-left: 0;
   }
 
-  &:nth-of-type(2) {
-    @include breakpoint($mobile, $max) {
-      padding-left: 5px;
-    }
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  @include breakpoint($sign-up-hide, $max) {
+    margin-inline: 5px;
   }
 }
 
-.user-nav__link {
-  @include outline-on-focus;
-  padding: 5px;
-  border: none;
-  background: none;
-  line-height: 0;
-  cursor: pointer;
+.sign-in-item {
+  @include breakpoint($sign-up-hide, $max) {
+    margin: 0;
+  }
 }
 
-.user-menu__toggle {
-  &::after {
-    all: unset;
+.sign-in-link {
+  @include breakpoint($sign-up-hide, $max) {
+    padding-inline: 5px;
+  }
+}
+
+.sign-up-item {
+  @include breakpoint($sign-up-hide, $max) {
+    display: none;
   }
 }

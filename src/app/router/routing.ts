@@ -4,7 +4,7 @@ import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
-import Route from './routes';
+import { Route } from './routes';
 
 const router = new Navigo('/');
 

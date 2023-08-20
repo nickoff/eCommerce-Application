@@ -1,12 +1,13 @@
-import { element } from 'tsx-vanilla';
+import { element, fragment } from 'tsx-vanilla';
 import cx from 'clsx';
 import Component from '@shared/component';
 import Store from '@app/store';
-import 'bootstrap/js/dist/dropdown';
-import s from './user-nav.module.scss';
+import { Route } from '@app/router';
+import { btn, btnFilled } from '../../../../styles/shared/button-like.module.scss';
+import { navItem, navLink } from '../common.module.scss';
+import * as s from './user-nav.module.scss';
 import CartIcon from './assets/cart-icon.svg';
-import UserIcon from './assets/profile-icon.svg';
-import UserDropdownMenu from './user-menu/user-menu';
+import UserMenu from './user-menu/user-menu';
 
 class UserNav extends Component {
   constructor(...args: IProps[]) {
@@ -15,23 +16,34 @@ class UserNav extends Component {
   }
 
   render(): JSX.Element {
+    const { customer } = Store.getInstance().getState();
+
     return (
       <nav>
-        <ul className={s.userNavList}>
-          <li className={s.userNavItem}>
-            <button className={s.userNavLink}>{CartIcon}</button>
+        <ul className={s.navList}>
+          <li className={cx(navItem, s.userNavItem)}>
+            <button className={navLink}>{CartIcon}</button>
           </li>
-          <li className={cx('dropdown', s.userNavItem)}>
-            <button
-              className={cx('dropdown-toggle', s.userNavLink, s.userMenuToggle)}
-              dataset={{ bsToggle: 'dropdown', bsOffset: '4,30' }}
-            >
-              {UserIcon}
-            </button>
-            {new UserDropdownMenu().render()}
-          </li>
+          {customer ? new UserMenu({ className: s.userNavItem }).render() : this.renderAuthLinks()}
         </ul>
       </nav>
+    );
+  }
+
+  private renderAuthLinks(): JSX.Element {
+    return (
+      <>
+        <li className={cx(navItem, s.signUpItem, 'p-0')}>
+          <a className={cx(btn, btnFilled)} href={Route.Registration} dataset={{ navigo: '' }}>
+            SIGN UP
+          </a>
+        </li>
+        <li className={cx(navItem, s.signInItem, s.userNavItem, 'p-0')}>
+          <a className={cx(btn, s.signInLink)} href={Route.Login} dataset={{ navigo: '' }}>
+            SIGN IN
+          </a>
+        </li>
+      </>
     );
   }
 }

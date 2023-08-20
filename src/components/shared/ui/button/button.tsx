@@ -2,7 +2,7 @@ import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { IButtonProps } from './button.interface';
 import { ButtonVariant } from './button.enum';
-import s from './button.module.scss';
+import * as s from './button.module.scss';
 
 function Button({ onClick, variant = ButtonVariant.Filled, className, content }: IButtonProps): JSX.Element {
   const classNames: Record<ButtonVariant, string> = {

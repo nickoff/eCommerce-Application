@@ -1,10 +1,9 @@
 import { element } from 'tsx-vanilla';
-import cx from 'clsx';
 import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
 import { COMPONENT_ROOT_ATTR, COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
 import { IFormControl } from '@shared/interfaces/form-control.interface';
-import s from './select.module.scss';
+import * as s from './select.module.scss';
 import { type ISelectProps } from './select.interface';
 
 class Select extends Component<ISelectProps> implements IFormControl {
@@ -39,10 +38,10 @@ class Select extends Component<ISelectProps> implements IFormControl {
   }
 
   render(): JSX.Element {
-    const { name, options, required, disabled, className, selectedOption, labelText } = this.props;
+    const { name, options, required, disabled, selectedOption, labelText } = this.props;
 
     return (
-      <div className={cx(s.select, className)} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
+      <div className={s.select} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <span className={s.selectLabel}>{labelText}</span>
         <select
           name={name}
