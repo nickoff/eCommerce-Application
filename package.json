@@ -9,7 +9,6 @@
     "format": "prettier --write .",
     "start": "webpack serve --open -c webpack.dev.ts",
     "build": "cross-env NODE_ENV=production webpack -c webpack.prod.ts",
-    "deploy": "npm run build && npx gh-pages -d dist -e eCommerce-Application",
     "test": "jest",
     "prepare": "husky install"
   },
@@ -41,6 +40,7 @@
     "@types/webpack": "^5.28.1",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
+    "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "eslint": "^8.46.0",

@@ -4,6 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { Configuration } from 'webpack';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -68,6 +69,9 @@ const commonConfig: Configuration = {
     ],
   },
   plugins: [
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'static' }],
+    }),
     new MiniCssPlugin({
       filename: isDev ? '[name].css' : '[name].[contenthash].css',
       chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',

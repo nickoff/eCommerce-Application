@@ -33,22 +33,34 @@ class AuthService {
   static async login(
     credentials: ICustomerCredentials,
     onSuccess?: (customer: Customer) => void,
-    onError?: (error: HttpErrorType) => void,
-  ): Promise<Customer | HttpErrorType> {
-    const [apiRoot] = ApiRootCreator.createPasswordFlow(credentials);
-    const result = await CustomerRepoService.getCustomerByCredentials(apiRoot, credentials);
+    onError?: (error: Error) => void,
+  ): Promise<Customer | Error> {
+    try {
+      const [apiRoot] = ApiRootCreator.createPasswordFlow(credentials);
+      const result = await CustomerRepoService.getCustomerByCredentials(apiRoot, credentials);
 
-    if (!isHttpErrorType(result)) {
-      Store.getInstance().login(result, apiRoot);
+      if (!isHttpErrorType(result)) {
+        Store.getInstance().login(result, apiRoot);
 
-      if (onSuccess) {
-        onSuccess(result);
+        if (onSuccess) {
+          onSuccess(result);
+        }
+      } else if (onError) {
+        onError(result);
       }
-    } else if (onError) {
-      onError(result);
-    }
 
-    return result;
+      return result;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (onError) {
+          onError(error);
+        }
+
+        return error;
+      }
+
+      throw error;
+    }
   }
 
   static logout(): void {
