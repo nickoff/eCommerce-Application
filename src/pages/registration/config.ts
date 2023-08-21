@@ -3,7 +3,6 @@ import Select from '@components/shared/ui/select/select';
 import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
-import Button from '@components/shared/ui/button/button';
 
 const pwdInput = new Input({
   name: InputName.Password,
@@ -47,7 +46,6 @@ export const controls = {
     validationSchema: Schema.EMAIL_UNIQUE_SCHEMA,
   }),
   password: pwdInput,
-  button: Button,
   passwordConfirm: confirmPwdInput,
   phone: new Input({
     name: InputName.Phone,
