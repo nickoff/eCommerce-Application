@@ -36,6 +36,7 @@ class PageReg extends Component {
   componentDidRender(): void {
     this.form = qs('form', this.getContent());
     this.msgPara = qs(`.${s.regMsg}`, this.getContent());
+    this.addressToggler.addEventListener('change', () => this.toggleControls(this.billingControls));
     this.form.addEventListener('click', (e: Event) => this.showHidePass(e));
   }
 
