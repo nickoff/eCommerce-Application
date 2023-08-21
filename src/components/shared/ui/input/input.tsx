@@ -1,4 +1,4 @@
-import { element } from 'tsx-vanilla';
+import { element, ref } from 'tsx-vanilla';
 import { ValidationError } from 'yup';
 import Component from '@shared/component';
 import { qs } from '@shared/utils/dom-helpers';
@@ -7,6 +7,7 @@ import { InputType } from '@shared/enums';
 import { COMPONENT_ROOT_ATTR, COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
 import * as s from './input.module.scss';
 import { IInputProps } from './input.interface';
+import VisibilityToggle from './visibility-toggle/visibility-toggle';
 
 export class Input extends Component<IInputProps> implements IFormControl {
   input!: HTMLInputElement;
@@ -41,21 +42,32 @@ export class Input extends Component<IInputProps> implements IFormControl {
 
   render(): JSX.Element {
     this.hasError = false;
-    const { name, label, type, placeholder, disabled, required } = this.props;
+    this.errorPara.textContent = '';
+
+    const { name, label, type, placeholder, disabled, required, withVisibilityToggle } = this.props;
+
+    const inputRef = ref<HTMLInputElement>();
 
     return (
       <div className={s.input} attributes={{ [COMPONENT_ROOT_ATTR]: '' }}>
         <span className={s.inputLabel}>{label}</span>
 
-        <input
-          name={name}
-          type={type ?? InputType.Text}
-          oninput={this.validate.bind(this)}
-          placeholder={placeholder ?? ''}
-          disabled={disabled}
-          required={required}
-          attributes={{ [COMPONENT_CHILD_ATTR]: '' }}
-        />
+        <div className={s.inputWrapper}>
+          <input
+            name={name}
+            type={type ?? InputType.Text}
+            oninput={this.validate.bind(this)}
+            placeholder={placeholder ?? ''}
+            disabled={disabled}
+            required={required}
+            attributes={{ [COMPONENT_CHILD_ATTR]: '' }}
+            ref={inputRef}
+          />
+          {withVisibilityToggle &&
+            inputRef.value &&
+            new VisibilityToggle({ input: inputRef.value, className: s.visToggle }).render()}
+        </div>
+
         {this.errorPara}
       </div>
     );

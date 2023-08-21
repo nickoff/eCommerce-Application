@@ -10,6 +10,7 @@ const pwdInput = new Input({
   type: InputType.Password,
   label: 'Password',
   required: true,
+  withVisibilityToggle: true,
   validationSchema: Schema.PASSWORD_SCHEMA,
 });
 
@@ -18,6 +19,7 @@ const confirmPwdInput = new Input({
   type: InputType.Password,
   label: 'Confirm Password',
   required: true,
+  withVisibilityToggle: true,
   validationSchema: Schema.PASSWORD_CONFIRM_SCHEMA,
   additionalValidationContext: { getPwdValue: pwdInput.getValue.bind(pwdInput) },
 });

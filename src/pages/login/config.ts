@@ -24,6 +24,7 @@ export const controls = {
     type: InputType.Password,
     label: LoginPageText.LableForPas,
     required: true,
+    withVisibilityToggle: true,
     validationSchema: DEFAULT_STRING_SCHEMA,
   }),
 };

@@ -1,0 +1,15 @@
+.toggle {
+  color: $field-default-color;
+  cursor: pointer;
+  transition: color 0.1s;
+  user-select: none;
+
+  &:hover {
+    color: #00000081;
+  }
+
+  svg {
+    height: auto;
+    width: 20px;
+  }
+}
