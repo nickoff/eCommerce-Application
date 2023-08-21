@@ -78,6 +78,7 @@ const commonConfig: Configuration = {
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      favicon: './src/favicon.png',
       minify: !isDev,
     }),
     new ForkTsCheckerPlugin(),

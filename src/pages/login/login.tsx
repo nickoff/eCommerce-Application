@@ -7,16 +7,18 @@ import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
 import { Route } from '@app/router';
 import { router } from '@app/router/routing';
+import { PageTitle } from '@pages/page-title.decorator';
 import * as s from './login.module.scss';
 import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import { controls, LoginPageText } from './config';
 
+@PageTitle('Login')
 class PageLogin extends Component {
   private form!: HTMLFormElement;
 
   private msgPara!: HTMLParagraphElement;
 
-  componentDidRender(): void {
+  protected componentDidRender(): void {
     this.form = qs('form', this.getContent());
     this.msgPara = qs(`.${s.loginMsg}`, this.getContent());
   }

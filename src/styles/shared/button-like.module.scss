@@ -8,6 +8,10 @@
   letter-spacing: 1px;
   cursor: pointer;
 
+  &:focus {
+    outline: none;
+  }
+
   &:hover {
     transition: background 0.2s;
   }

@@ -10,10 +10,12 @@ import { qs } from '@shared/utils/dom-helpers';
 import { INewCustomer } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
 import { AddressType } from '@shared/enums/address.enum';
+import { PageTitle } from '@pages/page-title.decorator';
 import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import * as s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
 
+@PageTitle('Sign Up')
 class PageReg extends Component {
   private billingControls: FormControlType[];
 

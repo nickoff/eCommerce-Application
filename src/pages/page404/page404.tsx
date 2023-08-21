@@ -1,9 +1,10 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
-// import cx from 'clsx';
 import { Route } from '@app/router';
+import { PageTitle } from '@pages/page-title.decorator';
 import * as s from './page404.module.scss';
 
+@PageTitle('404')
 class Page404 extends Component {
   render(): JSX.Element {
     return (
