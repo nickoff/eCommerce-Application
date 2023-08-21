@@ -46,3 +46,20 @@
 .error__message {
   margin-bottom: 0;
 }
+
+.input-wrapper {
+  position: relative;
+
+  &:hover {
+    input:not([disabled]) {
+      border: 1px solid $primary-color;
+    }
+  }
+}
+
+.vis-toggle {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  translate: 0 -50%;
+}
