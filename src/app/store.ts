@@ -3,9 +3,14 @@ import Component from '@shared/component';
 import { isKeyOf, isHttpErrorType } from '@shared/utils/type-guards';
 import { StorageKey } from '@shared/enums';
 import CustomerRepoService from '@shared/api/customer/customer-repo.service';
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
+import ApiRootCreator from '@shared/api/api-root-creator';
+import { AuthFlow } from '@shared/enums/auth-flow.enum';
 
 interface IState {
   customer: Customer | null;
+  apiRoot: ByProjectKeyRequestBuilder;
+  authFlow: AuthFlow;
 }
 
 export default class Store {
@@ -19,7 +24,8 @@ export default class Store {
 
   static getInstance(): Store {
     if (!Store.instance) {
-      Store.instance = new Store({ customer: null });
+      const [apiRoot, authFlow] = ApiRootCreator.initFlow();
+      Store.instance = new Store({ customer: null, apiRoot, authFlow });
     }
 
     return Store.instance;
@@ -42,23 +48,17 @@ export default class Store {
     });
   }
 
-  private getCachedCustomerId(): string | null {
-    return localStorage.getItem(StorageKey.CustomerID);
-  }
-
   async init(): Promise<void> {
-    const cachedCustomerID = this.getCachedCustomerId();
-
-    if (!cachedCustomerID) {
+    if (this.getState().authFlow !== AuthFlow.ExistingToken) {
       return;
     }
 
-    const result = await CustomerRepoService.getCustomerById(cachedCustomerID);
+    const result = await CustomerRepoService.getMe(this.getState().apiRoot);
 
     if (!isHttpErrorType(result)) {
       this.setState({ customer: result });
     } else {
-      localStorage.removeItem(StorageKey.CustomerID);
+      localStorage.removeItem(StorageKey.TokenCache);
     }
   }
 
@@ -72,14 +72,14 @@ export default class Store {
     this.observers[property] = observers;
   }
 
-  login(customer: Customer): void {
-    this.setState({ customer });
-    localStorage.setItem(StorageKey.CustomerID, customer.id);
+  login(customer: Customer, apiRootWithPassFlow: ByProjectKeyRequestBuilder): void {
+    this.setState({ customer, apiRoot: apiRootWithPassFlow, authFlow: AuthFlow.Password });
   }
 
   logout(): void {
-    this.setState({ customer: null });
-    localStorage.removeItem(StorageKey.CustomerID);
+    const [apiRoot, authFlow] = ApiRootCreator.createCredentialsFlow();
+    this.setState({ customer: null, apiRoot, authFlow });
+    localStorage.removeItem(StorageKey.TokenCache);
   }
 
   private setState(newState: Partial<IState>): void {
