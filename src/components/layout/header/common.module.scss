@@ -1,0 +1,18 @@
+.nav-item {
+  @include flex-vertical-center;
+  padding-block: 15px;
+
+  svg {
+    width: 26px;
+    height: auto;
+  }
+}
+
+.nav-link {
+  @include outline-on-focus;
+  padding: 5px;
+  border: none;
+  background: none;
+  line-height: 0;
+  cursor: pointer;
+}

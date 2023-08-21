@@ -1,6 +1,6 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
-import s from './home.module.scss';
+import * as s from './home.module.scss';
 import HomePageText from './config';
 
 class PageHome extends Component {

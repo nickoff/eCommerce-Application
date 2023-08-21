@@ -4,22 +4,42 @@ import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
-import Route from './routes';
+import Store from '@app/store';
+import { Route } from './routes';
 
 const router = new Navigo('/');
 
+const beforeHook = (done: (p?: boolean) => void): void => {
+  if (Store.getInstance().getState().customer) {
+    done(false);
+    router.navigate(Route.Home);
+  } else {
+    done();
+  }
+};
+
 const initRouter = (): void => {
   router
+    .on(() => Main.setProps({ page: new PageHome() }))
     .on({
       [Route.Home]: () => Main.setProps({ page: new PageHome() }),
-      [Route.Default]: () => Main.setProps({ page: new PageHome() }),
-      [Route.Login]: () => Main.setProps({ page: new PageLogin() }),
-      [Route.Registration]: () => Main.setProps({ page: new PageReg() }),
+      [Route.Login]: {
+        as: 'login-page',
+        uses: () => Main.setProps({ page: new PageLogin() }),
+        hooks: {
+          before: beforeHook,
+        },
+      },
+      [Route.Registration]: {
+        as: 'reg-page',
+        uses: () => Main.setProps({ page: new PageReg() }),
+        hooks: {
+          before: beforeHook,
+        },
+      },
     })
+    .notFound(() => Main.setProps({ page: new Page404() }))
     .resolve();
-
-  router.notFound(() => {
-    Main.setProps({ page: new Page404() });
-  });
 };
+
 export { initRouter, router };

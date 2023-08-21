@@ -2,12 +2,16 @@ import { BaseAddress, type Customer, type CustomerDraft } from '@commercetools/p
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 
 import { INewCustomer, ICustomerCredentials } from '@shared/interfaces/customer.interface';
-import apiRoot from '../api-root';
+import { AddressType } from '@shared/enums/address.enum';
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 import extractHttpError from '../extract-http-error.decorator';
 
 class CustomerRepoService {
   @extractHttpError
-  static async createCustomer(customerDraft: CustomerDraft): Promise<Customer | HttpErrorType> {
+  static async createCustomer(
+    apiRoot: ByProjectKeyRequestBuilder,
+    customerDraft: CustomerDraft,
+  ): Promise<Customer | HttpErrorType> {
     const response = await apiRoot
       .customers()
       .post({
@@ -20,7 +24,10 @@ class CustomerRepoService {
   }
 
   @extractHttpError
-  static async getCustomerByCredentials({ email, password }: ICustomerCredentials): Promise<Customer | HttpErrorType> {
+  static async getCustomerByCredentials(
+    apiRoot: ByProjectKeyRequestBuilder,
+    { email, password }: ICustomerCredentials,
+  ): Promise<Customer | HttpErrorType> {
     const response = await apiRoot
       .me()
       .login()
@@ -37,14 +44,20 @@ class CustomerRepoService {
   }
 
   @extractHttpError
-  static async getCustomerById(ID: string): Promise<Customer | HttpErrorType> {
+  static async getMe(apiRoot: ByProjectKeyRequestBuilder): Promise<Customer | HttpErrorType> {
+    const response = await apiRoot.me().get().execute();
+    return response.body;
+  }
+
+  @extractHttpError
+  static async getCustomerById(apiRoot: ByProjectKeyRequestBuilder, ID: string): Promise<Customer | HttpErrorType> {
     const response = await apiRoot.customers().withId({ ID }).get().execute();
     const customer = response.body;
 
     return customer;
   }
 
-  static async isEmailUnique(email: string): Promise<boolean> {
+  static async isEmailUnique(apiRoot: ByProjectKeyRequestBuilder, email: string): Promise<boolean> {
     try {
       const response = await apiRoot
         .customers()
@@ -72,10 +85,10 @@ class CustomerRepoService {
       isDefaultShipping,
     } = customerData;
 
-    const addresses = [this.createBaseAddress(customerData, 'Shipping')];
+    const addresses = [this.createBaseAddress(customerData, AddressType.Shipping)];
 
     if (!useShippingAddress) {
-      addresses.push(this.createBaseAddress(customerData, 'Billing'));
+      addresses.push(this.createBaseAddress(customerData, AddressType.Billing));
     }
 
     const customerDraft: CustomerDraft = {
@@ -100,7 +113,7 @@ class CustomerRepoService {
     return customerDraft;
   }
 
-  private static createBaseAddress(data: INewCustomer, addressType: 'Billing' | 'Shipping'): BaseAddress {
+  private static createBaseAddress(data: INewCustomer, addressType: AddressType): BaseAddress {
     return {
       country: data[`country${addressType}`] ?? '',
       city: data[`city${addressType}`],

@@ -1,29 +1,26 @@
 @import '../../styles/helpers/variables';
 
 .page-wrapper {
-  margin: auto;
-  max-width: 50rem;
-  height: 37rem;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-top: 30px;
+  @include flex-vertical-center;
   justify-content: center;
-}
-
-.page-pic {
-  height: 100%;
-  width: 100%;
-  background-image: url('./assets/404.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.page-title {
   text-align: center;
 }
 
-a {
-  font-size: 1.6rem;
+.code {
+  font-size: clamp(5rem, -0.455rem + 27.27vw, 20rem);
+  color: $primary-color;
+  margin: 0;
+}
+
+.not-found {
+  font-size: clamp(2rem, 1.273rem + 3.64vw, 4rem);
+}
+
+.go-back {
+  font-size: clamp(1rem, 0.636rem + 1.82vw, 2rem);
+
+  a {
+    font-size: inherit;
+  }
 }

@@ -1,51 +1,25 @@
-.user-menu__dropdown {
-  position: relative;
-  background-color: $primary-color;
-  padding-block: 0px;
-  border-top: none;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-
-  li:not(:last-of-type) {
-    border-bottom: 1px solid var(--bs-dropdown-divider-bg);
-  }
-
-  &::before {
-    border-bottom: 15px solid $primary-color;
-    border-left: 19px solid rgba(0, 0, 0, 0);
-    border-right: 19px solid rgba(0, 0, 0, 0);
-    content: '';
-    position: absolute;
-    right: 0;
-    top: -14px;
-    width: 0;
-    z-index: -1;
-    transition: border-color 0.1s;
-  }
-
-  &:has(li:first-of-type:hover) {
-    &::before {
-      border-bottom: 15px solid $primary-color-hover;
-    }
-  }
+.menu-container {
+  background-color: $default-color;
+  color: $default-color;
+  padding: 15px 20px;
+  border-radius: 8px;
 }
 
-.user-menu__dropdown-item {
-  font-size: $base-font-size;
-  font-weight: $base-font-weight;
-  color: $default-color !important;
-  transition: background-color 0.1s;
-
-  &:hover {
-    background-color: $primary-color-hover;
-  }
+.email-para {
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  color: $second-color;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: $grey;
 }
 
-.user-menu__dropdown-link {
-  display: block;
-  padding: 10px 25px;
+.log-out-btn {
+  padding: 6px 10px;
+}
 
-  &:is(:active, :focus) {
-    outline: none;
+.dropdown-toggle {
+  &::after {
+    all: unset;
   }
 }
