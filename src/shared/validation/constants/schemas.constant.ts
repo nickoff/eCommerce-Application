@@ -16,13 +16,9 @@ export const PASSWORD_SCHEMA = DEFAULT_STRING_SCHEMA.required(Message.REQUIRED)
   .matches(Pattern.PASSWORD.lowerCase, Message.PASSWORD.lowerCase)
   .matches(Pattern.PASSWORD.upperCase, Message.PASSWORD.upperCase);
 
-export const PASSWORD_CONFIRM_SCHEMA = yup
-  .string()
-  .when('$getPwdValue', ([getPwdValue], schema) =>
-    getPwdValue
-      ? schema.test('passwords-do-match', "Passwords don't match", (value) => value === getPwdValue())
-      : schema,
-  );
+export const PASSWORD_CONFIRM_SCHEMA = DEFAULT_STRING_SCHEMA.when('$getPwdValue', ([getPwdValue], schema) =>
+  getPwdValue ? schema.test('passwords-do-match', "Passwords don't match", (value) => value === getPwdValue()) : schema,
+);
 
 export const EMAIL_SCHEMA = DEFAULT_STRING_SCHEMA.required(Message.REQUIRED)
   .email(Message.EMAIL.incorrect)

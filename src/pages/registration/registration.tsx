@@ -1,16 +1,17 @@
-/* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
-import Button from '@components/shared/ui/button/button';
+import cx from 'clsx';
 import { type FormControlType } from '@shared/types';
-import Route from '@app/router/routes';
+import { Route, router } from '@app/router';
 import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import { qs } from '@shared/utils/dom-helpers';
 import { INewCustomer } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
-import s from './registration.module.scss';
+import { AddressType } from '@shared/enums/address.enum';
+import { btn, btnFilled } from '../../styles/shared/index.module.scss';
+import * as s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
 
 class PageReg extends Component {
@@ -24,7 +25,7 @@ class PageReg extends Component {
 
   constructor() {
     super();
-    this.billingControls = newAdressControls('Billing');
+    this.billingControls = newAdressControls(AddressType.Billing);
 
     this.addressToggler = document.createElement('input');
     this.addressToggler.type = 'checkbox';
@@ -42,39 +43,43 @@ class PageReg extends Component {
       <div className={s.pageWrapper}>
         <h2 className={s.heading}>Please sign up to continue</h2>
         <form className={s.form}>
-          {render(
-            c.firstName.class(s.firstName),
-            c.lastName.class(s.lastName),
-            c.email.class(s.email),
-            c.password.class(s.pwd),
-            c.passwordConfirm.class(s.pwdСonfirm),
-            c.dateOfBirth.class(s.birth),
-            c.phone.class(s.phone),
-          )}
-          <div className={s.shipping}>
-            <h3 className={s.addressHeading}>Shipping Address</h3>
-            <label className={s.defaultLabel}>
-              Use as default
-              <input type="checkbox" name="isDefaultShipping" />
-            </label>
-            {render(newAdressControls('Shipping'))}
-          </div>
-          <div className={s.billing}>
-            <h3 className={s.addressHeading}>Billing Address</h3>
-            <label className={s.billingLabel}>Use shipping address {this.addressToggler}</label>
-            <label className={s.defaultLabel}>
-              Use as default
-              <input type="checkbox" name="isDefaultBilling" />
-            </label>
-            {render(this.billingControls)}
+          <div className={s.formGrid}>
+            {render(
+              c.firstName.class(s.firstName),
+              c.lastName.class(s.lastName),
+              c.email.class(s.email),
+              c.password.class(s.pwd),
+              c.passwordConfirm.class(s.pwdСonfirm),
+              c.dateOfBirth.class(s.birth),
+              c.phone.class(s.phone),
+            )}
+            <div className={s.shipping}>
+              <h3 className={s.addressHeading}>Shipping Address</h3>
+              <label className={s.defaultLabel}>
+                Use as default
+                <input type="checkbox" name="isDefaultShipping" />
+              </label>
+              {render(newAdressControls(AddressType.Shipping))}
+            </div>
+            <div className={s.billing}>
+              <h3 className={s.addressHeading}>Billing Address</h3>
+              <label className={s.billingLabel}>Use shipping address {this.addressToggler}</label>
+              <label className={s.defaultLabel}>
+                Use as default
+                <input type="checkbox" name="isDefaultBilling" />
+              </label>
+              {render(this.billingControls)}
+            </div>
           </div>
           <p className={s.para}>
-            Already registered?{' '}
-            <a href={Route.Login} attributes={{ 'data-navigo': '' }}>
+            Already registered?
+            <a className={s.signLink} href={Route.Login} dataset={{ navigo: '' }}>
               Sign In
             </a>
           </p>
-          <Button className={s.submitBtn} onClick={this.onFormSubmit.bind(this)} content={'Sign Up'} />
+          <button className={cx(btn, btnFilled, s.submitBtn)} onclick={this.onFormSubmit.bind(this)}>
+            SIGN UP
+          </button>
         </form>
         <p className={s.regMsg}></p>
       </div>
@@ -99,9 +104,8 @@ class PageReg extends Component {
 
     AuthService.register(formData, () => {
       this.msgPara.textContent = "You've signed up";
+      setTimeout(() => router.navigate(Route.Home), 500);
     });
-
-    console.log(formData);
   }
 }
 

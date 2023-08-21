@@ -1,6 +1,6 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
-import s from './hamburger.module.scss';
+import * as s from './hamburger.module.scss';
 import HamIcon from './hamburget-icon.svg';
 
 export default function Hamburger({ className }: IProps): JSX.Element {

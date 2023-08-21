@@ -5,7 +5,7 @@ import { qs } from '@shared/utils/dom-helpers';
 import { IFormControl } from '@shared/interfaces/form-control.interface';
 import { InputType } from '@shared/enums';
 import { COMPONENT_ROOT_ATTR, COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
-import s from './input.module.scss';
+import * as s from './input.module.scss';
 import { IInputProps } from './input.interface';
 
 export class Input extends Component<IInputProps> implements IFormControl {

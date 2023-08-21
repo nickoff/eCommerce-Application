@@ -31,6 +31,7 @@ const commonConfig: Configuration = {
               modules: {
                 exportLocalsConvention: 'camelCaseOnly',
                 localIdentName: '[local]_[hash:base64:10]',
+                namedExport: true,
               },
             },
           },

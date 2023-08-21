@@ -23,6 +23,9 @@
 .form {
   margin: auto;
   max-width: 600px;
+}
+
+.form__grid {
   display: grid;
   row-gap: 10px;
   column-gap: 20px;
@@ -31,9 +34,7 @@
     'email       email'
     'pwd         pwd-confirm'
     'birth       phone'
-    'shipping    billing'
-    'para        para'
-    'submit-btn  submit-btn';
+    'shipping    billing';
   grid-template-columns: 1fr 1fr;
 
   @media (max-width: 580px) {
@@ -43,9 +44,7 @@
       'pwd         pwd-confirm'
       'birth       phone'
       'shipping    shipping'
-      'billing     billing'
-      'para        para'
-      'submit-btn  submit-btn';
+      'billing     billing';
   }
 
   @include breakpoint($mobile, $max) {
@@ -58,9 +57,7 @@
       'birth'
       'phone'
       'shipping'
-      'billing'
-      'para'
-      'submit-btn';
+      'billing';
     grid-template-columns: 1fr;
   }
 }
@@ -124,18 +121,23 @@
 }
 
 .para {
-  margin: 0;
-  grid-area: para;
-  justify-self: center;
+  margin-bottom: 20px;
   font-size: 1.4rem;
-}
-
-.submit-btn {
-  grid-area: submit-btn;
-  justify-self: center;
+  text-align: center;
 }
 
 .regMsg {
   text-align: center;
   font-size: 1.4rem;
+}
+
+.submit-btn {
+  margin: auto;
+  display: block;
+  padding: 15px 40px;
+}
+
+.sign-link {
+  color: $second-color;
+  margin-left: 3px;
 }

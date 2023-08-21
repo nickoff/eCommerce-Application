@@ -1,9 +1,9 @@
-export const CTP_PROJECT_KEY = 'applicationecommerce2023';
-export const CTP_CLIENT_SECRET = 'ZGlER1T98pbmgsQU_6yT-5Ds2t9giBkR';
-export const CTP_CLIENT_ID = 'BbHxf-f4L65MQdmy2UUhQCYs';
-export const CTP_AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
-export const CTP_API_URL = 'https://api.europe-west1.gcp.commercetools.com';
-export const CTP_SCOPES = [
+export const PROJECT_KEY = 'applicationecommerce2023';
+export const CLIENT_SECRET = 'ZGlER1T98pbmgsQU_6yT-5Ds2t9giBkR';
+export const CLIENT_ID = 'BbHxf-f4L65MQdmy2UUhQCYs';
+export const AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
+export const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
+export const SCOPES = [
   'manage_project:applicationecommerce2023',
   'view_audit_log:applicationecommerce2023',
   'manage_api_clients:applicationecommerce2023',
