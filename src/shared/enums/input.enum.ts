@@ -4,9 +4,17 @@ export enum InputName {
   FirstName = 'firstName',
   LastName = 'lastName',
   DateOfBirth = 'dateOfBirth',
-  StreetName = 'streetName',
+  StreetName = 'street',
   City = 'city',
-  PostalCode = 'postalCode',
+  PostalCode = 'postal',
   Country = 'country',
   Phone = 'phone',
+}
+
+export enum InputType {
+  Text = 'text',
+  Password = 'password',
+  Email = 'email',
+  Date = 'date',
+  Phone = 'tel',
 }

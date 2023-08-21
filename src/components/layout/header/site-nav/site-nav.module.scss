@@ -6,23 +6,31 @@
 .site-nav__list {
   @include flex-vertical-center;
   list-style: none;
+  gap: 10px;
   margin: 0;
 
-  @include breakpoint($tablet, $max) {
+  @include breakpoint($nav-hide, $max) {
     padding-top: 15px;
     gap: 20px;
   }
 }
 
 .site-nav__item {
-  padding: 15px 10px;
+  @include breakpoint($nav-hide, $max) {
+    padding-block: 0 !important;
+  }
 }
 
 .site-nav__link {
   @include flex-vertical-center;
+  color: inherit;
 
-  &:hover,
   &:focus {
+    outline: none;
     color: inherit;
+  }
+
+  &:hover {
+    color: $primary-color;
   }
 }

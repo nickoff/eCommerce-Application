@@ -1,10 +1,3 @@
-export interface IAddress {
-  country: string;
-  city: string;
-  street: string;
-  postalCode: string;
-}
-
 export interface ICustomerCredentials {
   email: string;
   password: string;
@@ -13,7 +6,17 @@ export interface ICustomerCredentials {
 export interface INewCustomer extends ICustomerCredentials {
   firstName: string;
   lastName: string;
-  shippingAddress: IAddress;
-  billingAddress?: IAddress;
-  dateOfBirth?: Date;
+  dateOfBirth: string;
+  phone?: string;
+  countryShipping: string;
+  cityShipping: string;
+  streetShipping: string;
+  postalCodeShipping: string;
+  countryBilling?: string;
+  cityBilling?: string;
+  streetBilling?: string;
+  postalCodeBilling?: string;
+  isDefaultShipping?: string;
+  isDefaultBilling?: string;
+  useShippingAddress?: 'on';
 }

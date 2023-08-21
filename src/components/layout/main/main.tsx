@@ -1,9 +1,7 @@
 import { element } from 'tsx-vanilla';
 import Component from '@shared/component';
-import cx from 'clsx';
-import './main.scss';
-
-import { SharedCSSClass } from '@shared/constants/shared-css-class';
+import { container } from '../../../styles/shared/index.module.scss';
+import * as s from './main.module.scss';
 
 interface IMainProps extends IProps {
   page: Component;
@@ -12,8 +10,8 @@ interface IMainProps extends IProps {
 class Main extends Component<IMainProps> {
   render(): JSX.Element {
     return (
-      <div>
-        <main className={cx(SharedCSSClass.Container)}>{this.props.page?.render()}</main>
+      <div className={s.mainWrapper}>
+        <main className={container}>{this.props.page?.render()}</main>
       </div>
     );
   }

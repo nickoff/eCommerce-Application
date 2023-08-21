@@ -1,77 +1,99 @@
-import { InputName } from '@shared/enums/input.enum';
-import { Input } from '@components/shared/ui/input/input';
+import { InputName, InputType } from '@shared/enums';
 import Select from '@components/shared/ui/select/select';
-import { FormControl } from '@shared/types';
+import { type FormControlType } from '@shared/types';
+import { Input } from '@components/shared/ui/input/input';
+import * as Schema from '@shared/validation/constants/schemas.constant';
+import { AddressType } from '@shared/enums/address.enum';
+
+const pwdInput = new Input({
+  name: InputName.Password,
+  type: InputType.Password,
+  label: 'Password',
+  required: true,
+  validationSchema: Schema.PASSWORD_SCHEMA,
+});
+
+const confirmPwdInput = new Input({
+  name: InputName.Password,
+  type: InputType.Password,
+  label: 'Confirm Password',
+  required: true,
+  validationSchema: Schema.PASSWORD_CONFIRM_SCHEMA,
+  additionalValidationContext: { getPwdValue: pwdInput.getValue.bind(pwdInput) },
+});
+
+pwdInput.afterRender((component) => {
+  component.input.addEventListener('input', () => confirmPwdInput.isValid());
+});
 
 export const controls = {
   firstName: new Input({
     name: InputName.FirstName,
-    labelText: 'First name',
-    isRequired: true,
+    label: 'First name',
+    required: true,
+    validationSchema: Schema.NO_SPECIAL_SCHEMA,
   }),
   lastName: new Input({
     name: InputName.LastName,
-    labelText: 'Last name',
-    isRequired: true,
+    label: 'Last name',
+    required: true,
+    validationSchema: Schema.NO_SPECIAL_SCHEMA,
   }),
   email: new Input({
     name: InputName.Email,
-    labelText: 'Email address',
-    isRegEmail: true,
-    isRequired: true,
+    type: InputType.Email,
+    label: 'Email',
+    required: true,
+    validationSchema: Schema.EMAIL_UNIQUE_SCHEMA,
   }),
-  password: new Input({
-    name: InputName.Password,
-    labelText: 'Password',
-    isPassword: true,
-    isRequired: true,
-  }),
-  passwordConfirm: new Input({
-    name: InputName.Password,
-    labelText: 'Confirm Password',
-    noValidationRequired: true,
-    isRequired: true,
-  }),
+  password: pwdInput,
+  passwordConfirm: confirmPwdInput,
   phone: new Input({
     name: InputName.Phone,
-    labelText: 'Phone number',
-    isRequired: true,
+    type: InputType.Phone,
+    label: 'Phone number',
+    validationSchema: Schema.PHONE_SCHEMA,
   }),
   dateOfBirth: new Input({
     name: InputName.DateOfBirth,
-    labelText: 'Date of birth',
-    isRequired: true,
+    type: InputType.Date,
+    label: 'Date of birth',
+    required: true,
+    validationSchema: Schema.DATE_OF_BIRTH_SCHEMA,
   }),
 };
 
-export function newAdressControls(): FormControl[] {
+export function newAdressControls(variant: AddressType): FormControlType[] {
   return [
     new Select({
-      name: InputName.Country,
+      name: `${InputName.Country}${variant}`,
       options: [
-        { value: '', content: '', isDisabled: true },
+        { value: '', content: '', disabled: true },
         { value: 'RU', content: 'Russia' },
         { value: 'BY', content: 'Belarus' },
         { value: 'KZ', content: 'Kazakhstan' },
       ],
       selectedOption: 0,
       labelText: 'Country',
-      isRequired: true,
+      required: true,
     }),
     new Input({
-      name: InputName.City,
-      labelText: 'City',
-      isRequired: true,
+      name: `${InputName.City}${variant}`,
+      label: 'City',
+      required: true,
+      validationSchema: Schema.NO_SPECIAL_SCHEMA,
     }),
     new Input({
-      name: InputName.StreetName,
-      labelText: 'Street',
-      isRequired: true,
+      name: `${InputName.StreetName}${variant}`,
+      label: 'Street',
+      required: true,
+      validationSchema: Schema.DEFAULT_STRING_SCHEMA,
     }),
     new Input({
-      name: InputName.PostalCode,
-      labelText: 'Postal code',
-      isRequired: true,
+      name: `${InputName.PostalCode}${variant}`,
+      label: 'Postal code',
+      required: true,
+      validationSchema: Schema.POSTAL_CODE_SCHEMA,
     }),
   ];
 }
