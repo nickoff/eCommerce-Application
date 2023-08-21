@@ -85,6 +85,31 @@
   grid-area: pwd-confirm;
 }
 
+.pwd-view,
+.сonfirm-view {
+  position: relative;
+  top: 25px;
+  margin-left: auto;
+  display: inline-block;
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+  background: url('./assets/view.png') 0 0 no-repeat;
+}
+
+.pwd-view {
+  grid-area: pwd;
+}
+
+.сonfirm-view {
+  grid-area: pwd-confirm;
+  margin-left: auto;
+}
+
+.no-view1 {
+  background-color: black;
+}
+
 .birth {
   grid-area: birth;
 }

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
+import { InputType } from '@shared/enums';
 import Component from '@shared/component';
 import { render } from '@shared/utils/misc';
 import Button from '@components/shared/ui/button/button';
@@ -12,6 +13,7 @@ import { INewCustomer } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
 import s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
+import './view-icon.scss';
 
 class PageReg extends Component {
   private billingControls: FormControlType[];
@@ -34,7 +36,7 @@ class PageReg extends Component {
   componentDidRender(): void {
     this.form = qs('form', this.getContent());
     this.msgPara = qs(`.${s.regMsg}`, this.getContent());
-    this.addressToggler.addEventListener('change', () => this.toggleControls(this.billingControls));
+    this.form.addEventListener('click', (e: Event) => this.showHidePass(e));
   }
 
   render(): JSX.Element {
@@ -51,6 +53,8 @@ class PageReg extends Component {
             c.dateOfBirth.class(s.birth),
             c.phone.class(s.phone),
           )}
+          <span className={s.pwdView} attributes={{ 'data-view': '0' }}></span>
+          <span className={(s.pwdView, s.сonfirmView)} attributes={{ 'data-view': '1' }}></span>
           <div className={s.shipping}>
             <h3 className={s.addressHeading}>Shipping Address</h3>
             <label className={s.defaultLabel}>
@@ -86,6 +90,23 @@ class PageReg extends Component {
       i.clear();
       i.setProps({ disabled: !i.getState().disabled });
     });
+  }
+
+  private showHidePass(e: Event): void {
+    const { target } = e;
+    const pasInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[name=password]');
+
+    if (!(target instanceof HTMLSpanElement)) return;
+
+    const pasInputIndex = Number(target.getAttribute('data-view'));
+
+    if (pasInputIndex === null) return;
+
+    target.classList.toggle('no-view');
+
+    if (pasInputs[pasInputIndex].type === InputType.Password) {
+      pasInputs[pasInputIndex].type = InputType.Text;
+    } else pasInputs[pasInputIndex].type = InputType.Password;
   }
 
   private async onFormSubmit(e: Event): Promise<void> {
