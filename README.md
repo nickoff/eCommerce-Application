@@ -67,10 +67,6 @@ The page will reload if you make edits.<br />
 Builds the app for production to the <code>dist</code> folder.<br />
 The build is minified and the filenames include the hashes.<br />
 
-- <code>npm run deploy</code>
-
-Builds the app for production and merges the content of the <code>dist</code> folder into the <code>gh-pages</code> branch.<br />
-
 - <code>npm run test</code>
 
 Launches all Jest's tests in the project.<br />
