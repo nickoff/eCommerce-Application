@@ -40,6 +40,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
   }
 
   render(): JSX.Element {
+    this.hasError = false;
     const { name, label, type, placeholder, disabled, required } = this.props;
 
     return (
