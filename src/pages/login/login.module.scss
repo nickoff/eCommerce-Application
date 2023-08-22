@@ -33,7 +33,6 @@
 
 .sign-text {
   font-size: 1.4rem;
-  margin-bottom: 10px;
 }
 
 .sign-link {
@@ -46,6 +45,7 @@
 }
 
 .error-msg {
+  color: $color-error-validation;
   font-size: 1.4rem;
   text-align: center;
   margin: 0;
@@ -53,4 +53,8 @@
 
 .submit-btn {
   padding: 15px 40px;
+}
+
+.msg-wrapper {
+  min-height: 23px;
 }

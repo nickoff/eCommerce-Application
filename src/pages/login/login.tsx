@@ -38,9 +38,9 @@ class PageLogin extends Component {
               {LoginPageText.Link}
             </a>
           </span>
-          <div>
+          <div className={s.msgWrapper}>
             <p className={s.errorMsg}></p>
-            <div className="spinner-border" attributes={{ role: 'status', 'data-spinner': '' }}>
+            <div attributes={{ role: 'status', 'data-spinner': '' }}>
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
@@ -54,6 +54,7 @@ class PageLogin extends Component {
 
   private async onFormSubmit(e: Event): Promise<void> {
     e.preventDefault();
+    this.msgPara.textContent = '';
 
     if (!(await isFormValid(this.form))) {
       return;
@@ -69,7 +70,9 @@ class PageLogin extends Component {
     };
 
     const onError = (): void => {
-      this.msgPara.innerHTML = 'Wrong email or password';
+      setTimeout(() => {
+        this.msgPara.textContent = 'Wrong email or password';
+      }, 100);
     };
 
     await AuthService.login(
