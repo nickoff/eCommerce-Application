@@ -16,6 +16,19 @@ export function qs<E extends Element = HTMLElement>(
   return element;
 }
 
+export function qsAll<E extends Element = HTMLElement>(
+  selector: string,
+  scope: Document | Element | DocumentFragment = document,
+): E[] {
+  const elements = scope.querySelectorAll<E>(selector);
+
+  if (!elements.length) {
+    throw new Error(`Cannot find any element with "${selector}" selector`);
+  }
+
+  return [...elements];
+}
+
 /**
  * Employs event delegation by registering handler function
  * to listen for provided event on parent element

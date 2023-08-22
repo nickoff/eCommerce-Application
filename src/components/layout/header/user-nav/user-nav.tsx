@@ -1,7 +1,7 @@
 import { element, fragment } from 'tsx-vanilla';
 import cx from 'clsx';
-import Component from '@shared/component';
-import Store from '@app/store';
+import { Component } from '@shared/lib';
+import Store from '@app/store/store';
 import { Route } from '@app/router';
 import { btn, btnFilled } from '../../../../styles/shared/button-like.module.scss';
 import { navItem, navLink } from '../common.module.scss';
@@ -12,11 +12,11 @@ import UserMenu from './user-menu/user-menu';
 class UserNav extends Component {
   constructor(...args: IProps[]) {
     super(...args);
-    Store.getInstance().subscribe('customer', this);
+    Store.subscribe('customer', this);
   }
 
   render(): JSX.Element {
-    const { customer } = Store.getInstance().getState();
+    const { customer } = Store.getState();
 
     return (
       <nav>

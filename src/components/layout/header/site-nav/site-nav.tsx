@@ -1,6 +1,6 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
-import Component from '@shared/component';
+import { Component } from '@shared/lib';
 
 import { MouseEvtName } from '@shared/constants/events';
 import { delegate } from '@shared/utils/dom-helpers';
@@ -28,7 +28,7 @@ class SiteNav extends Component {
     );
   }
 
-  componentDidRender(): void {
+  protected componentDidRender(): void {
     delegate(this.getContent(), s.siteNavLink, MouseEvtName.CLICK, this.changeActiveLink.bind(this));
   }
 

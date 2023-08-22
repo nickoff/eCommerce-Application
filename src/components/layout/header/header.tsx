@@ -1,6 +1,6 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
-import Component from '@shared/component';
+import { Component } from '@shared/lib';
 import * as s from './header.module.scss';
 import { container } from '../../../styles/shared/index.module.scss';
 import SiteNav from './site-nav/site-nav';

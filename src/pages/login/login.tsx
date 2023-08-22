@@ -1,33 +1,36 @@
 import { element } from 'tsx-vanilla';
-import Component from '@shared/component';
-import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import cx from 'clsx';
+import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import { qs } from '@shared/utils/dom-helpers';
 import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
-import { Route } from '@app/router';
-import { router } from '@app/router/routing';
+import { Route, router } from '@app/router';
 import { PageTitle } from '@pages/page-title.decorator';
+import Loader from 'promise-loading-spinner';
+import { Component, Child } from '@shared/lib';
+import { AuthResult } from '@shared/types';
 import * as s from './login.module.scss';
 import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import { controls, LoginPageText } from './config';
 
 @PageTitle('Login')
 class PageLogin extends Component {
-  private form!: HTMLFormElement;
+  @Child(s.form) private form!: HTMLFormElement;
 
-  private msgPara!: HTMLParagraphElement;
+  @Child(s.errorMsg) private msgPara!: HTMLParagraphElement;
 
   protected componentDidRender(): void {
-    this.form = qs('form', this.getContent());
-    this.msgPara = qs(`.${s.loginMsg}`, this.getContent());
+    const spinnerEl = qs('[data-spinner]', this.getContent());
+
+    const loader = new Loader({ loaderElement: spinnerEl, classActive: 'spinner-border' });
+    this.login = loader.wrapFunction(this.login.bind(this));
   }
 
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
         <h2 className={s.pageTitle}>{LoginPageText.Title}</h2>
-        <form className={s.form}>
+        <form className={s.form} onsubmit={this.onFormSubmit.bind(this)} noValidate>
           {controls.email.render()}
           {controls.password.render()}
           <span className={s.signText}>
@@ -36,8 +39,13 @@ class PageLogin extends Component {
               {LoginPageText.Link}
             </a>
           </span>
-          <p className={s.loginMsg}></p>
-          <button className={cx(btn, btnFilled, s.submitBtn)} onclick={this.onFormSubmit.bind(this)}>
+          <div className={s.msgWrapper}>
+            <p className={s.errorMsg}></p>
+            <div attributes={{ role: 'status', 'data-spinner': '' }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <button className={cx(btn, btnFilled, s.submitBtn)} type="submit">
             SIGN IN
           </button>
         </form>
@@ -47,27 +55,28 @@ class PageLogin extends Component {
 
   private async onFormSubmit(e: Event): Promise<void> {
     e.preventDefault();
+    this.msgPara.textContent = '';
+    this.login();
+  }
 
+  private async login(): Promise<void> {
     if (!(await isFormValid(this.form))) {
       return;
     }
 
     const credentials = buildFormData<ICustomerCredentials>(this.form);
+    const result = await AuthService.login(credentials);
+    this.handleLoginResult(result);
+  }
 
-    const onSucces = (): void => {
-      this.msgPara.innerHTML = "You've logged in";
-      setTimeout(() => router.navigate(Route.Home), 500);
-    };
-
-    const onError = (): void => {
-      this.msgPara.innerHTML = 'Wrong email or password';
-    };
-
-    await AuthService.login(
-      credentials,
-      () => onSucces(),
-      () => onError(),
-    );
+  private async handleLoginResult(result: AuthResult): Promise<void> {
+    if (result instanceof Error) {
+      setTimeout(() => {
+        this.msgPara.textContent = 'Wrong email or password';
+      }, 100);
+    } else {
+      router.navigate(Route.Home);
+    }
   }
 }
 

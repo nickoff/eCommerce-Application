@@ -43,7 +43,7 @@
   }
 }
 
-.error__message {
+.error__msg {
   margin-bottom: 0;
 }
 
@@ -62,4 +62,8 @@
   top: 50%;
   right: 7px;
   translate: 0 -50%;
+}
+
+.input-el {
+  width: 100%;
 }

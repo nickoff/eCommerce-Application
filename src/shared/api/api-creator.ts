@@ -1,9 +1,8 @@
 import { ClientBuilder, type TokenStore, type Client, type TokenCache } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
-import { StorageKey } from '@shared/enums';
-import { AuthFlow } from '@shared/enums/auth-flow.enum';
+import { ApiRoot } from '@shared/types';
+import { ICustomerCredentials } from '@shared/interfaces';
+import { StorageKey, AuthFlow } from '@shared/enums';
 import { PROJECT_KEY } from './constants';
 import { httpMiddlewareOptions, authMiddlewareOptions, getPassAuthMiddlewareOptions } from './middlewares.config';
 
@@ -12,31 +11,30 @@ const initialToken: TokenStore = {
   expirationTime: 0,
 };
 
-export default class ApiRootCreator {
-  static initFlow(): [ByProjectKeyRequestBuilder, AuthFlow] {
+type ApiCreatorReturn = [ApiRoot, AuthFlow, Client];
+
+export default class ApiCreator {
+  static initFlow(): ApiCreatorReturn {
     return this.isTokenCached() ? this.createExistingTokenFlow() : this.createCredentialsFlow();
   }
 
-  static createCredentialsFlow(): [ByProjectKeyRequestBuilder, AuthFlow.Credentials] {
+  static createCredentialsFlow(): ApiCreatorReturn {
     const client = new ClientBuilder()
       .withClientCredentialsFlow(authMiddlewareOptions)
       .withHttpMiddleware(httpMiddlewareOptions)
       .build();
 
-    return [this.createApiRoot(client), AuthFlow.Credentials];
+    return [this.createApiRoot(client), AuthFlow.Credentials, client];
   }
 
-  static createPasswordFlow({
-    email: username,
-    password,
-  }: ICustomerCredentials): [ByProjectKeyRequestBuilder, AuthFlow.Password] {
+  static createPasswordFlow({ email: username, password }: ICustomerCredentials): ApiCreatorReturn {
     const options = getPassAuthMiddlewareOptions({ username, password }, this.tokenCache);
 
     const client = new ClientBuilder().withPasswordFlow(options).withHttpMiddleware(httpMiddlewareOptions).build();
-    return [this.createApiRoot(client), AuthFlow.Password];
+    return [this.createApiRoot(client), AuthFlow.Password, client];
   }
 
-  static createExistingTokenFlow(): [ByProjectKeyRequestBuilder, AuthFlow.ExistingToken] {
+  static createExistingTokenFlow(): ApiCreatorReturn {
     const { token } = this.tokenCache.get();
 
     if (!token) {
@@ -50,7 +48,7 @@ export default class ApiRootCreator {
       .withHttpMiddleware(httpMiddlewareOptions)
       .build();
 
-    return [this.createApiRoot(client), AuthFlow.ExistingToken];
+    return [this.createApiRoot(client), AuthFlow.ExistingToken, client];
   }
 
   private static isTokenCached(): boolean {
@@ -67,7 +65,7 @@ export default class ApiRootCreator {
     },
   };
 
-  private static createApiRoot(client: Client): ByProjectKeyRequestBuilder {
+  private static createApiRoot(client: Client): ApiRoot {
     return createApiBuilderFromCtpClient(client).withProjectKey({ projectKey: PROJECT_KEY });
   }
 }

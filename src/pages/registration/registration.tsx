@@ -1,16 +1,16 @@
 /* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
-import Component from '@shared/component';
-import { render } from '@shared/utils/misc';
 import cx from 'clsx';
-import { type FormControlType } from '@shared/types';
+import { Child, Component } from '@shared/lib';
+import { render } from '@shared/utils/misc';
+import { AuthResult, type FormControlType } from '@shared/types';
 import { Route, router } from '@app/router';
 import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
-import { qs } from '@shared/utils/dom-helpers';
 import { INewCustomer } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
 import { AddressType } from '@shared/enums/address.enum';
 import { PageTitle } from '@pages/page-title.decorator';
+import Loader from 'promise-loading-spinner';
 import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import * as s from './registration.module.scss';
 import { controls as c, newAdressControls } from './config';
@@ -21,9 +21,11 @@ class PageReg extends Component {
 
   private addressToggler: HTMLInputElement;
 
-  private form!: HTMLFormElement;
+  @Child(s.form) private form!: HTMLFormElement;
 
-  private msgPara!: HTMLParagraphElement;
+  @Child(s.para) private msgPara!: HTMLParagraphElement;
+
+  @Child('[data-spinner]', true) private spinner!: HTMLElement;
 
   constructor() {
     super();
@@ -34,17 +36,18 @@ class PageReg extends Component {
     this.addressToggler.name = 'useShippingAddress';
   }
 
-  componentDidRender(): void {
-    this.form = qs('form', this.getContent());
-    this.msgPara = qs(`.${s.regMsg}`, this.getContent());
+  protected componentDidRender(): void {
     this.addressToggler.addEventListener('change', () => this.toggleControls(this.billingControls));
+
+    const loader = new Loader({ loaderElement: this.spinner, classActive: 'spinner-border' });
+    this.register = loader.wrapFunction(this.register.bind(this));
   }
 
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
         <h2 className={s.heading}>Please sign up to continue</h2>
-        <form className={s.form}>
+        <form className={s.form} onsubmit={this.onFormSubmit.bind(this)} noValidate>
           <div className={s.formGrid}>
             {render(
               c.firstName.class(s.firstName),
@@ -79,11 +82,16 @@ class PageReg extends Component {
               Sign In
             </a>
           </p>
-          <button className={cx(btn, btnFilled, s.submitBtn)} onclick={this.onFormSubmit.bind(this)}>
+          <div className={s.msgWrapper}>
+            <p className={s.errorMsg}></p>
+            <div attributes={{ role: 'status', 'data-spinner': '' }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <button className={cx(btn, btnFilled, s.submitBtn)} type="submit">
             SIGN UP
           </button>
         </form>
-        <p className={s.regMsg}></p>
       </div>
     );
   }
@@ -97,17 +105,25 @@ class PageReg extends Component {
 
   private async onFormSubmit(e: Event): Promise<void> {
     e.preventDefault();
+    this.register();
+  }
 
+  private async register(): Promise<void> {
     if (!(await isFormValid(this.form))) {
       return;
     }
 
     const formData = buildFormData<INewCustomer>(this.form);
+    const result = await AuthService.register(formData);
+    this.handleRegisterResult(result);
+  }
 
-    AuthService.register(formData, () => {
-      this.msgPara.textContent = "You've signed up";
-      setTimeout(() => router.navigate(Route.Home), 500);
-    });
+  private async handleRegisterResult(result: AuthResult): Promise<void> {
+    if (!(result instanceof Error)) {
+      router.navigate(Route.Home);
+    } else {
+      this.msgPara.textContent = 'Something went wrong, try again later';
+    }
   }
 }
 

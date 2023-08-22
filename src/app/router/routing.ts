@@ -4,13 +4,13 @@ import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
-import Store from '@app/store';
+import Store from '@app/store/store';
 import { Route } from './routes';
 
 const router = new Navigo('/');
 
 const beforeHook = (done: (p?: boolean) => void): void => {
-  if (Store.getInstance().getState().customer) {
+  if (Store.getState().customer) {
     done(false);
     router.navigate(Route.Home);
   } else {

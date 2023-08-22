@@ -1,7 +1,7 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
-import Component from '@shared/component';
-import Store from '@app/store';
+import { Component } from '@shared/lib';
+import Store from '@app/store/store';
 import * as bs from 'bootstrap';
 import { qs } from '@shared/utils/dom-helpers';
 import { router, Route } from '@app/router';
@@ -19,7 +19,7 @@ class UserMenu extends Component {
   }
 
   render(): JSX.Element {
-    const { customer } = Store.getInstance().getState();
+    const { customer } = Store.getState();
 
     return (
       <li className={cx('dropdown', navItem)}>

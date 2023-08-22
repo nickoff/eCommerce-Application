@@ -1,6 +1,6 @@
 import { element } from 'tsx-vanilla';
-import { SharedCSSClass } from './constants/shared-css-class';
-import { COMPONENT_ROOT_ATTR } from './constants/misc';
+import { SharedCSSClass } from '../constants/shared-css-class';
+import { COMPONENT_ROOT_ATTR } from '../constants/misc';
 
 declare global {
   interface IProps {
@@ -25,7 +25,7 @@ Element.prototype.getComponent = function get<T extends Component>(): T {
   throw new Error('Element has no reference to any Component');
 };
 
-abstract class Component<Props extends IProps = IProps> {
+export abstract class Component<Props extends IProps = IProps> {
   protected element!: HTMLElement;
 
   protected readonly props: Props;
@@ -34,32 +34,38 @@ abstract class Component<Props extends IProps = IProps> {
 
   protected elementClasses: string[] = [];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected afterRenderCallbacks: Callback<any>[] = [];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected beforeRenderCallbacks: Callback<any>[] = [];
+
   constructor(props: Props = {} as Props) {
     this.props = new Proxy(props, this.propChangeHandler);
     this.render = new Proxy(this.render, this.renderHandler);
-  }
 
-  abstract render(): JSX.Element;
-
-  afterRender(callback: Callback<this> | Callback<this>[]): void {
     if (!this.componentDidRender) {
       this.componentDidRender = (): null => null;
     }
 
     this.componentDidRender = new Proxy(this.componentDidRender, {
       apply: (...args): void => {
+        this.beforeRenderCallbacks.forEach((cb) => cb(this));
         Reflect.apply(...args);
-
-        if (Array.isArray(callback)) {
-          callback.forEach((cb) => cb(this));
-        } else {
-          callback(this);
-        }
+        this.afterRenderCallbacks.forEach((cb) => cb(this));
       },
     });
   }
 
-  protected componentDidRender?(): void;
+  abstract render(): JSX.Element;
+
+  beforeRender(callback: Callback<this> | Callback<this>[]): void {
+    this.beforeRenderCallbacks = this.beforeRenderCallbacks.concat(callback);
+  }
+
+  afterRender(callback: Callback<this> | Callback<this>[]): void {
+    this.afterRenderCallbacks = this.afterRenderCallbacks.concat(callback);
+  }
 
   getContent(): HTMLElement {
     if (this.element) return this.element;
@@ -114,6 +120,8 @@ abstract class Component<Props extends IProps = IProps> {
     this.element.remove();
   }
 
+  protected componentDidRender?(): void;
+
   private applyClasses(): void {
     const { className } = this.props;
 
@@ -159,5 +167,3 @@ abstract class Component<Props extends IProps = IProps> {
     },
   };
 }
-
-export default Component;

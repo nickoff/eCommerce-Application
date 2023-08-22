@@ -33,7 +33,6 @@
 
 .sign-text {
   font-size: 1.4rem;
-  margin-bottom: 10px;
 }
 
 .sign-link {
@@ -45,12 +44,17 @@
   padding-block: 30px;
 }
 
-.login-msg {
+.error-msg {
+  color: $color-error-validation;
   font-size: 1.4rem;
   text-align: center;
-  margin-bottom: 10px;
+  margin: 0;
 }
 
 .submit-btn {
   padding: 15px 40px;
+}
+
+.msg-wrapper {
+  min-height: 23px;
 }
