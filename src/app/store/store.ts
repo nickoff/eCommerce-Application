@@ -6,6 +6,7 @@ import CustomerRepoService from '@shared/api/customer/customer-repo.service';
 import { ApiRoot } from '@shared/types';
 import ApiCreator from '@shared/api/api-creator';
 import { AuthFlow } from '@shared/enums/auth-flow.enum';
+import { Client } from '@commercetools/sdk-client-v2';
 import IState from './state.interface';
 
 class Store {
@@ -56,13 +57,13 @@ class Store {
     this.observers[property] = observers;
   }
 
-  login(customer: Customer, apiRootWithPassFlow: ApiRoot): void {
-    this.setState({ customer, apiRoot: apiRootWithPassFlow, authFlow: AuthFlow.Password });
+  login(customer: Customer, apiRoot: ApiRoot, authFlow: AuthFlow, apiClient: Client): void {
+    this.setState({ customer, apiRoot, authFlow, apiClient });
   }
 
   logout(): void {
-    const [apiRoot, authFlow] = ApiCreator.createCredentialsFlow();
-    this.setState({ customer: null, apiRoot, authFlow });
+    const [apiRoot, authFlow, apiClient] = ApiCreator.createCredentialsFlow();
+    this.setState({ customer: null, apiRoot, authFlow, apiClient });
     localStorage.removeItem(StorageKey.TokenCache);
   }
 

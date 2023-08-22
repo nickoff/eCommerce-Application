@@ -37,6 +37,9 @@ export abstract class Component<Props extends IProps = IProps> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected afterRenderCallbacks: Callback<any>[] = [];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected beforeRenderCallbacks: Callback<any>[] = [];
+
   constructor(props: Props = {} as Props) {
     this.props = new Proxy(props, this.propChangeHandler);
     this.render = new Proxy(this.render, this.renderHandler);
@@ -47,6 +50,7 @@ export abstract class Component<Props extends IProps = IProps> {
 
     this.componentDidRender = new Proxy(this.componentDidRender, {
       apply: (...args): void => {
+        this.beforeRenderCallbacks.forEach((cb) => cb(this));
         Reflect.apply(...args);
         this.afterRenderCallbacks.forEach((cb) => cb(this));
       },
@@ -54,6 +58,10 @@ export abstract class Component<Props extends IProps = IProps> {
   }
 
   abstract render(): JSX.Element;
+
+  beforeRender(callback: Callback<this> | Callback<this>[]): void {
+    this.beforeRenderCallbacks = this.beforeRenderCallbacks.concat(callback);
+  }
 
   afterRender(callback: Callback<this> | Callback<this>[]): void {
     this.afterRenderCallbacks = this.afterRenderCallbacks.concat(callback);

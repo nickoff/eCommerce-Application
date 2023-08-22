@@ -8,6 +8,7 @@ import { Route, router } from '@app/router';
 import { PageTitle } from '@pages/page-title.decorator';
 import Loader from 'promise-loading-spinner';
 import { Component, Child } from '@shared/lib';
+import { AuthResult } from '@shared/types';
 import * as s from './login.module.scss';
 import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import { controls, LoginPageText } from './config';
@@ -29,7 +30,7 @@ class PageLogin extends Component {
     return (
       <div className={s.pageWrapper}>
         <h2 className={s.pageTitle}>{LoginPageText.Title}</h2>
-        <form className={s.form}>
+        <form className={s.form} onsubmit={this.onFormSubmit.bind(this)} noValidate>
           {controls.email.render()}
           {controls.password.render()}
           <span className={s.signText}>
@@ -44,7 +45,7 @@ class PageLogin extends Component {
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-          <button className={cx(btn, btnFilled, s.submitBtn)} onclick={this.onFormSubmit.bind(this)}>
+          <button className={cx(btn, btnFilled, s.submitBtn)} type="submit">
             SIGN IN
           </button>
         </form>
@@ -55,31 +56,27 @@ class PageLogin extends Component {
   private async onFormSubmit(e: Event): Promise<void> {
     e.preventDefault();
     this.msgPara.textContent = '';
+    this.login();
+  }
 
+  private async login(): Promise<void> {
     if (!(await isFormValid(this.form))) {
       return;
     }
 
     const credentials = buildFormData<ICustomerCredentials>(this.form);
-    this.login(credentials);
+    const result = await AuthService.login(credentials);
+    this.handleLoginResult(result);
   }
 
-  private async login(credentials: ICustomerCredentials): Promise<void> {
-    const onSucces = (): void => {
-      router.navigate(Route.Home);
-    };
-
-    const onError = (): void => {
+  private async handleLoginResult(result: AuthResult): Promise<void> {
+    if (result instanceof Error) {
       setTimeout(() => {
         this.msgPara.textContent = 'Wrong email or password';
       }, 100);
-    };
-
-    await AuthService.login(
-      credentials,
-      () => onSucces(),
-      () => onError(),
-    );
+    } else {
+      router.navigate(Route.Home);
+    }
   }
 }
 

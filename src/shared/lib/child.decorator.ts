@@ -8,7 +8,7 @@ export function Child(selector: string, anySelector?: boolean) {
   ): void {
     if (context.kind === 'field') {
       context.addInitializer(function select() {
-        this.afterRender(() =>
+        this.beforeRender(() =>
           context.access.set(this, qs(anySelector ? selector : `.${selector}`, this.getContent())),
         );
       });
@@ -25,7 +25,7 @@ export function Children(selector: string, anySelector?: boolean) {
   ): void {
     if (context.kind === 'field') {
       context.addInitializer(function select() {
-        this.afterRender(() =>
+        this.beforeRender(() =>
           context.access.set(this, qsAll(anySelector ? selector : `.${selector}`, this.getContent()) as Value),
         );
       });
