@@ -1,6 +1,6 @@
 import { Input } from '@components/shared/ui/input/input';
 import { InputName, InputType } from '@shared/enums';
-import { DEFAULT_STRING_SCHEMA, EMAIL_SCHEMA } from '@shared/validation/constants/schemas.constant';
+import { PASSWORD_SCHEMA, EMAIL_SCHEMA } from '@shared/validation/constants/schemas.constant';
 
 export enum LoginPageText {
   Title = 'Please sign in to continue',
@@ -25,6 +25,6 @@ export const controls = {
     label: LoginPageText.LableForPas,
     required: true,
     withVisibilityToggle: true,
-    validationSchema: DEFAULT_STRING_SCHEMA,
+    validationSchema: PASSWORD_SCHEMA,
   }),
 };
