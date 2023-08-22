@@ -1,5 +1,5 @@
 import { element } from 'tsx-vanilla';
-import Component from '@shared/component';
+import { Component } from '@shared/lib';
 import { PageTitle } from '@pages/page-title.decorator';
 import { SITE_TITLE } from '@shared/constants/seo';
 import * as s from './home.module.scss';

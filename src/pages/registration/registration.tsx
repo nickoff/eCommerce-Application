@@ -1,12 +1,11 @@
 /* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
-import Component from '@shared/component';
-import { render } from '@shared/utils/misc';
 import cx from 'clsx';
+import { Child, Component } from '@shared/lib';
+import { render } from '@shared/utils/misc';
 import { type FormControlType } from '@shared/types';
 import { Route, router } from '@app/router';
 import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
-import { qs } from '@shared/utils/dom-helpers';
 import { INewCustomer } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
 import { AddressType } from '@shared/enums/address.enum';
@@ -21,9 +20,9 @@ class PageReg extends Component {
 
   private addressToggler: HTMLInputElement;
 
-  private form!: HTMLFormElement;
+  @Child(s.form) private form!: HTMLFormElement;
 
-  private msgPara!: HTMLParagraphElement;
+  @Child(s.para) private msgPara!: HTMLParagraphElement;
 
   constructor() {
     super();
@@ -35,8 +34,6 @@ class PageReg extends Component {
   }
 
   componentDidRender(): void {
-    this.form = qs('form', this.getContent());
-    this.msgPara = qs(`.${s.regMsg}`, this.getContent());
     this.addressToggler.addEventListener('change', () => this.toggleControls(this.billingControls));
   }
 

@@ -1,5 +1,5 @@
 import { element } from 'tsx-vanilla';
-import Component from '@shared/component';
+import { Component } from '@shared/lib';
 import { container } from '../../../styles/shared/index.module.scss';
 import * as s from './main.module.scss';
 

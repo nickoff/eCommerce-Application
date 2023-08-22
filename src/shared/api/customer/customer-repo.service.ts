@@ -1,17 +1,13 @@
 import { BaseAddress, type Customer, type CustomerDraft } from '@commercetools/platform-sdk';
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
-
-import { INewCustomer, ICustomerCredentials } from '@shared/interfaces/customer.interface';
-import { AddressType } from '@shared/enums/address.enum';
-import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
+import { INewCustomer, ICustomerCredentials } from '@shared/interfaces';
+import { AddressType } from '@shared/enums';
+import { ApiRoot } from '@shared/types';
 import extractHttpError from '../extract-http-error.decorator';
 
 class CustomerRepoService {
   @extractHttpError
-  static async createCustomer(
-    apiRoot: ByProjectKeyRequestBuilder,
-    customerDraft: CustomerDraft,
-  ): Promise<Customer | HttpErrorType> {
+  static async createCustomer(apiRoot: ApiRoot, customerDraft: CustomerDraft): Promise<Customer | HttpErrorType> {
     const response = await apiRoot
       .customers()
       .post({
@@ -25,7 +21,7 @@ class CustomerRepoService {
 
   @extractHttpError
   static async getCustomerByCredentials(
-    apiRoot: ByProjectKeyRequestBuilder,
+    apiRoot: ApiRoot,
     { email, password }: ICustomerCredentials,
   ): Promise<Customer | HttpErrorType> {
     const response = await apiRoot
@@ -44,20 +40,20 @@ class CustomerRepoService {
   }
 
   @extractHttpError
-  static async getMe(apiRoot: ByProjectKeyRequestBuilder): Promise<Customer | HttpErrorType> {
+  static async getMe(apiRoot: ApiRoot): Promise<Customer | HttpErrorType> {
     const response = await apiRoot.me().get().execute();
     return response.body;
   }
 
   @extractHttpError
-  static async getCustomerById(apiRoot: ByProjectKeyRequestBuilder, ID: string): Promise<Customer | HttpErrorType> {
+  static async getCustomerById(apiRoot: ApiRoot, ID: string): Promise<Customer | HttpErrorType> {
     const response = await apiRoot.customers().withId({ ID }).get().execute();
     const customer = response.body;
 
     return customer;
   }
 
-  static async isEmailUnique(apiRoot: ByProjectKeyRequestBuilder, email: string): Promise<boolean> {
+  static async isEmailUnique(apiRoot: ApiRoot, email: string): Promise<boolean> {
     try {
       const response = await apiRoot
         .customers()

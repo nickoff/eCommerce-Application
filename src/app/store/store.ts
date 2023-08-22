@@ -1,35 +1,19 @@
 import { Customer } from '@commercetools/platform-sdk';
-import Component from '@shared/component';
+import { Component } from '@shared/lib';
 import { isKeyOf, isHttpErrorType } from '@shared/utils/type-guards';
 import { StorageKey } from '@shared/enums';
 import CustomerRepoService from '@shared/api/customer/customer-repo.service';
-import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import ApiRootCreator from '@shared/api/api-root-creator';
+import { ApiRoot } from '@shared/types';
+import ApiCreator from '@shared/api/api-creator';
 import { AuthFlow } from '@shared/enums/auth-flow.enum';
+import IState from './state.interface';
 
-interface IState {
-  customer: Customer | null;
-  apiRoot: ByProjectKeyRequestBuilder;
-  authFlow: AuthFlow;
-}
-
-export default class Store {
+class Store {
   private readonly state: IState;
 
   private observers: {
     [K in keyof IState]?: Component[];
   };
-
-  private static instance: Store;
-
-  static getInstance(): Store {
-    if (!Store.instance) {
-      const [apiRoot, authFlow] = ApiRootCreator.initFlow();
-      Store.instance = new Store({ customer: null, apiRoot, authFlow });
-    }
-
-    return Store.instance;
-  }
 
   constructor(initialState: IState) {
     this.observers = {};
@@ -72,12 +56,12 @@ export default class Store {
     this.observers[property] = observers;
   }
 
-  login(customer: Customer, apiRootWithPassFlow: ByProjectKeyRequestBuilder): void {
+  login(customer: Customer, apiRootWithPassFlow: ApiRoot): void {
     this.setState({ customer, apiRoot: apiRootWithPassFlow, authFlow: AuthFlow.Password });
   }
 
   logout(): void {
-    const [apiRoot, authFlow] = ApiRootCreator.createCredentialsFlow();
+    const [apiRoot, authFlow] = ApiCreator.createCredentialsFlow();
     this.setState({ customer: null, apiRoot, authFlow });
     localStorage.removeItem(StorageKey.TokenCache);
   }
@@ -90,3 +74,7 @@ export default class Store {
     this.observers[property]?.forEach((observer) => observer.render());
   }
 }
+
+const [apiRoot, authFlow, apiClient] = ApiCreator.initFlow();
+
+export default new Store({ customer: null, apiRoot, authFlow, apiClient });

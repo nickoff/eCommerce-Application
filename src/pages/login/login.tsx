@@ -1,26 +1,28 @@
 import { element } from 'tsx-vanilla';
-import Component from '@shared/component';
-import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import cx from 'clsx';
+import { isFormValid, buildFormData } from '@shared/utils/form-helpers';
 import { qs } from '@shared/utils/dom-helpers';
 import { ICustomerCredentials } from '@shared/interfaces/customer.interface';
 import AuthService from '@app/auth.service';
-import { Route } from '@app/router';
-import { router } from '@app/router/routing';
+import { Route, router } from '@app/router';
 import { PageTitle } from '@pages/page-title.decorator';
+import Loader from 'promise-loading-spinner';
+import { Component, Child } from '@shared/lib';
 import * as s from './login.module.scss';
 import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import { controls, LoginPageText } from './config';
 
 @PageTitle('Login')
 class PageLogin extends Component {
-  private form!: HTMLFormElement;
+  @Child(s.form) private form!: HTMLFormElement;
 
-  private msgPara!: HTMLParagraphElement;
+  @Child(s.errorMsg) private msgPara!: HTMLParagraphElement;
 
   protected componentDidRender(): void {
-    this.form = qs('form', this.getContent());
-    this.msgPara = qs(`.${s.loginMsg}`, this.getContent());
+    const spinnerEl = qs('[data-spinner]', this.getContent());
+
+    const loader = new Loader({ loaderElement: spinnerEl, classActive: 'spinner-border' });
+    this.login = loader.wrapFunction(this.login.bind(this));
   }
 
   render(): JSX.Element {
@@ -36,7 +38,12 @@ class PageLogin extends Component {
               {LoginPageText.Link}
             </a>
           </span>
-          <p className={s.loginMsg}></p>
+          <div>
+            <p className={s.errorMsg}></p>
+            <div className="spinner-border" attributes={{ role: 'status', 'data-spinner': '' }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
           <button className={cx(btn, btnFilled, s.submitBtn)} onclick={this.onFormSubmit.bind(this)}>
             SIGN IN
           </button>
@@ -53,10 +60,12 @@ class PageLogin extends Component {
     }
 
     const credentials = buildFormData<ICustomerCredentials>(this.form);
+    this.login(credentials);
+  }
 
+  private async login(credentials: ICustomerCredentials): Promise<void> {
     const onSucces = (): void => {
-      this.msgPara.innerHTML = "You've logged in";
-      setTimeout(() => router.navigate(Route.Home), 500);
+      router.navigate(Route.Home);
     };
 
     const onError = (): void => {

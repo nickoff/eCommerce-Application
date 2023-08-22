@@ -43,6 +43,14 @@
   font-weight: $heading-font-weight;
 }
 
-.error__message {
+.error__msg {
   margin-bottom: 0;
+}
+
+.select-el {
+  width: 100%;
+}
+
+.option-el {
+  display: inline;
 }

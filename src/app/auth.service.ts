@@ -3,8 +3,8 @@ import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 import CustomerRepoService from '@shared/api/customer/customer-repo.service';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import { type Customer } from '@commercetools/platform-sdk';
-import ApiRootCreator from '@shared/api/api-root-creator';
-import Store from './store';
+import ApiRootCreator from '@shared/api/api-creator';
+import Store from './store/store';
 
 class AuthService {
   static async register(
@@ -12,7 +12,7 @@ class AuthService {
     onSuccess?: (customer: Customer) => void,
     onError?: (error: HttpErrorType) => void,
   ): Promise<Customer | HttpErrorType> {
-    const { apiRoot } = Store.getInstance().getState();
+    const { apiRoot } = Store.getState();
     const customerDraft = CustomerRepoService.createCustomerDraft(customerData);
     const result = await CustomerRepoService.createCustomer(apiRoot, customerDraft);
 
@@ -40,7 +40,7 @@ class AuthService {
       const result = await CustomerRepoService.getCustomerByCredentials(apiRoot, credentials);
 
       if (!isHttpErrorType(result)) {
-        Store.getInstance().login(result, apiRoot);
+        Store.login(result, apiRoot);
 
         if (onSuccess) {
           onSuccess(result);
@@ -64,7 +64,7 @@ class AuthService {
   }
 
   static logout(): void {
-    Store.getInstance().logout();
+    Store.logout();
   }
 }
 

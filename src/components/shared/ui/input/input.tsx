@@ -1,7 +1,6 @@
 import { element, ref } from 'tsx-vanilla';
 import { ValidationError } from 'yup';
-import Component from '@shared/component';
-import { qs } from '@shared/utils/dom-helpers';
+import { Component, Child } from '@shared/lib';
 import { IFormControl } from '@shared/interfaces/form-control.interface';
 import { InputType } from '@shared/enums';
 import { COMPONENT_ROOT_ATTR, COMPONENT_CHILD_ATTR } from '@shared/constants/misc';
@@ -10,18 +9,11 @@ import { IInputProps } from './input.interface';
 import VisibilityToggle from './visibility-toggle/visibility-toggle';
 
 export class Input extends Component<IInputProps> implements IFormControl {
-  input!: HTMLInputElement;
-
-  private errorPara: HTMLParagraphElement;
-
   private hasError = false;
 
-  constructor(...args: IInputProps[]) {
-    super(...args);
+  @Child(s.errorMsg) private errorPara!: HTMLParagraphElement;
 
-    this.errorPara = document.createElement('p');
-    this.errorPara.classList.add(s.errorMessage);
-  }
+  @Child(s.inputEl) input!: HTMLInputElement;
 
   getValue(): string {
     return this.input.value;
@@ -36,13 +28,8 @@ export class Input extends Component<IInputProps> implements IFormControl {
     return !this.hasError;
   }
 
-  protected componentDidRender(): void {
-    this.input = qs('input', this.getContent());
-  }
-
   render(): JSX.Element {
     this.hasError = false;
-    this.errorPara.textContent = '';
 
     const { name, label, type, placeholder, disabled, required, withVisibilityToggle } = this.props;
 
@@ -54,6 +41,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
 
         <div className={s.inputWrapper}>
           <input
+            className={s.inputEl}
             name={name}
             type={type ?? InputType.Text}
             oninput={this.validate.bind(this)}
@@ -68,7 +56,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
             new VisibilityToggle({ input: inputRef.value, className: s.visToggle }).render()}
         </div>
 
-        {this.errorPara}
+        <p className={s.errorMsg}></p>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import Component from '../component';
+import { Component } from '@shared/lib';
 
 export function render<T extends Component>(arg: T | T[], ...components: T[]): JSX.Element[] {
   const arr = components ?? [];

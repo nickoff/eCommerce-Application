@@ -1,9 +1,9 @@
 import { debounce } from 'lodash';
 import { ValidationError } from 'yup';
 import CustomerRepoService from '@shared/api/customer/customer-repo.service';
-import Store from '@app/store';
+import Store from '@app/store/store';
 
-const { apiRoot } = Store.getInstance().getState();
+const { apiRoot } = Store.getState();
 
 const DEBOUNCE_TIMEOUT = 500;
 

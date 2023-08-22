@@ -1,5 +1,5 @@
 import { element } from 'tsx-vanilla';
-import Component from '@shared/component';
+import { Component } from '@shared/lib';
 import { Route } from '@app/router';
 import { PageTitle } from '@pages/page-title.decorator';
 import * as s from './page404.module.scss';
