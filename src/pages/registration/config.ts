@@ -46,7 +46,7 @@ export const controls = {
     type: InputType.Text,
     label: 'Email',
     required: true,
-    validationSchema: Schema.EMAIL_UNIQUE_SCHEMA,
+    validationSchema: [Schema.EMAIL_SCHEMA, Schema.EMAIL_UNIQUE_SCHEMA],
   }),
   password: pwdInput,
   passwordConfirm: confirmPwdInput,

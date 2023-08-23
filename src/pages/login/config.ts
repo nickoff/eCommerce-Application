@@ -13,7 +13,7 @@ export enum LoginPageText {
 export const controls = {
   email: new Input({
     name: InputName.Email,
-    type: InputType.Email,
+    type: InputType.Text,
     label: LoginPageText.LableForEmail,
     required: true,
     validationSchema: EMAIL_SCHEMA,

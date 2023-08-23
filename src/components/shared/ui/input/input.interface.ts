@@ -1,4 +1,4 @@
-import { StringSchema, DateSchema } from 'yup';
+import { Schema } from 'yup';
 import { InputType } from '@shared/enums';
 
 export interface IInputProps extends IProps {
@@ -8,7 +8,7 @@ export interface IInputProps extends IProps {
   label?: string;
   required?: boolean;
   disabled?: boolean;
-  validationSchema?: StringSchema | DateSchema;
+  validationSchema?: Schema | Schema[];
   additionalValidationContext?: object;
   withVisibilityToggle?: boolean;
 }

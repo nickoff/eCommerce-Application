@@ -62,9 +62,9 @@ export class Input extends Component<IInputProps> implements IFormControl {
   }
 
   private async validate(): Promise<void> {
-    const { validationSchema: schema, required, disabled, additionalValidationContext } = this.props;
+    const { validationSchema, required, disabled, additionalValidationContext } = this.props;
 
-    if (disabled || !schema) {
+    if (disabled || !validationSchema) {
       return;
     }
 
@@ -75,9 +75,16 @@ export class Input extends Component<IInputProps> implements IFormControl {
       return;
     }
 
+    const schemas = Array.isArray(validationSchema) ? validationSchema : [validationSchema];
+
     try {
-      await schema.validate(value, { context: { required, ...additionalValidationContext } });
-      if (this.hasError) this.removeError();
+      // Validation should be done sequentially, that's why following rules are disabled
+      // eslint-disable-next-line no-restricted-syntax
+      for (const schema of schemas) {
+        // eslint-disable-next-line no-await-in-loop
+        await schema.validate(value, { context: { required, ...additionalValidationContext } });
+        if (this.hasError) this.removeError();
+      }
     } catch (error) {
       if (error instanceof ValidationError) {
         this.showError(error.message);

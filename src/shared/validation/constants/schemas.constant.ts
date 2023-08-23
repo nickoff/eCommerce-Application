@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as yup from 'yup';
 import isEmailUniqueDebounced from '../unique-email.validation';
-import yupSequence from '../yup-sequence';
 import * as Pattern from './patterns.constant';
 import * as Message from './messages.constant';
 
@@ -30,15 +28,7 @@ export const EMAIL_SCHEMA = DEFAULT_STRING_SCHEMA.required(Message.REQUIRED)
   .test('has-domain', Message.EMAIL.domain, (value) => value.includes('.'))
   .test('has-at-symbol', Message.EMAIL.atSymbol, (value) => value.includes('@'));
 
-export const EMAIL_UNIQUE_SCHEMA = yup
-  .string()
-  .test(
-    yupSequence(
-      'email-validation-with-unique-check',
-      EMAIL_SCHEMA,
-      yup.string().ensure().test('is-unique', Message.EMAIL.exist, isEmailUniqueDebounced),
-    ),
-  );
+export const EMAIL_UNIQUE_SCHEMA = yup.string().ensure().test('is-unique', Message.EMAIL.exist, isEmailUniqueDebounced);
 
 export const DATE_OF_BIRTH_SCHEMA = yup
   .date()
