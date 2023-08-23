@@ -43,7 +43,7 @@ export const controls = {
   }),
   email: new Input({
     name: InputName.Email,
-    type: InputType.Email,
+    type: InputType.Text,
     label: 'Email',
     required: true,
     validationSchema: Schema.EMAIL_UNIQUE_SCHEMA,

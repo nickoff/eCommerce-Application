@@ -10,6 +10,8 @@ export const DEFAULT_STRING_SCHEMA = yup
   .when('$required', ([required], schema) => (required ? schema.required(Message.REQUIRED) : schema));
 
 export const PASSWORD_SCHEMA = DEFAULT_STRING_SCHEMA.required(Message.REQUIRED)
+  .strict(true)
+  .trim(Message.PASSWORD.trim)
   .min(Pattern.PASSWORD.min, Message.PASSWORD.min)
   .matches(Pattern.PASSWORD.number, Message.PASSWORD.number)
   .matches(Pattern.PASSWORD.special, Message.PASSWORD.special)
@@ -21,8 +23,9 @@ export const PASSWORD_CONFIRM_SCHEMA = DEFAULT_STRING_SCHEMA.when('$getPwdValue'
 );
 
 export const EMAIL_SCHEMA = DEFAULT_STRING_SCHEMA.required(Message.REQUIRED)
-  .email(Message.EMAIL.incorrect)
+  .strict(true)
   .trim(Message.EMAIL.trim)
+  .email(Message.EMAIL.incorrect)
   .ensure()
   .test('has-domain', Message.EMAIL.domain, (value) => value.includes('.'))
   .test('has-at-symbol', Message.EMAIL.atSymbol, (value) => value.includes('@'));
