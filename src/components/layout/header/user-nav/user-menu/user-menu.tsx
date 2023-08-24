@@ -34,7 +34,7 @@ class UserMenu extends Component {
           <button className={cx(btn, btnFilled, s.logOutBtn)} onclick={this.onLogOutClick.bind(this)}>
             LOG OUT
           </button>
-          <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onLogOutClick.bind(this)}>
+          <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onUserProfileClick.bind(this)}>
             PROFILE
           </button>
         </div>
@@ -46,6 +46,11 @@ class UserMenu extends Component {
     this.dropdown.hide();
     AuthService.logout();
     router.navigate(Route.Home);
+  }
+
+  private onUserProfileClick(): void {
+    this.dropdown.hide();
+    router.navigate(Route.UserProfile);
   }
 }
 

@@ -1,0 +1,25 @@
+.page-wrapper {
+  padding-block: 30px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.data-wrapper {
+  padding-top: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 3rem;
+  font-size: 16px;
+  margin-bottom: 2rem;
+}
+
+.data-key {
+  font-weight: 600;
+}
+
+.data-valuey {
+  color: $second-color;
+}
