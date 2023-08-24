@@ -3,7 +3,8 @@ import MiniCssPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
-import { resolveTsAliases } from 'resolve-ts-aliases';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { Configuration } from 'webpack';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -18,12 +19,44 @@ const commonConfig: Configuration = {
   module: {
     rules: [
       {
-        test: /\.ts$/i,
+        test: /\.tsx?$/i,
         use: 'ts-loader',
       },
       {
+        test: /\.module.s?css$/i,
+        use: [
+          MiniCssPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                exportLocalsConvention: 'camelCaseOnly',
+                localIdentName: '[local]_[hash:base64:10]',
+                namedExport: true,
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: '@import "@sass-helpers";',
+            },
+          },
+        ],
+      },
+      {
         test: /\.s?css$/i,
-        use: [MiniCssPlugin.loader, 'css-loader', 'sass-loader'],
+        exclude: /\.module.s?css$/i,
+        use: [
+          MiniCssPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: '@import "@sass-helpers";',
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
@@ -31,28 +64,35 @@ const commonConfig: Configuration = {
       },
       {
         test: /\.svg$/i,
-        type: 'asset/source',
+        use: 'svg-loader-js',
       },
     ],
   },
   plugins: [
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'static' }],
+    }),
     new MiniCssPlugin({
       filename: isDev ? '[name].css' : '[name].[contenthash].css',
       chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      favicon: './src/favicon.png',
       minify: !isDev,
     }),
     new ForkTsCheckerPlugin(),
     new ESLintPlugin({
-      extensions: ['.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js'],
       context: 'src',
     }),
   ],
   resolve: {
-    extensions: ['.ts', '.js'],
-    alias: resolveTsAliases(path.resolve(__dirname, 'tsconfig.json')),
+    plugins: [new TsconfigPathsPlugin()],
+    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@sass-helpers': path.resolve(__dirname, './src/styles/helpers'),
+    },
   },
 };
 

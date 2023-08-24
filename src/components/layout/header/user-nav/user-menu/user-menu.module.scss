@@ -1,0 +1,25 @@
+.menu-container {
+  background-color: $default-color;
+  color: $default-color;
+  padding: 15px 20px;
+  border-radius: 8px;
+}
+
+.email-para {
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  color: $second-color;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: $grey;
+}
+
+.log-out-btn {
+  padding: 6px 10px;
+}
+
+.dropdown-toggle {
+  &::after {
+    all: unset;
+  }
+}

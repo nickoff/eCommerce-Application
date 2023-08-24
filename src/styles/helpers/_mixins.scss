@@ -1,0 +1,18 @@
+@mixin flex-vertical-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin outline-on-focus {
+  &:focus {
+    outline: 5px auto -moz-mac-focusring;
+    outline: 5px auto -moz-focusring;
+    outline: 5px auto -webkit-focus-ring-color !important;
+    outline-offset: 2px;
+  }
+}

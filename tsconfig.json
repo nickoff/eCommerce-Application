@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "element",
+    "jsxFragmentFactory": "fragment",
     "sourceMap": true,
     "target": "es2016",
     "module": "commonjs",
@@ -8,11 +11,30 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "resolveJsonModule": true,
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "camelCaseOnly",
+          "additionalData": "@import '@sass-helpers';",
+          "rendererOptions": {
+            "sass": {
+              "includePaths": ["@styles/_shared.module.scss"]
+            }
+          }
+        }
+      }
+    ],
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"]
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"],
+      "@app/*": ["app/*"],
+      "@shared/*": ["shared/*"],
+      "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"],
+      "@sass-helpers": ["styles/helpers/_index"]
     }
   }
 }

@@ -1,0 +1,13 @@
+.container {
+  max-width: 1125px;
+  padding-inline: 15px;
+  margin: auto;
+
+  @include breakpoint($mobile, $max) {
+    padding-inline: 10px;
+  }
+}
+
+a:any-link {
+  color: $second-color;
+}

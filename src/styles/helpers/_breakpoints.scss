@@ -1,0 +1,15 @@
+$max: 'max';
+$min: 'min';
+
+$mobile: 'mobile';
+$tablet: 'tablet';
+$nav-hide: 'nav-hide';
+$sign-up-hide: 'sign-up-hide';
+
+$breakpoints: (#{$mobile}: 374.98px, #{$sign-up-hide}: 550px, #{$tablet}: 767.98px, #{$nav-hide}: 879.98px);
+
+@mixin breakpoint($breakpoint: md, $key: $max) {
+  @media (#{$key}-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}

@@ -1,8 +1,4 @@
-import '@components/hello-world.scss';
-import { heading } from '@components/hello-world';
-import Img from '@assets/images/rsschool.png';
+import './styles/main.scss';
+import App from '@app/app';
 
-const img = new Image();
-img.src = Img;
-
-document.body.append(heading, img);
+App.init();

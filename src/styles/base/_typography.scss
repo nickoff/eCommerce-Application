@@ -1,0 +1,84 @@
+@import '../helpers/variables';
+
+// Html Base
+html {
+  font-family: $base-font;
+  font-weight: $base-font-weight;
+  color: $second-color;
+
+  font-style: normal;
+  font-size: 10px;
+}
+
+// Body Base
+body {
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+}
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $heading-font;
+  font-weight: $heading-font-weight;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 5.6rem;
+  line-height: 5.8rem;
+  letter-spacing: 0.2rem;
+}
+
+h2 {
+  font-size: 4rem;
+  line-height: 4.4rem;
+  letter-spacing: 0.15rem;
+}
+
+h3 {
+  font-size: 3.2rem;
+  line-height: 3.6rem;
+  letter-spacing: 0.115rem;
+}
+
+h4 {
+  font-size: 2.8rem;
+  line-height: 3.8rem;
+  letter-spacing: 0.2rem;
+}
+
+h5 {
+  font-size: 2.4rem;
+  line-height: 3.3rem;
+  letter-spacing: 0.17rem;
+}
+
+h6 {
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  letter-spacing: 0.13rem;
+}
+
+// sub-titles
+.overline {
+  color: $primary-color;
+  font-size: 1.4rem;
+  line-height: normal;
+  letter-spacing: 1rem;
+  text-transform: uppercase;
+}
+
+.sub-title {
+  color: $primary-color;
+  font-size: 1.3rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 2.5rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+}

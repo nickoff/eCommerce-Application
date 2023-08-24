@@ -1,0 +1,156 @@
+.sign-btn__up {
+  margin-bottom: 2rem;
+}
+
+.sign-text__up {
+  font-size: 1.2rem;
+}
+
+.page-wrapper {
+  position: relative;
+  padding-block: 30px;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.address-heading {
+  color: $primary-color;
+  margin: 0;
+}
+
+.form {
+  margin: auto;
+  max-width: 600px;
+}
+
+.form__grid {
+  display: grid;
+  row-gap: 10px;
+  column-gap: 20px;
+  grid-template-areas:
+    'first-name  last-name'
+    'email       email'
+    'pwd         pwd-confirm'
+    'birth       phone'
+    'shipping    billing';
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 580px) {
+    grid-template-areas:
+      'first-name  last-name'
+      'email       email'
+      'pwd         pwd-confirm'
+      'birth       phone'
+      'shipping    shipping'
+      'billing     billing';
+  }
+
+  @include breakpoint($mobile, $max) {
+    grid-template-areas:
+      'first-name'
+      'last-name'
+      'email'
+      'pwd'
+      'pwd-confirm'
+      'birth'
+      'phone'
+      'shipping'
+      'billing';
+    grid-template-columns: 1fr;
+  }
+}
+
+.first-name {
+  grid-area: first-name;
+}
+
+.last-name {
+  grid-area: last-name;
+}
+
+.email {
+  grid-area: email;
+}
+
+.pwd {
+  grid-area: pwd;
+}
+
+.pwd-сonfirm {
+  grid-area: pwd-confirm;
+}
+
+.birth {
+  grid-area: birth;
+}
+
+.phone {
+  grid-area: phone;
+}
+
+.shipping {
+  grid-area: shipping;
+  position: relative;
+}
+
+.billing {
+  grid-area: billing;
+  position: relative;
+}
+
+.default-label,
+.billing-label {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  @include flex-vertical-center;
+  gap: 5px;
+  font-size: 1.2rem;
+}
+
+.billing-label {
+  top: 18px;
+}
+
+.shipping,
+.billing {
+  @include flex-column;
+  gap: 20px;
+}
+
+.para {
+  // margin-bottom: 20px;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.regMsg {
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.submit-btn {
+  margin: auto;
+  display: block;
+  padding: 15px 40px;
+}
+
+.sign-link {
+  color: $second-color;
+  margin-left: 3px;
+}
+
+.msg-wrapper {
+  min-height: 23px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.error-msg {
+  font-size: 1.4rem;
+  margin: 0;
+  color: $color-error-validation;
+}
