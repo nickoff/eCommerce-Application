@@ -1,3 +1,5 @@
+import { Route } from '@app/router';
+
 enum LinkText {
   Home = 'HOME',
   Headphones = 'HEADPHONES',
@@ -6,8 +8,8 @@ enum LinkText {
 }
 
 export const linksConfig = [
-  { text: LinkText.Home, route: 'home' },
-  { text: LinkText.Headphones, route: '#' },
+  { text: LinkText.Home, route: Route.Home },
+  { text: LinkText.Headphones, route: Route.Headphones },
   { text: LinkText.Speakers, route: '#' },
   { text: LinkText.Earphones, route: '#' },
 ];

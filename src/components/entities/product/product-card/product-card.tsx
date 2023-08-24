@@ -11,13 +11,13 @@ class ProductCard extends Component<IProductCardProps> {
     const { name, images, attributes, prices } = this.props.productData;
 
     return (
-      <article className={s.prodCard}>
+      <div className={s.prodCard}>
         <img className={s.prodCardImg} src={images[0].url} alt={images[0].label} />
         <p className={s.prodCardVendor}>{attributes?.vendor}</p>
         <p className={s.prodCardPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
         <a className={s.prodCardName}>{name}</a>
         <button className={cx(btn, btnFilled, s.prodCardBtn)}>ADD TO CART</button>
-      </article>
+      </div>
     );
   }
 }

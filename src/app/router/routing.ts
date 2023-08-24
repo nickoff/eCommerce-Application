@@ -5,6 +5,7 @@ import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
 import Store from '@app/store/store';
+import CatalogPage from '@pages/catalog/catalog';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -36,6 +37,10 @@ const initRouter = (): void => {
         hooks: {
           before: beforeHook,
         },
+      },
+      [Route.Headphones]: {
+        as: 'headphones-catalog',
+        uses: () => Main.setProps({ page: new CatalogPage() }),
       },
     })
     .notFound(() => Main.setProps({ page: new Page404() }))
