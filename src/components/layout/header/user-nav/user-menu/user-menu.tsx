@@ -34,6 +34,9 @@ class UserMenu extends Component {
           <button className={cx(btn, btnFilled, s.logOutBtn)} onclick={this.onLogOutClick.bind(this)}>
             LOG OUT
           </button>
+          <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onLogOutClick.bind(this)}>
+            PROFILE
+          </button>
         </div>
       </li>
     );
