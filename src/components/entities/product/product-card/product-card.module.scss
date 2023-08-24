@@ -1,0 +1,43 @@
+.prod-card {
+  padding: 20px;
+  max-width: 250px;
+  background-color: $default-color;
+  font-family: $base-font;
+}
+
+.prod-card__img {
+  @include responsive-img;
+  margin-bottom: 10px;
+}
+
+.prod-card__vendor {
+  color: #777;
+  font-size: 1.4rem;
+}
+
+.prod-card__price {
+  color: $primary-color;
+  font-size: 2rem;
+  font-family: $price-font;
+  font-weight: 300;
+}
+
+.prod-card__name {
+  margin-bottom: 20px;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.55;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: $primary-color-hover;
+  }
+}
+
+.prod-card__btn {
+  width: 100%;
+}

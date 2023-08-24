@@ -66,6 +66,10 @@ const commonConfig: Configuration = {
         test: /\.svg$/i,
         use: 'svg-loader-js',
       },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
   plugins: [
