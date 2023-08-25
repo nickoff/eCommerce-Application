@@ -12,16 +12,7 @@ import Toolbar from './toolbar/toolbar';
 import { ToolbarEvent, CardsLayout } from './toolbar/toolbar.enum';
 
 const productCollectionVariant = {
-  grid: [
-    s.productsCollection,
-    'row',
-    'row-cols-auto',
-    'row-cols-2xs-2',
-    'row-cols-md-3',
-    'row-cols-2xl-4',
-    'g-4',
-    'justify-content-center',
-  ],
+  grid: [s.productsCollection, 'row', 'row-cols-auto', 'row-cols-2xs-2', 'row-cols-md-3', 'row-cols-2xl-4', 'g-4'],
   list: [s.productsCollection, s.productsCollectionList],
 };
 
@@ -45,7 +36,7 @@ class CatalogPage extends Component {
         <div className={cx(s.productsContainer, 'container-fluid')}>
           {new Toolbar({ className: s.productsToolbar }).render()}
           <div className={cx(productCollectionVariant.grid)}>
-            {this.productCards && this.productCards.map((card) => <div className="col">{card.render()}</div>)}
+            {this.productCards && this.productCards.map((card) => <div className="col d-flex">{card.render()}</div>)}
           </div>
         </div>
       </div>
@@ -57,12 +48,7 @@ class CatalogPage extends Component {
     const productsResp = await ProductListService.getProductsByCategory(apiRoot, CategoryId.Headphones);
 
     if (!isHttpErrorType(productsResp)) {
-      // this.productCards = productsResp.map((prod) => new ProductCard({ productData: new Product(prod) }));
-
-      this.productCards = Array.from({ length: 12 }, () =>
-        productsResp.map((prod) => new ProductCard({ productData: new Product(prod), className: s.gridCard })),
-      ).flat();
-
+      this.productCards = productsResp.map((prod) => new ProductCard({ productData: new Product(prod) }));
       this.render();
     }
   }
