@@ -1,0 +1,56 @@
+.select {
+  font-family: $base-font;
+  font-size: 1.2rem;
+  line-height: normal;
+  width: 100%;
+  min-height: 78px;
+
+  select {
+    font-weight: $heading-font-weight;
+    color: $second-color;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid $field-default-color;
+    padding: 7px 24px;
+
+    &:hover:not([disabled]) {
+      border: 1px solid $primary-color;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid $primary-color;
+    }
+
+    &[disabled] {
+      background-color: rgba(239, 239, 239, 0.3);
+    }
+  }
+
+  &--invalid {
+    color: $color-error-validation;
+
+    select {
+      border: 1px solid $color-error-validation;
+      color: $second-color;
+    }
+  }
+}
+
+.select-label {
+  margin-bottom: 5px;
+  display: inline-block;
+  font-weight: $heading-font-weight;
+}
+
+.error__msg {
+  margin-bottom: 0;
+}
+
+.select-el {
+  width: 100%;
+}
+
+.option-el {
+  display: inline;
+}

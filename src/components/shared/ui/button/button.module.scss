@@ -1,0 +1,30 @@
+.btn {
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  &:hover {
+    transition: background 0.2s;
+  }
+}
+
+.btn--filled {
+  background: #d87d4a;
+  color: #fff;
+
+  &:hover {
+    background: #fbaf85;
+  }
+}
+
+.btn--outline {
+  background: none;
+  color: #000;
+  border: 1px solid #000;
+
+  &:hover {
+    background: #000;
+    color: #fff;
+  }
+}
