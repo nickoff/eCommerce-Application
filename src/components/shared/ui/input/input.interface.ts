@@ -11,4 +11,5 @@ export interface IInputProps extends IProps {
   validationSchema?: Schema | Schema[];
   additionalValidationContext?: object;
   withVisibilityToggle?: boolean;
+  value?: string | number;
 }

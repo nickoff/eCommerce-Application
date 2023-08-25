@@ -2,7 +2,7 @@
   padding-block: 30px;
 }
 
-h2 {
+h1 {
   text-align: center;
 }
 
@@ -22,4 +22,46 @@ h2 {
 
 .data-valuey {
   color: $second-color;
+}
+
+.first-name {
+  grid-area: first-name;
+}
+
+.last-name {
+  grid-area: last-name;
+}
+
+.email {
+  grid-area: email;
+}
+
+.pwd {
+  grid-area: pwd;
+}
+
+.pwd-сonfirm {
+  grid-area: pwd-confirm;
+}
+
+.birth {
+  grid-area: birth;
+}
+
+.phone {
+  grid-area: phone;
+}
+
+.shipping {
+  grid-area: shipping;
+  position: relative;
+}
+
+.billing {
+  grid-area: billing;
+  position: relative;
+}
+
+.hidden {
+  display: none;
 }

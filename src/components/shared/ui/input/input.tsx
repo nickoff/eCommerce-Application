@@ -31,7 +31,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
   render(): JSX.Element {
     this.hasError = false;
 
-    const { name, label, type, placeholder, disabled, required, withVisibilityToggle } = this.props;
+    const { name, label, type, placeholder, disabled, required, withVisibilityToggle, value } = this.props;
 
     const inputRef = ref<HTMLInputElement>();
 
@@ -44,6 +44,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
             className={s.inputEl}
             name={name}
             type={type ?? InputType.Text}
+            value={value ?? ''}
             oninput={this.validate.bind(this)}
             placeholder={placeholder ?? ''}
             disabled={disabled}
