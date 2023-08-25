@@ -17,6 +17,10 @@
 
 .toolbar__sorting {
   margin-right: 80px;
+
+  @media (max-width: 1280px) {
+    margin-right: 50px;
+  }
 }
 
 .layout {
@@ -27,11 +31,19 @@
   @include bg-border-none;
   padding: 5px;
 
+  &:hover,
+  &:focus {
+    svg {
+      fill: $primary-color-hover;
+    }
+  }
+
   svg {
     display: block;
     width: 26px;
     height: 26px;
-    color: $second-color;
+    fill: $second-color;
+    @include transition(fill);
   }
 }
 

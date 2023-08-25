@@ -22,6 +22,16 @@
   margin-bottom: 20px;
 }
 
+.products__collection {
+  text-decoration: none;
+
+  &--list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
 .grid-card {
   @media (max-width: 480px) {
     max-width: 300px;
