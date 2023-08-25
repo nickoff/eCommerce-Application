@@ -18,6 +18,10 @@
   max-width: 1080px;
 }
 
+.products__toolbar {
+  margin-bottom: 20px;
+}
+
 .grid-card {
   @media (max-width: 480px) {
     max-width: 300px;

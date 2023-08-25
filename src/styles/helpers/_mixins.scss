@@ -21,3 +21,8 @@
   max-width: 100%;
   height: auto;
 }
+
+@mixin bg-border-none {
+  background: none;
+  border: none;
+}

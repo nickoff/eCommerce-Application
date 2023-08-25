@@ -1,0 +1,56 @@
+.toolbar {
+  @include flex-vertical-center;
+  font-size: 1.5rem;
+  font-family: $base-font;
+}
+
+.toolbar__info {
+  margin: 0;
+  margin-right: auto;
+  @include flex-vertical-center;
+}
+
+.toolbar__layout {
+  @include flex-vertical-center;
+  gap: 10px;
+}
+
+.toolbar__sorting {
+  margin-right: 80px;
+}
+
+.layout {
+  line-height: 1;
+}
+
+.layout__btn {
+  @include bg-border-none;
+  padding: 5px;
+
+  svg {
+    display: block;
+    width: 26px;
+    height: 26px;
+    color: $second-color;
+  }
+}
+
+.sorting-toggle {
+  @include bg-border-none;
+
+  &::after {
+    margin-left: 8px;
+  }
+}
+
+.sorting__item {
+  cursor: pointer;
+}
+
+.sorting__btn {
+  @include bg-border-none;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  font-size: 1.5rem;
+}

@@ -8,6 +8,7 @@ import Product from '@components/entities/product/product';
 import ProductCard from '@components/entities/product/product-card/product-card';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import * as s from './catalog.module.scss';
+import Toolbar from './toolbar/toolbar';
 
 class CatalogPage extends Component {
   private productCards: ProductCard[] | null = null;
@@ -19,6 +20,7 @@ class CatalogPage extends Component {
       <div className="d-flex ">
         <div className={s.sortingContainer}></div>
         <div className={cx(s.productsContainer, 'container-fluid')}>
+          {new Toolbar({ className: s.productsToolbar }).render()}
           <div className="row row-cols-auto row-cols-2xs-2 row-cols-md-3 row-cols-2xl-4 g-4 justify-content-center">
             {this.productCards && this.productCards.map((card) => <div className="col">{card.render()}</div>)}
           </div>
