@@ -4,13 +4,6 @@ import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
 import { AddressType } from '@shared/enums/address.enum';
-import Store from '@app/store/store';
-
-const { customer } = Store.getState();
-// eslint-disable-next-line no-console
-console.log(customer);
-
-export const tempData = [customer?.firstName, customer?.lastName];
 
 const pwdInput = new Input({
   name: InputName.Password,
@@ -18,7 +11,6 @@ const pwdInput = new Input({
   label: 'Password',
   required: true,
   withVisibilityToggle: true,
-  validationSchema: Schema.PASSWORD_SCHEMA,
 });
 
 const confirmPwdInput = new Input({

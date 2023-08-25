@@ -6,22 +6,36 @@ h1 {
   text-align: center;
 }
 
-.data-wrapper {
-  padding-top: 3rem;
+.user-info h2 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: $primary-color;
+  color: white;
+  padding: 0.5rem;
+}
+
+.user-info {
+  position: relative;
+  margin: auto;
+  max-width: 600px;
   display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+  padding-top: 3.5rem;
+  border: 1px solid $primary-color;
   justify-content: center;
   align-items: center;
-  column-gap: 3rem;
-  font-size: 16px;
   margin-bottom: 2rem;
 }
 
-.data-key {
-  font-weight: 600;
+.user-info div {
+  width: 50%;
 }
 
-.data-valuey {
-  color: $second-color;
+.user-info div div {
+  text-align: center;
+  width: 90%;
 }
 
 .first-name {
@@ -52,16 +66,6 @@ h1 {
   grid-area: phone;
 }
 
-.shipping {
-  grid-area: shipping;
-  position: relative;
-}
-
-.billing {
-  grid-area: billing;
-  position: relative;
-}
-
-.hidden {
-  display: none;
+input [type='select'] {
+  width: 90%;
 }
