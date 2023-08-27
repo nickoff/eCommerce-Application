@@ -10,3 +10,5 @@ declare module '*.element.svg' {
   const value: SVGElement;
   export default value;
 }
+
+declare module '@spreadtheweb/multi-range-slider';

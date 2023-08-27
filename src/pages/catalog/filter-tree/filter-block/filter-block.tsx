@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Child, Component } from '@shared/lib';
@@ -7,8 +8,10 @@ import Store from '@app/store/store';
 import { assertIsHTMLElement, isHttpErrorType } from '@shared/utils/type-guards';
 import { AttributePlainEnumValue } from '@commercetools/platform-sdk';
 import { ProductFilterType, ProductTypeKey } from '@shared/enums';
-import { delegate, qs } from '@shared/utils/dom-helpers';
+import { delegate, qs, qsAll } from '@shared/utils/dom-helpers';
 import { MouseEvtName } from '@shared/constants/events';
+import rangeSlider, { RangeSlider, RangeSliderConfig } from 'range-slider-input';
+import 'range-slider-input/dist/style.css';
 import * as s from './filter-block.module.scss';
 import { IFilterBlockProps } from './filter-block.interface';
 import { FilterBlockEvent } from './filter-block.enum';
@@ -16,10 +19,70 @@ import { FilterBlockEvent } from './filter-block.enum';
 class FilterBlock extends Component<IFilterBlockProps> {
   @Child(s.accordionBody) private filterBody!: HTMLElement;
 
+  private lowerPriceInput!: HTMLInputElement;
+
+  private upperPriceInput!: HTMLInputElement;
+
   private filterData: AttributePlainEnumValue[] | null = null;
 
+  private priceRange!: RangeSlider;
+
+  private lowerThumb!: HTMLElement;
+
+  private upperThumb!: HTMLElement;
+
   protected componentDidRender(): void {
-    delegate(this.filterBody, '[data-filter-type]', MouseEvtName.CLICK, this.onFilterClick.bind(this));
+    if (this.props.filterType !== ProductFilterType.Price) {
+      delegate(this.filterBody, '[data-filter-type]', MouseEvtName.CLICK, this.onFilterClick.bind(this));
+    } else {
+      this.lowerPriceInput = qs('[data-bound="lower"]', this.getContent());
+      this.upperPriceInput = qs('[data-bound="upper"]', this.getContent());
+
+      this.lowerPriceInput.onchange = (): void => {
+        const [, upper] = this.priceRange.value();
+        let lower = +this.lowerPriceInput.value;
+
+        if (lower < 0) {
+          lower = 0;
+        } else if (lower > 1000) {
+          lower = 1000;
+        }
+
+        this.priceRange.value([lower, upper]);
+      };
+
+      this.upperPriceInput.onchange = (): void => {
+        const [lower] = this.priceRange.value();
+        let upper = +this.upperPriceInput.value;
+
+        if (upper < 0) {
+          upper = 0;
+        } else if (lower > 1000) {
+          upper = 1000;
+        }
+
+        this.priceRange.value([lower, upper]);
+      };
+
+      const sliderConfig: RangeSliderConfig = {
+        min: 0,
+        max: 1000,
+        value: [0, 1000],
+        step: 1,
+        rangeSlideDisabled: true,
+        onInput: (value) => {
+          const [lower, upper] = value;
+          this.lowerPriceInput.value = lower.toString();
+          this.upperPriceInput.value = upper.toString();
+        },
+      };
+
+      setTimeout(() => {
+        const rangeEl = qs(`.${s.rangeSlider}`, this.getContent());
+        this.priceRange = rangeSlider(rangeEl, sliderConfig);
+        [this.lowerThumb, this.upperThumb] = qsAll('.range-slider__thumb', rangeEl);
+      });
+    }
   }
 
   unselectFilter(key: string): void {
@@ -43,7 +106,9 @@ class FilterBlock extends Component<IFilterBlockProps> {
         </h4>
         <div id={collapseId} className="accordion-collapse collapse show">
           <div className={cx('accordion-body', s.accordionBody)}>
-            {this.filterData && this.renderContent(this.filterData)}
+            {this.props.filterType === ProductFilterType.Price
+              ? this.renderPriceRange()
+              : this.filterData && this.renderContent(this.filterData)}
           </div>
         </div>
       </div>
@@ -82,6 +147,8 @@ class FilterBlock extends Component<IFilterBlockProps> {
         return this.renderFilterList(filterData);
       case ProductFilterType.Color:
         return this.renderColorPallete(filterData);
+      case ProductFilterType.Price:
+        return this.renderPriceRange();
       default:
         throw new NeverError(filterType);
     }
@@ -90,6 +157,10 @@ class FilterBlock extends Component<IFilterBlockProps> {
   private async load(): Promise<void> {
     const { apiRoot } = Store;
     const { category, filterType } = this.props;
+
+    if (filterType === ProductFilterType.Price) {
+      return;
+    }
 
     const result = await ProductListService.getAttributeOfProductType(apiRoot, filterType, ProductTypeKey[category]);
 
@@ -127,6 +198,33 @@ class FilterBlock extends Component<IFilterBlockProps> {
           </li>
         ))}
       </ul>
+    );
+  }
+
+  private renderPriceRange(): JSX.Element {
+    return (
+      <div>
+        <div className={s.priceRangeInputWrapper}>
+          <input
+            className={s.priceRangeInput}
+            type="number"
+            value={0}
+            min={0}
+            max={1000}
+            dataset={{ bound: 'lower' }}
+          />
+          -
+          <input
+            className={s.priceRangeInput}
+            type="number"
+            value={1000}
+            min={0}
+            max={1000}
+            dataset={{ bound: 'upper' }}
+          />
+        </div>
+        <div className={s.rangeSlider}></div>
+      </div>
     );
   }
 }

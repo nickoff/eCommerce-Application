@@ -23,6 +23,7 @@ class FilterTree extends Component<IFilterTreeProps> {
   private filterBlocks = [
     new FilterBlock({ filterType: ProductFilterType.Vendor, category: this.props.category }),
     new FilterBlock({ filterType: ProductFilterType.Color, category: this.props.category }),
+    new FilterBlock({ filterType: ProductFilterType.Price, category: this.props.category }),
   ];
 
   private filter: IFilterBy = {
@@ -83,13 +84,18 @@ class FilterTree extends Component<IFilterTreeProps> {
   }
 
   private addFilter({ type, key, label }: IFilterChangeEvtPayload): void {
-    this.filter[type] = this.filter[type]?.concat(key);
+    if (type !== ProductFilterType.Price) {
+      this.filter[type] = this.filter[type]?.concat(key);
+    }
+
     this.appliedFilters.classList.remove('d-none');
     this.appliedFiltersList.append(this.renderAppliedFilterItem({ type, label, key }));
   }
 
   private removeFilter(type: ProductFilterType, key: string): void {
-    this.filter[type] = this.filter[type]?.filter((filterKey) => filterKey !== key);
+    if (type !== ProductFilterType.Price) {
+      this.filter[type] = this.filter[type]?.filter((filterKey) => filterKey !== key);
+    }
 
     qs(`[data-type="${type}"][data-key="${key}"]`).closest(`.${s.appliedFilter}`)?.remove();
 

@@ -67,29 +67,6 @@ class ProductListService {
     return response.body;
   }
 
-  static async getVendorsOfProductType(
-    apiRoot: ApiRoot,
-    key: ProductTypeKey,
-  ): Promise<AttributePlainEnumValue[] | HttpErrorType> {
-    const result = await this.getProductTypeByKey(apiRoot, key);
-
-    if (isHttpErrorType(result)) {
-      return result;
-    }
-
-    const { attributes } = result;
-
-    const vendorAttribute = attributes?.find((attr) => attr.name === 'vendor');
-
-    if (!vendorAttribute) {
-      throw new Error(`ProductType with ${key} key is missing 'vendor' attribute`);
-    }
-
-    const vendors = (vendorAttribute.type as AttributeEnumType).values;
-
-    return vendors;
-  }
-
   static async getAttributeOfProductType(
     apiRoot: ApiRoot,
     attrName: string,
@@ -110,29 +87,6 @@ class ProductListService {
     }
 
     return (attribute.type as AttributeEnumType).values;
-  }
-
-  static async getColorsOfProductType(
-    apiRoot: ApiRoot,
-    key: ProductTypeKey,
-  ): Promise<AttributePlainEnumValue[] | HttpErrorType> {
-    const result = await this.getProductTypeByKey(apiRoot, key);
-
-    if (isHttpErrorType(result)) {
-      return result;
-    }
-
-    const { attributes } = result;
-
-    const colorAttribute = attributes?.find((attr) => attr.name === 'color');
-
-    if (!colorAttribute) {
-      throw new Error(`ProductType with ${key} key is missing 'color' attribute`);
-    }
-
-    const colors = (colorAttribute.type as AttributeEnumType).values;
-
-    return colors;
   }
 }
 
