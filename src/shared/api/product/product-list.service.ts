@@ -1,14 +1,24 @@
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 import { ApiRoot } from '@shared/types';
-import { type ProductProjection, type Category } from '@commercetools/platform-sdk';
-import { CategoryId } from '@shared/enums';
+import {
+  type ProductProjection,
+  type Category,
+  type ProductType,
+  type AttributeEnumType,
+  type AttributePlainEnumValue,
+} from '@commercetools/platform-sdk';
+import { ProductCategoryId } from '@shared/enums';
+import { isHttpErrorType } from '@shared/utils/type-guards';
+import { IFilterBy } from '@shared/interfaces';
 import extractHttpError from '../extract-http-error.decorator';
+import { ProductTypeKey } from '../../enums';
+import { filterQueryBuilder } from './filter-query-builder';
 
 class ProductListService {
   @extractHttpError
   static async getProductsByCategory(
     apiRoot: ApiRoot,
-    categoryId: CategoryId,
+    categoryId: ProductCategoryId,
   ): Promise<ProductProjection[] | HttpErrorType> {
     const response = await apiRoot
       .productProjections()
@@ -23,6 +33,106 @@ class ProductListService {
   static async getCategories(apiRoot: ApiRoot): Promise<Category[] | HttpErrorType> {
     const response = await apiRoot.categories().get().execute();
     return response.body.results;
+  }
+
+  @extractHttpError
+  static async getProductsWithFilter(
+    apiRoot: ApiRoot,
+    filter: IFilterBy,
+  ): Promise<ProductProjection[] | HttpErrorType> {
+    const query = this.buildFilterQuery(filter);
+
+    const response = await apiRoot
+      .productProjections()
+      .search()
+      .get({ queryArgs: { filter: query } })
+      .execute();
+
+    return response.body.results;
+  }
+
+  private static buildFilterQuery(filter: IFilterBy): string[] {
+    return Object.entries(filter).reduce((acc, [criteria, values]) => {
+      if (!values || !values.length) return acc;
+      const valuesString = Array.isArray(values) ? values.map((val: string) => `"${val}"`).join(',') : `${values}`;
+      const query = filterQueryBuilder[criteria](valuesString);
+      acc.push(query);
+      return acc;
+    }, [] as string[]);
+  }
+
+  @extractHttpError
+  static async getProductTypeByKey(apiRoot: ApiRoot, key: ProductTypeKey): Promise<ProductType | HttpErrorType> {
+    const response = await apiRoot.productTypes().withKey({ key }).get().execute();
+    return response.body;
+  }
+
+  static async getVendorsOfProductType(
+    apiRoot: ApiRoot,
+    key: ProductTypeKey,
+  ): Promise<AttributePlainEnumValue[] | HttpErrorType> {
+    const result = await this.getProductTypeByKey(apiRoot, key);
+
+    if (isHttpErrorType(result)) {
+      return result;
+    }
+
+    const { attributes } = result;
+
+    const vendorAttribute = attributes?.find((attr) => attr.name === 'vendor');
+
+    if (!vendorAttribute) {
+      throw new Error(`ProductType with ${key} key is missing 'vendor' attribute`);
+    }
+
+    const vendors = (vendorAttribute.type as AttributeEnumType).values;
+
+    return vendors;
+  }
+
+  static async getAttributeOfProductType(
+    apiRoot: ApiRoot,
+    attrName: string,
+    key: ProductTypeKey,
+  ): Promise<AttributePlainEnumValue[] | HttpErrorType> {
+    const result = await this.getProductTypeByKey(apiRoot, key);
+
+    if (isHttpErrorType(result)) {
+      return result;
+    }
+
+    const { attributes } = result;
+
+    const attribute = attributes?.find((attr) => attr.name === attrName);
+
+    if (!attribute) {
+      throw new Error(`ProductType with ${key} key is missing ${attrName} attribute`);
+    }
+
+    return (attribute.type as AttributeEnumType).values;
+  }
+
+  static async getColorsOfProductType(
+    apiRoot: ApiRoot,
+    key: ProductTypeKey,
+  ): Promise<AttributePlainEnumValue[] | HttpErrorType> {
+    const result = await this.getProductTypeByKey(apiRoot, key);
+
+    if (isHttpErrorType(result)) {
+      return result;
+    }
+
+    const { attributes } = result;
+
+    const colorAttribute = attributes?.find((attr) => attr.name === 'color');
+
+    if (!colorAttribute) {
+      throw new Error(`ProductType with ${key} key is missing 'color' attribute`);
+    }
+
+    const colors = (colorAttribute.type as AttributeEnumType).values;
+
+    return colors;
   }
 }
 

@@ -9,7 +9,7 @@ import AuthService from '@app/auth.service';
 import * as s from './user-menu.module.scss';
 import { btn, btnFilled } from '../../../../../styles/shared/index.module.scss';
 import { navItem, navLink } from '../../common.module.scss';
-import UserIcon from '../assets/profile-icon.svg';
+import UserIcon from '../assets/profile-icon.element.svg';
 
 class UserMenu extends Component {
   private dropdown!: bs.Dropdown;

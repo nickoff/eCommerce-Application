@@ -7,7 +7,7 @@ function createProductAttributesObject(attributeRespData?: Attribute[]): IProduc
   }
 
   return attributeRespData.reduce((acc, { name, value }) => {
-    Object.assign(acc, { [name]: value });
+    Object.assign(acc, { [name]: value.label });
     return acc;
   }, {} as IProductAttributes);
 }

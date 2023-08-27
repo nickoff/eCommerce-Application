@@ -6,8 +6,8 @@ import { delegate } from '@shared/utils/dom-helpers';
 import { MouseEvtName } from '@shared/constants/events';
 import { assertIsHTMLElement } from '@shared/utils/type-guards';
 import * as s from './toolbar.module.scss';
-import GridIcon from './assets/grid-icon.svg';
-import ListIcon from './assets/list-icon.svg';
+import GridIcon from './assets/grid-icon.element.svg';
+import ListIcon from './assets/list-icon.element.svg';
 import { CardsLayout, ToolbarEvent } from './toolbar.enum';
 
 class Toolbar extends Component {

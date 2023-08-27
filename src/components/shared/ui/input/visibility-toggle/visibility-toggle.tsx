@@ -1,8 +1,8 @@
 import { element } from 'tsx-vanilla';
 import { Component } from '@shared/lib';
 import { InputType } from '@shared/enums';
-import EyeIcon from './assets/eye-fill.svg';
-import EyeSlashIcon from './assets/eye-slash-fill.svg';
+import EyeIcon from './assets/eye-fill.element.svg';
+import EyeSlashIcon from './assets/eye-slash-fill.element.svg';
 import * as s from './visibility-toggle.module.scss';
 import { IVisibilityToggleProps } from './visibility-toggle.interface';
 

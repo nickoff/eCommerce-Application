@@ -30,3 +30,8 @@
 @mixin transition($property: all) {
   transition: $property 0.2s ease-in-out;
 }
+
+@mixin list-reset {
+  list-style: none;
+  padding: 0;
+}

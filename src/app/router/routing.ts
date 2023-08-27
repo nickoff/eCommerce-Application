@@ -6,6 +6,7 @@ import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
+import { ProductCategory } from '@shared/enums';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -40,7 +41,7 @@ const initRouter = (): void => {
       },
       [Route.Headphones]: {
         as: 'headphones-catalog',
-        uses: () => Main.setProps({ page: new CatalogPage() }),
+        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Headphones }) }),
       },
     })
     .notFound(() => Main.setProps({ page: new Page404() }))

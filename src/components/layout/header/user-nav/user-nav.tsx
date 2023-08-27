@@ -6,7 +6,7 @@ import { Route } from '@app/router';
 import { btn, btnFilled } from '../../../../styles/shared/button-like.module.scss';
 import { navItem, navLink } from '../common.module.scss';
 import * as s from './user-nav.module.scss';
-import CartIcon from './assets/cart-icon.svg';
+import CartIcon from './assets/cart-icon.element.svg';
 import UserMenu from './user-menu/user-menu';
 
 class UserNav extends Component {

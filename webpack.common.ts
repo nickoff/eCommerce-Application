@@ -59,11 +59,12 @@ const commonConfig: Configuration = {
         ],
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|svg|gif)$/i,
+        exclude: /\.element.svg$/i,
         type: 'asset/resource',
       },
       {
-        test: /\.svg$/i,
+        test: /\.element.svg$/i,
         use: 'svg-loader-js',
       },
       {
