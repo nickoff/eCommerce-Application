@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { element } from 'tsx-vanilla';
+import { Address } from '@commercetools/platform-sdk';
 import { Component } from '@shared/lib';
 import Store from '@app/store/store';
 import { render } from '@shared/utils/misc';
@@ -12,6 +13,7 @@ import { controls as c, newAdressControls } from './config';
 class UserProfile extends Component {
   render(): JSX.Element {
     const { customer } = Store.getState();
+    if (!customer) return <div></div>;
     console.log(customer);
 
     return (
@@ -28,14 +30,7 @@ class UserProfile extends Component {
             c.passwordConfirm.class('hidden'),
           )}
         </form>
-        <form className={s.userInfo}>
-          <h2>User address</h2>
-          {render(newAdressControls(AddressType.Shipping))}
-        </form>
-        <form className={s.userInfo}>
-          <h2>User address</h2>
-          {render(newAdressControls(AddressType.Shipping))}
-        </form>
+        {this.insert(customer.addresses, customer.billingAddressIds)}
       </div>
     );
   }
@@ -61,20 +56,21 @@ class UserProfile extends Component {
     });
   }
 
-  private getCustomerData(): (string | undefined)[] | undefined {
-    const { customer } = Store.getState();
-    let tempArr;
-    if (customer) {
-      tempArr = [
-        customer.firstName,
-        customer.lastName,
-        customer.email,
-        customer.dateOfBirth,
-        customer.password,
-        customer.password,
-      ];
-    }
-    return tempArr;
+  private insert(addresses: Address[], billingAddressIds: string[] | undefined): JSX.Element {
+    const temp = addresses.map((el) => {
+      let typeAddres = AddressType.Shipping;
+
+      if (el.id) {
+        typeAddres = billingAddressIds?.includes(el.id) ? AddressType.Shipping : AddressType.Billing;
+      }
+      return (
+        <form className={s.userInfo}>
+          <h2>{typeAddres} Addres</h2>
+          {render(newAdressControls(typeAddres))}
+        </form>
+      );
+    });
+    return <div>{temp}</div>;
   }
 }
 export default UserProfile;
