@@ -18,13 +18,14 @@ class UserProfile extends Component {
         <form className={s.userInfo}>
           <h2>User information</h2>
           {render(
-            c.firstName.class(s.firstName),
-            c.lastName.class(s.lastName),
-            c.email.class(s.email),
-            c.dateOfBirth.class(s.birth),
+            c.firstName,
+            c.lastName,
+            c.email,
+            c.dateOfBirth,
             c.password.class('hidden'),
             c.passwordConfirm.class('hidden'),
           )}
+          <button className={s.userInfoBtn}>Edit data</button>
         </form>
         {this.insertAddressForms()}
       </div>
