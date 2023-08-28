@@ -8,7 +8,7 @@ import { qsAll } from '@shared/utils/dom-helpers';
 import { AddressType } from '@shared/enums/address.enum';
 import * as s from './userProfile.module.scss';
 import './userProfile.scss';
-import { controls as c, newAdressControls } from './config';
+import { controls as c, newAdressControls, UserPageText } from './config';
 
 class UserProfile extends Component {
   render(): JSX.Element {
@@ -63,26 +63,27 @@ class UserProfile extends Component {
       fields[0].value = addresses[index].country;
       fields[1].value = addresses[index].city ?? '';
       fields[2].value = addresses[index].streetName ?? '';
+      fields[3].value = addresses[index].postalCode ?? '';
     });
   }
 
   private insertAddressForms(): JSX.Element {
     const { customer } = Store.getState();
-    if (!customer) throw Error('customer data is missing');
+    if (!customer) throw Error(UserPageText.CustomerError);
 
     console.log(customer);
 
     const addressArray = customer.addresses.map((el) => {
-      if (!el.id) throw Error('customer data is missing');
+      if (!el.id) throw Error(UserPageText.CustomerError);
 
       const typeAddres = customer.billingAddressIds?.includes(el.id) ? AddressType.Billing : AddressType.Shipping;
       const defAddres = [customer.defaultBillingAddressId, customer.defaultShippingAddressId].includes(el.id)
-        ? 'default'
-        : '';
-      const addresId = el.id;
+        ? UserPageText.DefAddress
+        : UserPageText.Empty;
+      const addressId = el.id;
 
       return (
-        <form className={s.userInfo} dataset={{ id: addresId }}>
+        <form className={s.userInfo} dataset={{ id: addressId }}>
           <h2>{typeAddres} Addres</h2>
           <span className={s.defAddres}>{defAddres}</span>
           {render(newAdressControls(typeAddres))}

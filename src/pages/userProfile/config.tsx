@@ -99,3 +99,9 @@ export function newAdressControls(variant: AddressType): FormControlType[] {
     }),
   ];
 }
+
+export enum UserPageText {
+  CustomerError = 'Customer data is missing',
+  DefAddress = 'default',
+  Empty = '',
+}
