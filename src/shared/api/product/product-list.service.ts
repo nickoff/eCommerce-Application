@@ -9,7 +9,7 @@ import {
 } from '@commercetools/platform-sdk';
 import { ProductCategoryId } from '@shared/enums';
 import { isHttpErrorType } from '@shared/utils/type-guards';
-import { IFilterBy } from '@shared/interfaces';
+import { IFilterBy, ISortBy } from '@shared/interfaces';
 import extractHttpError from '../extract-http-error.decorator';
 import { ProductTypeKey } from '../../enums';
 import { filterQueryBuilder } from './filter-query-builder';
@@ -39,14 +39,17 @@ class ProductListService {
   static async getProductsWithFilter(
     apiRoot: ApiRoot,
     filter: IFilterBy,
+    sort?: ISortBy,
   ): Promise<ProductProjection[] | HttpErrorType> {
     const query = this.buildFilterQuery(filter);
 
-    const response = await apiRoot
-      .productProjections()
-      .search()
-      .get({ queryArgs: { filter: query } })
-      .execute();
+    const queryArgs: { filter: string[]; sort?: string } = { filter: query };
+
+    if (sort) {
+      queryArgs.sort = `${sort.type} ${sort.direction}`;
+    }
+
+    const response = await apiRoot.productProjections().search().get({ queryArgs }).execute();
 
     return response.body.results;
   }

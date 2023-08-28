@@ -5,3 +5,4 @@ export * from './address.enum';
 export * from './auth-flow.enum';
 export * from './product-categories';
 export * from './product-filter-type';
+export * from './product-sort.enum';
