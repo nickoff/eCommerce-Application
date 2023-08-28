@@ -12,10 +12,6 @@ import { controls as c, newAdressControls } from './config';
 
 class UserProfile extends Component {
   render(): JSX.Element {
-    const { customer } = Store.getState();
-    if (!customer) return <div></div>;
-    console.log(customer);
-
     return (
       <div className={s.pageWrapper}>
         <h1>User Profile</h1>
@@ -30,13 +26,15 @@ class UserProfile extends Component {
             c.passwordConfirm.class('hidden'),
           )}
         </form>
-        {this.insert(customer.addresses, customer.billingAddressIds)}
+        {this.insertAddressForms()}
       </div>
     );
   }
 
   protected componentDidRender(): void {
     const inputs = qsAll('input', this.getContent());
+    const forms = qsAll('[data-id]', this.getContent());
+
     const { customer } = Store.getState();
 
     if (!customer) return;
@@ -54,23 +52,44 @@ class UserProfile extends Component {
         input.value = customerValues[index];
       }
     });
+
+    this.fillAddressForms(forms, customer.addresses);
   }
 
-  private insert(addresses: Address[], billingAddressIds: string[] | undefined): JSX.Element {
-    const temp = addresses.map((el) => {
-      let typeAddres = AddressType.Shipping;
+  private fillAddressForms(forms: HTMLElement[], addresses: Address[]): void {
+    forms.forEach((el, index) => {
+      const fields: HTMLInputElement[] = qsAll('select,input', el);
 
-      if (el.id) {
-        typeAddres = billingAddressIds?.includes(el.id) ? AddressType.Shipping : AddressType.Billing;
-      }
+      fields[0].value = addresses[index].country;
+      fields[1].value = addresses[index].city ?? '';
+      fields[2].value = addresses[index].streetName ?? '';
+    });
+  }
+
+  private insertAddressForms(): JSX.Element {
+    const { customer } = Store.getState();
+    if (!customer) throw Error('customer data is missing');
+
+    console.log(customer);
+
+    const addressArray = customer.addresses.map((el) => {
+      if (!el.id) throw Error('customer data is missing');
+
+      const typeAddres = customer.billingAddressIds?.includes(el.id) ? AddressType.Billing : AddressType.Shipping;
+      const defAddres = [customer.defaultBillingAddressId, customer.defaultShippingAddressId].includes(el.id)
+        ? 'default'
+        : '';
+      const addresId = el.id;
+
       return (
-        <form className={s.userInfo}>
+        <form className={s.userInfo} dataset={{ id: addresId }}>
           <h2>{typeAddres} Addres</h2>
+          <span className={s.defAddres}>{defAddres}</span>
           {render(newAdressControls(typeAddres))}
         </form>
       );
     });
-    return <div>{temp}</div>;
+    return <div>{addressArray}</div>;
   }
 }
 export default UserProfile;

@@ -77,6 +77,7 @@ export function newAdressControls(variant: AddressType): FormControlType[] {
       selectedOption: 0,
       labelText: 'Country',
       required: true,
+      disabled: true,
     }),
     new Input({
       name: `${InputName.City}${variant}`,
