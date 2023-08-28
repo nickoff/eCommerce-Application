@@ -16,6 +16,7 @@
 }
 
 .toolbar__sorting {
+  margin-left: auto;
   margin-right: 80px;
 
   @media (max-width: 1280px) {
@@ -65,4 +66,21 @@
   height: 100%;
   text-align: left;
   font-size: 1.5rem;
+}
+
+.filter-btn {
+  @include flex-vertical-center;
+  @include bg-border-none;
+  padding: 5px;
+  font-size: 1.5rem;
+  gap: 5px;
+
+  @media (min-width: 1000.98px) {
+    display: none;
+  }
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
 }

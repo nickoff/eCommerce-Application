@@ -10,6 +10,7 @@ import { ISortBy } from '@shared/interfaces';
 import * as s from './toolbar.module.scss';
 import GridIcon from './assets/grid-icon.element.svg';
 import ListIcon from './assets/list-icon.element.svg';
+import FilterIcon from './assets/filter-icon.element.svg';
 import { CardsLayout, ToolbarEvent } from './toolbar.enum';
 
 class Toolbar extends Component {
@@ -32,9 +33,11 @@ class Toolbar extends Component {
   render(): JSX.Element {
     return (
       <div className={s.toolbar}>
-        <p className={s.toolbarInfo}>Showing 1-48 of 319 products</p>
-
-        <div className={cx(s.toolbarSorting, 'dropdown')}>
+        <button className={s.filterBtn} onclick={this.notifyFilterOpen.bind(this)}>
+          <span>{FilterIcon}</span>
+          Filter
+        </button>
+        <div className={cx(s.toolbarSorting, 'dropdown-center')}>
           Sort By:
           {
             <>
@@ -42,7 +45,7 @@ class Toolbar extends Component {
                 None
               </button>
 
-              <ul className={cx('dropdown-menu dropdown-menu-end')}>
+              <ul className={cx('dropdown-menu')}>
                 <li className={cx('dropdown-item', s.sortingItem)}>
                   <button
                     className={s.sortingBtn}
@@ -113,6 +116,10 @@ class Toolbar extends Component {
 
   private notifySortingChange(sortOptions: ISortBy): void {
     this.getContent().dispatchEvent(new CustomEvent(ToolbarEvent.SoringChange, { detail: sortOptions, bubbles: true }));
+  }
+
+  private notifyFilterOpen(): void {
+    this.getContent().dispatchEvent(new CustomEvent(ToolbarEvent.FilterOpen, { bubbles: true }));
   }
 }
 

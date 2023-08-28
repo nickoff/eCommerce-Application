@@ -6,7 +6,7 @@ export enum InputName {
   DateOfBirth = 'dateOfBirth',
   StreetName = 'street',
   City = 'city',
-  PostalCode = 'postal',
+  PostalCode = 'postalCode',
   Country = 'country',
   Phone = 'phone',
 }

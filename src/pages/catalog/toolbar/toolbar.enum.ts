@@ -8,6 +8,7 @@ export enum CardsLayout {
 export enum ToolbarEvent {
   LayoutChange = 'toolbar:layoutchange',
   SoringChange = 'toolbar:sortingchange',
+  FilterOpen = 'toolbar:filteropen',
 }
 
 declare global {

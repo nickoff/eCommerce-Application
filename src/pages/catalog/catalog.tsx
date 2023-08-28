@@ -1,10 +1,11 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
-import { Component } from '@shared/lib';
+import { Component, Child } from '@shared/lib';
 import ProductListService from '@shared/api/product/product-list.service';
 import Store from '@app/store/store';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import { IFilterBy, ISortBy } from '@shared/interfaces';
+import Backdrop from '@components/shared/ui/backdrop/backdrop';
 import * as s from './catalog.module.scss';
 import Toolbar from './toolbar/toolbar';
 import FilterTree from './filter-tree/filter-tree';
@@ -13,6 +14,10 @@ import { ICatalogProps } from './catalog.interface';
 import ProductCollection from './product-collection/product-collection';
 
 class CatalogPage extends Component<ICatalogProps> {
+  @Child(s.productsFilterTree) private filterTree!: HTMLElement;
+
+  private backdrop = new Backdrop({ onclick: this.hideFilterWindow.bind(this) });
+
   private prodCollection = new ProductCollection();
 
   private sorting?: ISortBy;
@@ -25,6 +30,17 @@ class CatalogPage extends Component<ICatalogProps> {
     );
 
     this.getContent().addEventListener(ToolbarEvent.SoringChange, ({ detail }) => this.onSortingChange(detail));
+
+    this.getContent().addEventListener(ToolbarEvent.FilterOpen, this.showFilterWindow.bind(this));
+  }
+
+  private showFilterWindow(): void {
+    this.filterTree.classList.add(s.show);
+    this.backdrop.show();
+  }
+
+  private hideFilterWindow(): void {
+    this.filterTree.classList.remove(s.show);
   }
 
   private onSortingChange(sortData: ISortBy): void {
@@ -37,12 +53,13 @@ class CatalogPage extends Component<ICatalogProps> {
     const { category } = this.props;
 
     return (
-      <div className="d-flex ">
-        {new FilterTree({ category, onFilterChange: this.load.bind(this) }).render()}
+      <div className={s.catalogContainer}>
+        {new FilterTree({ category, onFilterChange: this.load.bind(this), className: s.productsFilterTree }).render()}
         <div className={cx(s.productsContainer, 'container-fluid')}>
           {new Toolbar({ className: s.productsToolbar }).render()}
           {this.prodCollection.render()}
         </div>
+        {this.backdrop.render()}
       </div>
     );
   }
