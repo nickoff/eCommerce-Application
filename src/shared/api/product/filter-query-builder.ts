@@ -10,5 +10,6 @@ export const filterQueryBuilder: Record<string, (k: any) => string> = {
   category: (category: ProductCategory) => `categories.id:"${ProductCategoryId[category]}"`,
   [ProductFilterType.Vendor]: (vendor: string) => `variants.attributes.vendor.key:${vendor}`,
   [ProductFilterType.Color]: (color: string) => `variants.attributes.color.key:${color}`,
-  [ProductFilterType.Price]: ({ from, to }: IPriceRange) => `variants.price.centAmount:range (${from} to ${to})`,
+  [ProductFilterType.Price]: ({ from, to }: IPriceRange) =>
+    `variants.price.centAmount:range (${from * 100} to ${to * 100})`,
 };

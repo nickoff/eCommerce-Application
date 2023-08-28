@@ -13,7 +13,7 @@ import * as s from './filter-tree.module.scss';
 import FilterBlock from './filter-block/filter-block';
 import { IFilterTreeProps } from './filter-tree.interface';
 import { FilterBlockEvent } from './filter-block/filter-block.enum';
-import { IFilterChangeEvtPayload } from './filter-block/filter-block.interface';
+import { IFilterChangeEvtPayload, IPriceChangeEvtPayload } from './filter-block/filter-block.interface';
 
 class FilterTree extends Component<IFilterTreeProps> {
   @Child(s.appliedFilters) private appliedFilters!: HTMLElement;
@@ -44,10 +44,24 @@ class FilterTree extends Component<IFilterTreeProps> {
     });
   }
 
+  private proxifyFilter(): void {
+    this.filter = new Proxy(this.filter, {
+      set: (target, property, value): boolean => {
+        Reflect.set(target, property, value);
+        this.props.onFilterChange(this.filter);
+        return true;
+      },
+    });
+  }
+
   protected componentDidRender(): void {
     this.getContent().addEventListener(FilterBlockEvent.FilterChange, ({ detail }) =>
       this.onFilterChange(detail.filter),
     );
+
+    this.getContent().addEventListener(FilterBlockEvent.PriceChange, ({ detail }) => {
+      this.onPriceFilterChange(detail);
+    });
 
     delegate(this.appliedFilters, `.${s.removeFilterBtn}`, MouseEvtName.CLICK, (target) => {
       assertIsHTMLElement(target);
@@ -66,7 +80,9 @@ class FilterTree extends Component<IFilterTreeProps> {
         <div className={cx(s.appliedFilters, 'd-none')}>
           <div className="d-flex align-items-center justify-content-between mb-2">
             <p className="m-0">Refined by</p>
-            <button className={s.clearAllBtn}>Clear all</button>
+            <button className={s.clearAllBtn} onclick={this.resetFilters.bind(this)}>
+              Clear all
+            </button>
           </div>
           <ul className={s.appliedFiltersList}></ul>
         </div>
@@ -83,6 +99,42 @@ class FilterTree extends Component<IFilterTreeProps> {
     }
   }
 
+  private onPriceFilterChange(payload: IPriceChangeEvtPayload): void {
+    this.filter.price = payload;
+
+    this.appliedFilters.classList.remove('d-none');
+
+    const label = `${payload.from} - ${payload.to}`;
+
+    const newFilterItem = this.renderAppliedFilterItem({ type: ProductFilterType.Price, label, key: 'price' });
+
+    const existingFilterItem = this.appliedFiltersList
+      .querySelector(`[data-type="${ProductFilterType.Price}"]`)
+      ?.closest(`.${s.appliedFilter}`);
+
+    if (existingFilterItem) {
+      existingFilterItem.replaceWith(newFilterItem);
+    } else {
+      this.appliedFiltersList.append(newFilterItem);
+    }
+  }
+
+  private resetFilters(): void {
+    const filterItems = [...this.appliedFiltersList.children];
+
+    filterItems.forEach((item) => {
+      const { type, key } = qs(`.${s.removeFilterBtn}`, item).dataset;
+
+      if (type && key) {
+        this.removeFilter(type as ProductFilterType, key, false);
+      }
+    });
+
+    this.filter = { category: this.props.category, vendor: [], color: [] };
+    this.props.onFilterChange(this.filter);
+    this.proxifyFilter();
+  }
+
   private addFilter({ type, key, label }: IFilterChangeEvtPayload): void {
     if (type !== ProductFilterType.Price) {
       this.filter[type] = this.filter[type]?.concat(key);
@@ -92,12 +144,16 @@ class FilterTree extends Component<IFilterTreeProps> {
     this.appliedFiltersList.append(this.renderAppliedFilterItem({ type, label, key }));
   }
 
-  private removeFilter(type: ProductFilterType, key: string): void {
-    if (type !== ProductFilterType.Price) {
-      this.filter[type] = this.filter[type]?.filter((filterKey) => filterKey !== key);
+  private removeFilter(type: ProductFilterType, key: string, shouldUpdate = true): void {
+    if (shouldUpdate) {
+      if (type !== ProductFilterType.Price) {
+        this.filter[type] = this.filter[type]?.filter((filterKey) => filterKey !== key);
+      } else {
+        this.filter[type] = { from: 0, to: 1000 };
+      }
     }
 
-    qs(`[data-type="${type}"][data-key="${key}"]`).closest(`.${s.appliedFilter}`)?.remove();
+    qs(`[data-type="${type}"][data-key="${key}"]`, this.appliedFiltersList).closest(`.${s.appliedFilter}`)?.remove();
 
     if (!this.appliedFiltersList.children.length) {
       this.appliedFilters.classList.add('d-none');
@@ -114,7 +170,7 @@ class FilterTree extends Component<IFilterTreeProps> {
     return (
       <li className={s.appliedFilter}>
         <div>
-          <span>{capitalize(type)}</span>: <span className="fw-bold">{capitalize(label)}</span>
+          <span>{capitalize(type)}</span>: <span className="fw-bold">{label}</span>
         </div>
         <button className={s.removeFilterBtn} dataset={{ type, key }}>
           {CrossIcon.cloneNode(true)}

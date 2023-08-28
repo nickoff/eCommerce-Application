@@ -53,10 +53,17 @@ class ProductListService {
 
   private static buildFilterQuery(filter: IFilterBy): string[] {
     return Object.entries(filter).reduce((acc, [criteria, values]) => {
-      if (!values || !values.length) return acc;
-      const valuesString = Array.isArray(values) ? values.map((val: string) => `"${val}"`).join(',') : `${values}`;
-      const query = filterQueryBuilder[criteria](valuesString);
+      if (Array.isArray(values) && !values.length) return acc;
+
+      let searchValue = values;
+
+      if (Array.isArray(searchValue)) {
+        searchValue = values.map((val: string) => `"${val}"`).join(',');
+      }
+
+      const query = filterQueryBuilder[criteria](searchValue);
       acc.push(query);
+
       return acc;
     }, [] as string[]);
   }

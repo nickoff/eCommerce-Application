@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Child, Component } from '@shared/lib';
@@ -8,7 +7,7 @@ import Store from '@app/store/store';
 import { assertIsHTMLElement, isHttpErrorType } from '@shared/utils/type-guards';
 import { AttributePlainEnumValue } from '@commercetools/platform-sdk';
 import { ProductFilterType, ProductTypeKey } from '@shared/enums';
-import { delegate, qs, qsAll } from '@shared/utils/dom-helpers';
+import { delegate, qs } from '@shared/utils/dom-helpers';
 import { MouseEvtName } from '@shared/constants/events';
 import rangeSlider, { RangeSlider, RangeSliderConfig } from 'range-slider-input';
 import 'range-slider-input/dist/style.css';
@@ -27,66 +26,83 @@ class FilterBlock extends Component<IFilterBlockProps> {
 
   private priceRange!: RangeSlider;
 
-  private lowerThumb!: HTMLElement;
-
-  private upperThumb!: HTMLElement;
-
   protected componentDidRender(): void {
     if (this.props.filterType !== ProductFilterType.Price) {
       delegate(this.filterBody, '[data-filter-type]', MouseEvtName.CLICK, this.onFilterClick.bind(this));
     } else {
-      this.lowerPriceInput = qs('[data-bound="lower"]', this.getContent());
-      this.upperPriceInput = qs('[data-bound="upper"]', this.getContent());
-
-      this.lowerPriceInput.onchange = (): void => {
-        const [, upper] = this.priceRange.value();
-        let lower = +this.lowerPriceInput.value;
-
-        if (lower < 0) {
-          lower = 0;
-        } else if (lower > 1000) {
-          lower = 1000;
-        }
-
-        this.priceRange.value([lower, upper]);
-      };
-
-      this.upperPriceInput.onchange = (): void => {
-        const [lower] = this.priceRange.value();
-        let upper = +this.upperPriceInput.value;
-
-        if (upper < 0) {
-          upper = 0;
-        } else if (lower > 1000) {
-          upper = 1000;
-        }
-
-        this.priceRange.value([lower, upper]);
-      };
-
-      const sliderConfig: RangeSliderConfig = {
-        min: 0,
-        max: 1000,
-        value: [0, 1000],
-        step: 1,
-        rangeSlideDisabled: true,
-        onInput: (value) => {
-          const [lower, upper] = value;
-          this.lowerPriceInput.value = lower.toString();
-          this.upperPriceInput.value = upper.toString();
-        },
-      };
-
-      setTimeout(() => {
-        const rangeEl = qs(`.${s.rangeSlider}`, this.getContent());
-        this.priceRange = rangeSlider(rangeEl, sliderConfig);
-        [this.lowerThumb, this.upperThumb] = qsAll('.range-slider__thumb', rangeEl);
-      });
+      this.configurePriceInputs();
+      this.configureRangeSlider();
     }
   }
 
+  private configurePriceInputs(): void {
+    this.lowerPriceInput = qs('[data-bound="lower"]', this.getContent());
+    this.upperPriceInput = qs('[data-bound="upper"]', this.getContent());
+
+    [this.lowerPriceInput, this.upperPriceInput].forEach((input) => {
+      input.addEventListener('change', (e: Event) => {
+        const [lower, upper] = this.priceRange.value();
+
+        let inputValue = +input.value;
+
+        if (inputValue < 0) {
+          inputValue = 0;
+        } else if (inputValue > 1000) {
+          inputValue = 1000;
+        }
+
+        let finalValue: [number, number];
+
+        if (input === this.lowerPriceInput) {
+          finalValue = [inputValue, upper];
+        } else {
+          finalValue = [lower, inputValue];
+        }
+
+        this.priceRange.value(finalValue);
+
+        if (e.isTrusted) {
+          this.notifyPriceFilterChange(lower, upper);
+        }
+      });
+    });
+  }
+
+  private configureRangeSlider(): void {
+    const sliderConfig: RangeSliderConfig = {
+      min: 0,
+      max: 1000,
+      value: [0, 1000],
+      step: 1,
+      rangeSlideDisabled: true,
+      onInput: (value) => {
+        const [lower, upper] = value;
+        this.lowerPriceInput.value = lower.toString();
+        this.upperPriceInput.value = upper.toString();
+
+        // if (!userInteraction) {
+        //   this.notifyPriceFilterChange(lower, upper);
+        // }
+      },
+      onThumbDragEnd: () => {
+        this.notifyPriceFilterChange(...this.priceRange.value());
+      },
+    };
+
+    setTimeout(() => {
+      const rangeEl = qs(`.${s.rangeSlider}`, this.getContent());
+      this.priceRange = rangeSlider(rangeEl, sliderConfig);
+    });
+  }
+
   unselectFilter(key: string): void {
-    qs(`[data-filter-key="${key}"]`, this.getContent()).classList.remove(s.filterBtnSelected);
+    if (key === 'price') {
+      this.lowerPriceInput.value = '0';
+      this.upperPriceInput.value = '1000';
+      this.priceRange.value([0, 1000]);
+    } else {
+      qs(`[data-filter-key="${key}"]`, this.getContent()).classList.remove(s.filterBtnSelected);
+    }
   }
 
   render(): JSX.Element {
@@ -128,6 +144,15 @@ class FilterBlock extends Component<IFilterBlockProps> {
 
   private toggleFilterSelect(filterEl: HTMLElement): boolean {
     return filterEl.classList.toggle(s.filterBtnSelected);
+  }
+
+  private notifyPriceFilterChange(from: number, to: number): void {
+    this.getContent().dispatchEvent(
+      new CustomEvent(FilterBlockEvent.PriceChange, {
+        detail: { from, to },
+        bubbles: true,
+      }),
+    );
   }
 
   private notifyFilterChange(type: string, key: string, label: string, status: boolean): void {

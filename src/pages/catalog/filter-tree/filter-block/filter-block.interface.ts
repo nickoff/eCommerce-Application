@@ -11,3 +11,8 @@ export interface IFilterChangeEvtPayload {
   label: string;
   status: boolean;
 }
+
+export interface IPriceChangeEvtPayload {
+  from: number;
+  to: number;
+}
