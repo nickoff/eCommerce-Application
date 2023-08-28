@@ -43,6 +43,10 @@ const initRouter = (): void => {
         as: 'headphones-catalog',
         uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Headphones }) }),
       },
+      [Route.Earphones]: {
+        as: 'earphones-catalog',
+        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Earphones }) }),
+      },
     })
     .notFound(() => Main.setProps({ page: new Page404() }))
     .resolve();
