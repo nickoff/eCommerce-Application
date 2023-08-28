@@ -1,5 +1,6 @@
 $breakpoint-lg: 1280px;
 $breakpoint-md: 850px;
+$breakpoin-sm: 570px;
 
 .prod-card {
   padding: 20px;
@@ -19,6 +20,11 @@ $breakpoint-md: 850px;
       gap: 20px;
     }
 
+    @media (max-width: $breakpoin-sm) {
+      flex-direction: column;
+      gap: 0;
+    }
+
     .prod-card__img {
       margin-bottom: 10px;
     }
@@ -30,6 +36,12 @@ $breakpoint-md: 850px;
 
     .prod-card__name {
       margin-bottom: 15px;
+    }
+
+    .prod-card__btn {
+      @media (max-width: $breakpoin-sm) {
+        display: none;
+      }
     }
   }
 }
@@ -81,8 +93,9 @@ $breakpoint-md: 850px;
   text-align: center;
   max-width: 180px;
 
-  @media (max-width: $breakpoint-lg) {
-    max-width: 160px;
+  @media (max-width: $breakpoin-sm) {
+    max-width: 200px;
+    margin: auto;
   }
 }
 
@@ -91,17 +104,9 @@ $breakpoint-md: 850px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 5;
   white-space: pre-wrap;
   color: #777;
-
-  // @media (min-width: 1001px) and (max-width: 1140px) {
-  //   -webkit-line-clamp: 3;
-  // }
-
-  // @media (max-width: 850px) {
-  //   display: none;
-  // }
 
   p {
     margin: 0;
