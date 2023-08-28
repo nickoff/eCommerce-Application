@@ -15,6 +15,10 @@ h1 {
   padding: 0.5rem;
 }
 
+.user-info select {
+  width: 90%;
+}
+
 .def-addres {
   position: absolute;
   right: 0;
@@ -76,8 +80,4 @@ h1 {
 
 .phone {
   grid-area: phone;
-}
-
-input [type='select'] {
-  width: 90%;
 }
