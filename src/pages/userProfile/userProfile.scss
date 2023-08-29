@@ -1,0 +1,17 @@
+.hidden {
+  display: none;
+}
+
+.user-info-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.5rem;
+  color: $default-color;
+  background-color: $primary-color;
+  border: none;
+  cursor: pointer;
+}

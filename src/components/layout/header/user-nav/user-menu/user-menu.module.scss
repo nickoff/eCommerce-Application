@@ -18,6 +18,12 @@
   padding: 6px 10px;
 }
 
+.log-profile-btn {
+  padding: 6px 10px;
+  border-left: 1px solid $default-color;
+  background-color: $primary-color;
+}
+
 .dropdown-toggle {
   &::after {
     all: unset;
