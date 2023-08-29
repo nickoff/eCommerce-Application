@@ -1,10 +1,19 @@
+/* eslint-disable no-console */
 import { InputName, InputType } from '@shared/enums';
 import Select from '@components/shared/ui/select/select';
 import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
 import { AddressType } from '@shared/enums/address.enum';
+import Button from '@components/shared/ui/button/button';
 
+export const temp = Button({
+  type: 'button',
+  onClick(e) {
+    console.log(e);
+  },
+  content: 'edit',
+});
 const pwdInput = new Input({
   name: InputName.Password,
   type: InputType.Password,
@@ -26,7 +35,6 @@ const confirmPwdInput = new Input({
 pwdInput.afterRender((component) => {
   component.input.addEventListener('input', () => confirmPwdInput.isValid());
 });
-
 export const controls = {
   firstName: new Input({
     name: InputName.FirstName,

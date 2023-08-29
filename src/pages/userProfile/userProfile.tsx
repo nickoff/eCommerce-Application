@@ -100,5 +100,28 @@ class UserProfile extends Component {
     });
     return <div>{addressArray}</div>;
   }
+
+  private editForm(e: Event): void {
+    e.preventDefault();
+
+    const { target } = e;
+    if (!(target instanceof HTMLElement)) return;
+
+    const form = target.closest('form');
+
+    if (!form) return;
+
+    const inputs = qsAll('input', form);
+
+    inputs.forEach((el) => {
+      if (!(el instanceof HTMLInputElement)) return;
+      const input = el;
+      input.readOnly = false;
+      input.disabled = false;
+      input.classList.remove('hidden');
+    });
+  }
+
+  privete(): void {}
 }
 export default UserProfile;
