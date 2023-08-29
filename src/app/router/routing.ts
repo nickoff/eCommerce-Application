@@ -47,6 +47,10 @@ const initRouter = (): void => {
         as: 'earphones-catalog',
         uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Earphones }) }),
       },
+      [Route.Speakers]: {
+        as: 'speakers-catalog',
+        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
+      },
     })
     .notFound(() => Main.setProps({ page: new Page404() }))
     .resolve();
