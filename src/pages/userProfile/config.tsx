@@ -104,4 +104,5 @@ export enum UserPageText {
   CustomerError = 'Customer data is missing',
   DefAddress = 'default',
   Empty = '',
+  GeneralAddress = 'General address',
 }

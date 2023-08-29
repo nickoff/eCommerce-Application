@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { element } from 'tsx-vanilla';
-import { Address } from '@commercetools/platform-sdk';
+import { Address, Customer } from '@commercetools/platform-sdk';
 import { Component } from '@shared/lib';
 import Store from '@app/store/store';
 import { render } from '@shared/utils/misc';
@@ -25,7 +25,6 @@ class UserProfile extends Component {
             c.password.class('hidden'),
             c.passwordConfirm.class('hidden'),
           )}
-          <button className={s.userInfoBtn}>Edit data</button>
         </form>
         {this.insertAddressForms()}
       </div>
@@ -33,11 +32,17 @@ class UserProfile extends Component {
   }
 
   protected componentDidRender(): void {
-    const inputs = qsAll('input', this.getContent());
     const forms = qsAll('[data-id]', this.getContent());
 
     const { customer } = Store.getState();
+    if (!customer) return;
 
+    this.showUserInfoForm(customer);
+    this.showUserAddressForms(forms, customer.addresses);
+  }
+
+  private showUserInfoForm(customer: Customer): void {
+    const inputs = qsAll('input', this.getContent());
     if (!customer) return;
 
     const customerKeys = Object.keys(customer);
@@ -53,11 +58,9 @@ class UserProfile extends Component {
         input.value = customerValues[index];
       }
     });
-
-    this.fillAddressForms(forms, customer.addresses);
   }
 
-  private fillAddressForms(forms: HTMLElement[], addresses: Address[]): void {
+  private showUserAddressForms(forms: HTMLElement[], addresses: Address[]): void {
     forms.forEach((el, index) => {
       const fields: HTMLInputElement[] = qsAll('select,input', el);
 
@@ -77,10 +80,14 @@ class UserProfile extends Component {
     const addressArray = customer.addresses.map((el) => {
       if (!el.id) throw Error(UserPageText.CustomerError);
 
-      const typeAddres = customer.billingAddressIds?.includes(el.id) ? AddressType.Billing : AddressType.Shipping;
-      const defAddres = [customer.defaultBillingAddressId, customer.defaultShippingAddressId].includes(el.id)
+      const typeAddres = customer.shippingAddressIds?.includes(el.id) ? AddressType.Shipping : AddressType.Billing;
+      let defAddres = [customer.defaultBillingAddressId, customer.defaultShippingAddressId].includes(el.id)
         ? UserPageText.DefAddress
         : UserPageText.Empty;
+
+      if (customer.shippingAddressIds?.includes(el.id) && customer.billingAddressIds?.includes(el.id))
+        defAddres = UserPageText.GeneralAddress;
+
       const addressId = el.id;
 
       return (
