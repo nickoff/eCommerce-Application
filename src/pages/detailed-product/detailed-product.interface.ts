@@ -1,6 +1,5 @@
-import { IProduct } from '@shared/interfaces/product.interface';
+import { ProductProjection } from '@commercetools/platform-sdk';
 
 export interface IDetailedProductPageProps extends IProps {
-  productData?: IProduct;
-  productSlug?: string;
+  productData: ProductProjection;
 }

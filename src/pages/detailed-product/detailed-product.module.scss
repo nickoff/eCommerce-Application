@@ -1,0 +1,59 @@
+.card {
+  background-color: $default-color;
+  padding: 30px;
+}
+
+.card__seperator {
+  width: 100%;
+  margin: 24px 0;
+  // border-top: 1px solid #e1e3e4;
+  border-top: 2px solid #dee2e6;
+}
+
+.layout-container {
+  display: grid;
+  row-gap: 20px;
+  column-gap: 40px;
+  grid-template-areas:
+    'gallery  meta'
+    'desc     meta';
+  grid-template-columns: 1fr 1fr;
+}
+
+.gallery {
+  grid-area: gallery;
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.meta {
+  grid-area: meta;
+  position: sticky;
+  top: 96px;
+  align-self: start;
+}
+
+.desc {
+  grid-area: desc;
+}
+
+.prod-name {
+  font-weight: 700;
+  line-height: 1.43;
+  font-size: 2.5rem;
+  padding-bottom: 14px;
+}
+
+.prod-vendor {
+  font-size: 1.5rem;
+}
+
+.prod-price {
+  color: $primary-color;
+  font-size: 2rem;
+  font-family: $price-font;
+  font-weight: 300;
+}

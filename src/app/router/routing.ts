@@ -10,6 +10,8 @@ import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
 import { ProductCategory } from '@shared/enums';
 import ProductListService from '@shared/api/product/product-list.service';
+import DetailedProductPage from '@pages/detailed-product/detailed-product';
+import { isHttpErrorType } from '@shared/utils/type-guards';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -54,15 +56,14 @@ const initRouter = (): void => {
         as: 'speakers-catalog',
         uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
       },
-      '/(?:earphones|headphones|speakers)/(.+)/': {},
     })
     .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {
       if (match && match.data) {
         const slug = match.data[0];
         const result = await ProductListService.getProductBySlug(Store.apiRoot, slug);
 
-        if (result) {
-          console.log(result);
+        if (result && !isHttpErrorType(result)) {
+          Main.setProps({ page: new DetailedProductPage({ productData: result }) });
         } else {
           Main.setProps({ page: new Page404() });
         }

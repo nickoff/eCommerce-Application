@@ -1,12 +1,11 @@
 .main-wrapper {
   padding-top: 96px;
   background-color: $grey-1;
-  // overflow-y: scroll;
 }
 
 .main {
   padding-top: 50px;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
   height: 100%;
 }
