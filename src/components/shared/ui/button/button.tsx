@@ -4,7 +4,7 @@ import { IButtonProps } from './button.interface';
 import { ButtonVariant } from './button.enum';
 import * as s from './button.module.scss';
 
-function Button({ onClick, variant = ButtonVariant.Filled, className, content }: IButtonProps): JSX.Element {
+function Button({ onClick, disabled, variant = ButtonVariant.Filled, className, content }: IButtonProps): JSX.Element {
   const classNames: Record<ButtonVariant, string> = {
     [ButtonVariant.Filled]: s.btnFilled,
     [ButtonVariant.Outline]: s.btnOutline,
@@ -12,7 +12,7 @@ function Button({ onClick, variant = ButtonVariant.Filled, className, content }:
   };
 
   return (
-    <button className={cx(s.btn, classNames[variant], className)} onclick={onClick}>
+    <button className={cx(s.btn, classNames[variant], className)} onclick={onClick} disabled>
       {content}
     </button>
   );

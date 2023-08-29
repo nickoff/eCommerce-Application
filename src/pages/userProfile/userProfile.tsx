@@ -6,6 +6,7 @@ import Store from '@app/store/store';
 import { render } from '@shared/utils/misc';
 import { qsAll } from '@shared/utils/dom-helpers';
 import { AddressType } from '@shared/enums/address.enum';
+import Button from '@components/shared/ui/button/button';
 import * as s from './userProfile.module.scss';
 import './userProfile.scss';
 import { controls as c, newAdressControls, UserPageText } from './config';
@@ -25,6 +26,19 @@ class UserProfile extends Component {
             c.password.class('hidden'),
             c.passwordConfirm.class('hidden'),
           )}
+          {Button({
+            content: 'edit',
+            onClick(e) {
+              console.log(e);
+            },
+            className: 'myButton',
+          })}
+          {Button({
+            content: 'save',
+            onClick(e) {
+              console.log(e);
+            },
+          })}
         </form>
         {this.insertAddressForms()}
       </div>
