@@ -1,3 +1,5 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable no-console */
 import Main from '@components/layout/main/main';
 import Navigo from 'navigo';
 import PageLogin from '@pages/login/login';
@@ -7,6 +9,7 @@ import Page404 from '@pages/page404/page404';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
 import { ProductCategory } from '@shared/enums';
+import ProductListService from '@shared/api/product/product-list.service';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -51,6 +54,19 @@ const initRouter = (): void => {
         as: 'speakers-catalog',
         uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
       },
+      '/(?:earphones|headphones|speakers)/(.+)/': {},
+    })
+    .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {
+      if (match && match.data) {
+        const slug = match.data[0];
+        const result = await ProductListService.getProductBySlug(Store.apiRoot, slug);
+
+        if (result) {
+          console.log(result);
+        } else {
+          Main.setProps({ page: new Page404() });
+        }
+      }
     })
     .notFound(() => Main.setProps({ page: new Page404() }))
     .resolve();

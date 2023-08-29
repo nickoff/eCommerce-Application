@@ -12,6 +12,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const commonConfig: Configuration = {
   entry: './src/index.ts',
   output: {
+    publicPath: '/',
     filename: isDev ? '[name].js' : '[name].[contenthash].js',
     assetModuleFilename: 'public/[name].[contenthash][ext][query]',
     clean: true,
