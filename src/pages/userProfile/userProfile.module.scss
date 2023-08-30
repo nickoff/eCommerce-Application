@@ -55,30 +55,39 @@ h1 {
   width: 90%;
 }
 
-.user-info-btn {
+.buttons-wrapper {
   position: absolute;
   right: 0;
   bottom: 0;
+  text-align: right;
   font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: 0.1rem;
-  text-transform: uppercase;
-  padding: 0.6rem 1rem;
-  color: $default-color;
-  background-color: $primary-color;
-  border: none;
-  cursor: pointer;
 
-  &:focus {
-    outline: none;
-  }
+  button {
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    padding: 0.6rem 1rem;
+    color: $default-color;
+    background-color: $primary-color;
+    border: none;
+    cursor: pointer;
 
-  &:hover {
-    background-color: $primary-color-hover;
-    transition: 0.2s;
-  }
+    &:focus {
+      outline: none;
+    }
 
-  &:active {
-    transform: scale(1.2);
+    &:hover {
+      background-color: $primary-color-hover;
+      transition: 0.2s;
+    }
+
+    &:active {
+      transform: scale(1.2);
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
   }
 }

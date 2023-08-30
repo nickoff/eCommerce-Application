@@ -5,5 +5,4 @@ export interface IButtonProps extends IProps {
   content: string | JSX.Element;
   variant?: ButtonVariant;
   type?: 'submit' | 'reset' | 'button';
-  disabled?: boolean;
 }

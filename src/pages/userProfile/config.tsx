@@ -5,15 +5,9 @@ import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
 import { AddressType } from '@shared/enums/address.enum';
-import Button from '@components/shared/ui/button/button';
+import { Customer } from '@commercetools/platform-sdk';
+import Store from '@app/store/store';
 
-export const temp = Button({
-  type: 'button',
-  onClick(e) {
-    console.log(e);
-  },
-  content: 'edit',
-});
 const pwdInput = new Input({
   name: InputName.Password,
   type: InputType.Password,
@@ -85,7 +79,6 @@ export function newAdressControls(variant: AddressType): FormControlType[] {
       selectedOption: 0,
       labelText: 'Country',
       required: true,
-      disabled: true,
     }),
     new Input({
       name: `${InputName.City}${variant}`,
@@ -114,3 +107,40 @@ export enum UserPageText {
   Empty = '',
   GeneralAddress = 'General address',
 }
+
+export enum ButtonsNames {
+  Edit = 'edit',
+  Save = 'save',
+}
+
+export const getCustomer = (): Customer => {
+  const { customer } = Store.getState();
+  if (!customer) throw Error(UserPageText.CustomerError);
+  return customer;
+};
+
+export const fillResetInfoUser = (): void => {
+  const customer = getCustomer();
+  const inputs = document.querySelectorAll('input,select');
+
+  const errorsMsg = document.querySelectorAll('p');
+
+  errorsMsg.forEach((item) => {
+    const msg = item;
+    msg.textContent = '';
+  });
+
+  const customerKeys = Object.keys(customer);
+  const customerValues = Object.values(customer);
+
+  inputs.forEach((el) => {
+    if (!(el instanceof HTMLInputElement || el instanceof HTMLSelectElement)) return;
+    const input = el;
+    input.disabled = true;
+
+    if (customerKeys.indexOf(input.name) !== -1) {
+      const index = customerKeys.indexOf(input.name);
+      input.value = customerValues[index];
+    }
+  });
+};
