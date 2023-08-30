@@ -16,6 +16,10 @@
   text-transform: uppercase;
   letter-spacing: 1.143px;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: clamp(1.5rem, 1.245rem + 1.27vw, 2.2rem);
+  }
 }
 
 .layout-container {
@@ -50,6 +54,10 @@
   position: sticky;
   top: 96px;
   align-self: start;
+
+  @media (max-width: 1000px) {
+    position: static;
+  }
 }
 
 .desc {
@@ -89,4 +97,38 @@
     font-weight: 600;
     letter-spacing: unset;
   }
+}
+
+.quantity-counter {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  background-color: #f1f1f1;
+  width: 120px;
+  height: 48px;
+  font-size: 1.3rem;
+  margin-right: 16px;
+
+  @media (max-width: 400px) {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  & * {
+    width: 100%;
+  }
+
+  output {
+    font-weight: 700;
+  }
+
+  button {
+    @include bg-border-none;
+    height: 100%;
+  }
+}
+
+.add-to-cart-btn {
+  padding: 15px 30px;
+  line-height: normal;
 }

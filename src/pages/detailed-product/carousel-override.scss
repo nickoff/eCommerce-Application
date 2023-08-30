@@ -10,4 +10,14 @@
 .f-carousel__slide {
   padding-inline: 40px;
   cursor: zoom-in;
+
+  @media (max-width: 1000px) {
+    max-width: 650px;
+    margin: auto;
+    padding-inline: 0;
+  }
+
+  @media (min-width: 420px) and (max-width: 1000px) {
+    padding-inline: 40px;
+  }
 }
