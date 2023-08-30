@@ -13,6 +13,9 @@
 .card__heading {
   font-size: 2.2rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.143px;
+  margin-bottom: 20px;
 }
 
 .layout-container {
@@ -51,6 +54,12 @@
 
 .desc {
   grid-area: desc;
+  padding-bottom: 0;
+  margin-bottom: 40px;
+}
+
+.desc__expandable {
+  padding-bottom: 30px;
 }
 
 .prod-name {
@@ -69,4 +78,15 @@
   font-size: 2.5rem;
   font-family: $price-font;
   font-weight: 300;
+}
+
+.desc-text-container {
+  font-size: 1.5rem;
+
+  h3 {
+    font-size: 1.5rem;
+    text-transform: none;
+    font-weight: 600;
+    letter-spacing: unset;
+  }
 }
