@@ -1,0 +1,13 @@
+.f-carousel {
+  --f-button-next-pos: -5px;
+  --f-button-prev-pos: -5px;
+}
+
+.f-carousel__dots {
+  position: static;
+}
+
+.f-carousel__slide {
+  padding-inline: 40px;
+  cursor: zoom-in;
+}

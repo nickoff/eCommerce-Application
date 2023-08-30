@@ -78,6 +78,7 @@
     "@commercetools/platform-sdk": "^5.0.0",
     "@commercetools/sdk-client-v2": "^2.2.0",
     "@faker-js/faker": "^8.0.2",
+    "@fancyapps/ui": "^5.0.22",
     "bootstrap": "^5.3.1",
     "clsx": "^2.0.0",
     "lodash": "^4.17.21",

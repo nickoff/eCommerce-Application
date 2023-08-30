@@ -13,11 +13,20 @@
 .layout-container {
   display: grid;
   row-gap: 20px;
-  column-gap: 40px;
+  column-gap: 30px;
   grid-template-areas:
     'gallery  meta'
     'desc     meta';
+  // grid-template-columns: 4fr minmax(400px, 3fr);
   grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 1000px) {
+    grid-template-areas:
+      'gallery'
+      'meta'
+      'desc';
+    grid-template-columns: 1fr;
+  }
 }
 
 .gallery {
@@ -53,7 +62,7 @@
 
 .prod-price {
   color: $primary-color;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-family: $price-font;
   font-weight: 300;
 }
