@@ -4,6 +4,7 @@ import Product from '@components/entities/product/product';
 import cx from 'clsx';
 import { centsToMoney } from '@shared/utils/misc';
 import { Carousel, Fancybox } from '@fancyapps/ui';
+import { SITE_TITLE } from '@shared/constants/seo';
 import { IDetailedProductPageProps } from './detailed-product.interface';
 import * as s from './detailed-product.module.scss';
 import '@fancyapps/ui/dist/carousel/carousel.css';
@@ -16,6 +17,11 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
   @Child('#myCarousel', true) carouselContainer!: HTMLElement;
 
   private carousel!: Carousel;
+
+  constructor(props: IDetailedProductPageProps) {
+    super(props);
+    document.title = `${this.product.name} | ${SITE_TITLE}`;
+  }
 
   protected componentDidRender(): void {
     this.carousel = new Carousel(this.carouselContainer, { transition: 'slide' });
@@ -40,7 +46,9 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
           <hr className={s.cardSeperator} />
           <p className={s.prodPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
         </div>
-        <div className={cx(s.card, s.desc)}></div>
+        <div className={cx(s.card, s.desc)}>
+          <p className={s.cardHeading}>Descripton</p>
+        </div>
       </div>
     );
   }

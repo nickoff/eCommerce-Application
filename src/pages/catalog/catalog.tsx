@@ -6,6 +6,8 @@ import Store from '@app/store/store';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import { IFilterBy, ISortBy } from '@shared/interfaces';
 import Backdrop from '@components/shared/ui/backdrop/backdrop';
+import { capitalize } from 'lodash';
+import { SITE_TITLE } from '@shared/constants/seo';
 import * as s from './catalog.module.scss';
 import Toolbar from './toolbar/toolbar';
 import FilterTree from './filter-tree/filter-tree';
@@ -23,6 +25,11 @@ class CatalogPage extends Component<ICatalogProps> {
   private sorting?: ISortBy;
 
   private filter?: IFilterBy;
+
+  constructor(props: ICatalogProps) {
+    super(props);
+    document.title = `${capitalize(this.props.category)} | ${SITE_TITLE}`;
+  }
 
   protected componentDidRender(): void {
     this.getContent().addEventListener(ToolbarEvent.LayoutChange, ({ detail }) =>

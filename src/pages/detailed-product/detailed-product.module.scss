@@ -1,4 +1,5 @@
 .card {
+  font-family: $base-font;
   background-color: $default-color;
   padding: 30px;
 }
@@ -6,8 +7,12 @@
 .card__seperator {
   width: 100%;
   margin: 24px 0;
-  // border-top: 1px solid #e1e3e4;
   border-top: 2px solid #dee2e6;
+}
+
+.card__heading {
+  font-size: 2.2rem;
+  font-weight: 600;
 }
 
 .layout-container {
@@ -17,7 +22,6 @@
   grid-template-areas:
     'gallery  meta'
     'desc     meta';
-  // grid-template-columns: 4fr minmax(400px, 3fr);
   grid-template-columns: 1fr 1fr;
 
   @media (max-width: 1000px) {
