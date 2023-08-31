@@ -4,6 +4,7 @@ import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
+import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
 import { ProductCategory } from '@shared/enums';
@@ -50,6 +51,10 @@ const initRouter = (): void => {
       [Route.Speakers]: {
         as: 'speakers-catalog',
         uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
+      },
+      [Route.UserProfile]: {
+        as: 'user-profile',
+        uses: () => Main.setProps({ page: new UserProfile() }),
       },
     })
     .notFound(() => Main.setProps({ page: new Page404() }))
