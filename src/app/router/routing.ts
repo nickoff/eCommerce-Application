@@ -10,7 +10,7 @@ import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
 import { ProductCategory } from '@shared/enums';
-import ProductListService from '@shared/api/product/product-list.service';
+import ProductRepoService from '@shared/api/product/product-repo.service';
 import DetailedProductPage from '@pages/detailed-product/detailed-product';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import { Route } from './routes';
@@ -65,7 +65,7 @@ const initRouter = (): void => {
     .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {
       if (match && match.data) {
         const slug = match.data[0];
-        const result = await ProductListService.getProductBySlug(Store.apiRoot, slug);
+        const result = await ProductRepoService.getProductBySlug(slug);
 
         if (result && !isHttpErrorType(result)) {
           Main.setProps({ page: new DetailedProductPage({ productData: result }) });

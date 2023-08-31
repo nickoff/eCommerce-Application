@@ -1,10 +1,15 @@
+/* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Component, Child } from '@shared/lib';
 import Backdrop from '@components/shared/ui/backdrop/backdrop';
 import Main from '@components/layout/main/main';
 import CrossIcon from '@assets/icons/cross-lg-icon.element.svg';
-import { toggleScrollCompensate } from '@shared/utils/dom-helpers';
+import { toggleScrollCompensate, qs } from '@shared/utils/dom-helpers';
+import ProductRepoService from '@shared/api/product/product-repo.service';
+import { isHttpErrorType } from '@shared/utils/type-guards';
+import { Category, ProductProjection } from '@commercetools/platform-sdk';
+import { LANG_CODE } from '@shared/constants/misc';
 import * as s from './search-bar.module.scss';
 import SearchIcon from './search-icon.element.svg';
 import { navLink } from '../common.module.scss';
@@ -15,6 +20,8 @@ class SearchModal extends Component {
   @Child(s.searchModal) private searchModal!: HTMLElement;
 
   @Child(s.searchModalInput) private searchInput!: HTMLInputElement;
+
+  private searchResultsContainer: JSX.Element | null = null;
 
   private backdrop = new Backdrop({ onclick: this.hideModal.bind(this) });
 
@@ -42,19 +49,15 @@ class SearchModal extends Component {
             <div className={container}>
               <div className={cx(s.searchModalInputContainer)}>
                 <button className={s.searchBtn}>{SearchIcon.cloneNode(true)}</button>
-                <input className={s.searchModalInput} type="text" placeholder="Search..." />
+                <input
+                  className={s.searchModalInput}
+                  onchange={this.search.bind(this)}
+                  type="text"
+                  placeholder="Search..."
+                />
                 <button className={s.closeBtn} onclick={this.hideModal.bind(this)}>
                   {CrossIcon.cloneNode(true)}
                 </button>
-              </div>
-
-              <div className={s.searchResultsContainer}>
-                <div className={s.searchResults}>
-                  <p className={s.searchResultsHeading}>Filters</p>
-                </div>
-                <div className={s.searchResults}>
-                  <p className={s.searchResultsHeading}>Suggested products</p>
-                </div>
               </div>
             </div>
           </div>
@@ -63,10 +66,63 @@ class SearchModal extends Component {
     );
   }
 
+  private renderResults(products?: ProductProjection[], categories?: Category[]): JSX.Element {
+    return (
+      <div className={s.searchResultsContainer}>
+        <div className={s.searchResults}>
+          <p className={s.searchResultsHeading}>Categories</p>
+          <ul className={s.searchResultsList}>
+            {categories &&
+              categories.map((c) => (
+                <li>
+                  <a>{c.name[LANG_CODE]}</a>
+                </li>
+              ))}
+          </ul>
+        </div>
+        <div className={s.searchResults}>
+          <p className={s.searchResultsHeading}>Suggested products</p>
+          <ul className={s.searchResultsList}>
+            {products &&
+              products.map((p) => (
+                <li>
+                  <a>{p.name[LANG_CODE]}</a>
+                </li>
+              ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
+  private updateResults(products?: ProductProjection[], categories?: Category[]): void {
+    const newSearchResultsEl = this.renderResults(...[products, categories]);
+
+    if (this.searchResultsContainer) {
+      this.searchResultsContainer.replaceWith(newSearchResultsEl);
+    } else {
+      qs(`.${s.searchModalInputWrapper} .${container}`, this.getContent()).append(newSearchResultsEl);
+    }
+
+    this.searchResultsContainer = newSearchResultsEl;
+  }
+
+  private async search(): Promise<void> {
+    const text = this.searchInput.value;
+    const response = await ProductRepoService.searchProductsWithCategories(text);
+
+    if (isHttpErrorType(response)) {
+      return;
+    }
+
+    this.updateResults(...response);
+  }
+
   private showModal(): void {
     this.scrollWidth = toggleScrollCompensate();
     this.searchModal.classList.add(s.show);
     this.backdrop.show();
+    this.searchInput.focus();
   }
 
   private hideModal(): void {
@@ -80,6 +136,11 @@ class SearchModal extends Component {
       () => {
         this.searchModal.classList.remove(s.show, s.closing);
         this.searchInput.value = '';
+
+        if (this.searchResultsContainer) {
+          this.searchResultsContainer.remove();
+          this.searchResultsContainer = null;
+        }
       },
       { once: true },
     );

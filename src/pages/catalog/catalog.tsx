@@ -1,8 +1,7 @@
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Component, Child } from '@shared/lib';
-import ProductListService from '@shared/api/product/product-list.service';
-import Store from '@app/store/store';
+import ProductRepoService from '@shared/api/product/product-repo.service';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import { IFilterBy, ISortBy } from '@shared/interfaces';
 import Backdrop from '@components/shared/ui/backdrop/backdrop';
@@ -76,14 +75,9 @@ class CatalogPage extends Component<ICatalogProps> {
       this.filter = filter;
     }
 
-    const { apiRoot } = Store.getState();
     const { category } = this.props;
 
-    const productsData = await ProductListService.getProductsWithFilter(
-      apiRoot,
-      this.filter ?? { category },
-      this.sorting,
-    );
+    const productsData = await ProductRepoService.getProductsWithFilter(this.filter ?? { category }, this.sorting);
 
     if (!isHttpErrorType(productsData)) {
       this.prodCollection.setProps({ productsData });

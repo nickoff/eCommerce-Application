@@ -2,8 +2,7 @@ import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Child, Component } from '@shared/lib';
 import NeverError from '@shared/types/never-error';
-import ProductListService from '@shared/api/product/product-list.service';
-import Store from '@app/store/store';
+import ProductRepoService from '@shared/api/product/product-repo.service';
 import { assertIsHTMLElement, isHttpErrorType } from '@shared/utils/type-guards';
 import { AttributePlainEnumValue } from '@commercetools/platform-sdk';
 import { ProductFilterType, ProductTypeKey } from '@shared/enums';
@@ -79,10 +78,6 @@ class FilterBlock extends Component<IFilterBlockProps> {
         const [lower, upper] = value;
         this.lowerPriceInput.value = lower.toString();
         this.upperPriceInput.value = upper.toString();
-
-        // if (!userInteraction) {
-        //   this.notifyPriceFilterChange(lower, upper);
-        // }
       },
       onThumbDragEnd: () => {
         this.notifyPriceFilterChange(...this.priceRange.value());
@@ -180,14 +175,13 @@ class FilterBlock extends Component<IFilterBlockProps> {
   }
 
   private async load(): Promise<void> {
-    const { apiRoot } = Store;
     const { category, filterType } = this.props;
 
     if (filterType === ProductFilterType.Price) {
       return;
     }
 
-    const result = await ProductListService.getAttributeOfProductType(apiRoot, filterType, ProductTypeKey[category]);
+    const result = await ProductRepoService.getAttributeOfProductType(filterType, ProductTypeKey[category]);
 
     if (!isHttpErrorType(result)) {
       this.filterData = result;
