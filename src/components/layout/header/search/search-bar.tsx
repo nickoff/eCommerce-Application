@@ -4,6 +4,7 @@ import { Component, Child } from '@shared/lib';
 import Backdrop from '@components/shared/ui/backdrop/backdrop';
 import Main from '@components/layout/main/main';
 import CrossIcon from '@assets/icons/cross-lg-icon.element.svg';
+import { toggleScrollCompensate } from '@shared/utils/dom-helpers';
 import * as s from './search-bar.module.scss';
 import SearchIcon from './search-icon.element.svg';
 import { navLink } from '../common.module.scss';
@@ -16,6 +17,8 @@ class SearchModal extends Component {
   @Child(s.searchModalInput) private searchInput!: HTMLInputElement;
 
   private backdrop = new Backdrop({ onclick: this.hideModal.bind(this) });
+
+  private scrollWidth!: number;
 
   protected componentDidRender(): void {
     Main.afterRender((main) => main.getContent().append(this.backdrop.render()));
@@ -61,13 +64,16 @@ class SearchModal extends Component {
   }
 
   private showModal(): void {
+    this.scrollWidth = toggleScrollCompensate();
     this.searchModal.classList.add(s.show);
     this.backdrop.show();
   }
 
   private hideModal(): void {
+    this.searchModal.style.cssText += `--scrollbar-compensate:${this.scrollWidth}px`;
     this.searchModal.classList.add(s.closing);
     this.backdrop.hide();
+    toggleScrollCompensate();
 
     this.searchModal.addEventListener(
       'animationend',

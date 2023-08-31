@@ -8,6 +8,14 @@
   padding-right: var(--fancybox-scrollbar-compensate);
 }
 
+html {
+  &[data-scrollbar-compensate] {
+    .header-wrapper {
+      padding-right: var(--scrollbar-compensate);
+    }
+  }
+}
+
 .header {
   @include flex-vertical-center;
   padding-block: 15px;

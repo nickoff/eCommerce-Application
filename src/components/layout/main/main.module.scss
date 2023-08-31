@@ -10,3 +10,11 @@
   overflow-x: clip;
   height: 100%;
 }
+
+html {
+  &[data-scrollbar-compensate] {
+    .main-wrapper {
+      padding-right: var(--scrollbar-compensate);
+    }
+  }
+}

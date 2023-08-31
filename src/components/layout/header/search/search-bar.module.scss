@@ -11,6 +11,10 @@
   }
 
   &.closing {
+    .search-modal__logo-wrapper,
+    .search-modal__input-wrapper {
+      padding-left: var(--scrollbar-compensate);
+    }
     animation: fade-out 0.2s forwards;
   }
 }
