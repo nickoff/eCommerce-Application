@@ -8,6 +8,7 @@ import { navItem, navLink } from '../common.module.scss';
 import * as s from './user-nav.module.scss';
 import CartIcon from './assets/cart-icon.element.svg';
 import UserMenu from './user-menu/user-menu';
+import SearchModal from '../search/search-bar';
 
 class UserNav extends Component {
   constructor(...args: IProps[]) {
@@ -21,6 +22,7 @@ class UserNav extends Component {
     return (
       <nav>
         <ul className={s.navList}>
+          <li className={cx(navItem, s.userNavItem)}>{new SearchModal().render()}</li>
           <li className={cx(navItem, s.userNavItem)}>
             <button className={navLink}>{CartIcon}</button>
           </li>

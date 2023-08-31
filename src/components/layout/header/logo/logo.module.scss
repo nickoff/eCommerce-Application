@@ -1,5 +1,6 @@
 .logo {
   @include flex-vertical-center;
+  display: inlnie-flex;
   padding: 5px;
   &:focus {
     outline: none;

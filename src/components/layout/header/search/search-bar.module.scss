@@ -1,0 +1,147 @@
+.search-modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: none;
+
+  &.show {
+    display: block;
+    animation: fade-in 0.2s forwards ease-out;
+  }
+
+  &.closing {
+    animation: fade-out 0.2s forwards;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    translate: 0 -50px;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  to {
+    opacity: 0;
+    translate: 0 -50px;
+  }
+}
+
+.search-modal__logo-wrapper {
+  padding-block: 5px;
+  width: 100%;
+  background-color: $second-color;
+
+  svg {
+    width: unset;
+  }
+}
+
+.search-modal__input-wrapper {
+  background-color: $default-color;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.search-toggle {
+  @include bg-border-none;
+
+  svg {
+    width: 23px;
+  }
+}
+
+.search-modal__input-container {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  svg {
+    width: 25px;
+    height: auto;
+  }
+}
+
+.search-modal__input {
+  padding-left: 50px !important;
+  padding-right: 40px !important;
+  font-size: 2.5rem;
+  width: 100%;
+  color: $second-color;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid $field-default-color;
+  padding: 8px 24px;
+
+  &:hover:not([disabled]) {
+    border: 1px solid $primary-color;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid $primary-color;
+  }
+
+  &::placeholder {
+    color: $field-default-color;
+  }
+}
+
+.search-btn,
+.close-btn {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  border: none;
+}
+
+.search-btn {
+  left: 0;
+  background-color: $primary-color;
+  height: 100%;
+  padding-inline: 10px;
+}
+
+.close-btn {
+  right: 0;
+  background: none;
+  padding-inline: 10px;
+
+  svg {
+    fill: $second-color;
+  }
+}
+
+.search-results-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 40%;
+}
+
+.search-results__heading {
+  font-size: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+  color: #777;
+  font-weight: 500;
+}
