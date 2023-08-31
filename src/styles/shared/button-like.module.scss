@@ -7,13 +7,10 @@
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;
+  transition: background 0.2s ease-in-out;
 
   &:focus {
     outline: none;
-  }
-
-  &:hover {
-    transition: background 0.2s;
   }
 }
 

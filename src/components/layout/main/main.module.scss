@@ -1,4 +1,12 @@
 .main-wrapper {
+  padding-top: 96px;
   background-color: $grey-1;
-  overflow-y: scroll;
+  // overflow-y: scroll;
+}
+
+.main {
+  padding-top: 50px;
+  position: relative;
+  overflow-x: hidden;
+  height: 100%;
 }
