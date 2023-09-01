@@ -8,8 +8,9 @@ import CrossIcon from '@assets/icons/cross-lg-icon.element.svg';
 import { toggleScrollCompensate, qs } from '@shared/utils/dom-helpers';
 import ProductRepoService from '@shared/api/product/product-repo.service';
 import { isHttpErrorType } from '@shared/utils/type-guards';
-import { Category, ProductProjection } from '@commercetools/platform-sdk';
+import { Category } from '@commercetools/platform-sdk';
 import { LANG_CODE } from '@shared/constants/misc';
+import Product from '@components/entities/product/product';
 import * as s from './search-bar.module.scss';
 import SearchIcon from './search-icon.element.svg';
 import { navLink } from '../common.module.scss';
@@ -21,6 +22,8 @@ class SearchModal extends Component {
 
   @Child(s.searchModalInput) private searchInput!: HTMLInputElement;
 
+  @Child(s.searchModalLogo) private logo!: HTMLElement;
+
   private searchResultsContainer: JSX.Element | null = null;
 
   private backdrop = new Backdrop({ onclick: this.hideModal.bind(this) });
@@ -29,6 +32,7 @@ class SearchModal extends Component {
 
   protected componentDidRender(): void {
     Main.afterRender((main) => main.getContent().append(this.backdrop.render()));
+    this.logo.addEventListener('click', this.hideModal.bind(this));
   }
 
   render(): JSX.Element {
@@ -41,7 +45,7 @@ class SearchModal extends Component {
         <div className={cx(s.searchModal)}>
           <div className={s.searchModalLogoWrapper}>
             <div className={container}>
-              <Logo />
+              <Logo className={s.searchModalLogo} />
             </div>
           </div>
 
@@ -66,7 +70,7 @@ class SearchModal extends Component {
     );
   }
 
-  private renderResults(products?: ProductProjection[], categories?: Category[]): JSX.Element {
+  private renderResults(products?: Product[], categories?: Category[]): JSX.Element {
     return (
       <div className={s.searchResultsContainer}>
         <div className={s.searchResults}>
@@ -75,7 +79,7 @@ class SearchModal extends Component {
             {categories &&
               categories.map((c) => (
                 <li>
-                  <a>{c.name[LANG_CODE]}</a>
+                  <a className={s.searchResultsLink}>{c.name[LANG_CODE]}</a>
                 </li>
               ))}
           </ul>
@@ -86,7 +90,10 @@ class SearchModal extends Component {
             {products &&
               products.map((p) => (
                 <li>
-                  <a>{p.name[LANG_CODE]}</a>
+                  <a className={s.searchResultsLink} href={p.detailsPath} dataset={{ navigo: '' }}>
+                    <img src={p.images[0].url} alt={p.images[0].label} />
+                    {p.name}
+                  </a>
                 </li>
               ))}
           </ul>
@@ -95,7 +102,7 @@ class SearchModal extends Component {
     );
   }
 
-  private updateResults(products?: ProductProjection[], categories?: Category[]): void {
+  private updateResults(products?: Product[], categories?: Category[]): void {
     const newSearchResultsEl = this.renderResults(...[products, categories]);
 
     if (this.searchResultsContainer) {

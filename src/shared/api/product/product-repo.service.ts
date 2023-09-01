@@ -6,6 +6,7 @@ import {
   type AttributeEnumType,
   type AttributePlainEnumValue,
   type ProductProjectionPagedSearchResponse,
+  type LocalizedString,
 } from '@commercetools/platform-sdk';
 import { ProductCategoryId } from '@shared/enums';
 import { isHttpErrorType } from '@shared/utils/type-guards';
@@ -13,6 +14,7 @@ import { IFilterBy, ISortBy } from '@shared/interfaces';
 import { TermFacetResult, FacetResults } from '@commercetools/platform-sdk';
 import Store from '@app/store/store';
 import { LANG_CODE } from '@shared/constants/misc';
+import Product from '@components/entities/product/product';
 import extractHttpError from '../extract-http-error.decorator';
 import { ProductTypeKey } from '../../enums';
 import { filterQueryBuilder } from './filter-query-builder';
@@ -24,7 +26,7 @@ class ProductRepoService {
     const response = await Store.apiRoot
       .productProjections()
       .search()
-      .get({ queryArgs: { filter: `categories.id:"${categoryId}"` } })
+      .get({ queryArgs: { filter: `categories.id:"${categoryId}"`, expand: 'categories[*]' } })
       .execute();
 
     return response.body.results;
@@ -37,16 +39,19 @@ class ProductRepoService {
   }
 
   @extractHttpError
-  static async getProductsWithFilter(filter: IFilterBy, sort?: ISortBy): Promise<ProductProjection[] | HttpErrorType> {
+  static async getProductsWithFilter(
+    filter: IFilterBy,
+    sortConfig?: ISortBy,
+  ): Promise<ProductProjection[] | HttpErrorType> {
     const query = this.buildFilterQuery(filter);
 
-    const queryArgs: { filter: string[]; sort?: string } = { filter: query };
+    const sort = sortConfig ? `${sortConfig.type} ${sortConfig.direction}` : undefined;
 
-    if (sort) {
-      queryArgs.sort = `${sort.type} ${sort.direction}`;
-    }
-
-    const response = await Store.apiRoot.productProjections().search().get({ queryArgs }).execute();
+    const response = await Store.apiRoot
+      .productProjections()
+      .search()
+      .get({ queryArgs: { filter: query, expand: 'categories[*]', sort } })
+      .execute();
 
     return response.body.results;
   }
@@ -99,29 +104,27 @@ class ProductRepoService {
   static async getProductBySlug(slug: string): Promise<ProductProjection | HttpErrorType> {
     const response = await Store.apiRoot
       .productProjections()
-      .get({ queryArgs: { where: `slug(en-US="${slug}")` } })
+      .get({ queryArgs: { where: `slug(en-US="${slug}")`, expand: 'categories[*]' } })
       .execute();
 
     return response.body.results[0];
   }
 
   @extractHttpError
-  static async searchProductsWithCategories(text: string): Promise<[ProductProjection[], Category[]] | HttpErrorType> {
+  static async searchProductsWithCategories(text: string): Promise<[Product[], Category[]] | HttpErrorType> {
     const response = await this.searchProducts(text);
-
-    const textLowerCase = text.toLocaleLowerCase();
-
-    const productsFiltered = response.results.filter((prod) =>
-      prod.name[LANG_CODE].toLocaleLowerCase().includes(textLowerCase),
-    );
-
     const categories = await this.getCategoryById(this.getFacetTerms(response.facets, 'categories.id'));
 
-    const categoriesFiltered = categories.filter((category) =>
-      category.name[LANG_CODE].toLocaleLowerCase().includes(textLowerCase),
-    );
+    const filter = this.nameMatchFilter.bind(null, text);
+
+    const productsFiltered = response.results.filter(filter).map((p) => new Product(p));
+    const categoriesFiltered = categories.filter(filter);
 
     return [productsFiltered, categoriesFiltered];
+  }
+
+  private static nameMatchFilter<T extends { name: LocalizedString }>(text: string, item: T): boolean {
+    return item.name[LANG_CODE].toLocaleLowerCase().includes(text.toLocaleLowerCase());
   }
 
   private static async searchProducts(text: string): Promise<ProductProjectionPagedSearchResponse> {
@@ -135,6 +138,7 @@ class ProductRepoService {
           fuzzy: true,
           fuzzyLevel: text.length === 5 ? 2 : undefined,
           limit: searchResultsLimit,
+          expand: 'categories[*]',
         },
       })
       .execute();
@@ -152,9 +156,9 @@ class ProductRepoService {
     return (facetTerms as TermFacetResult)?.terms.map((t) => t.term as string);
   }
 
-  private static async getCategoryById(ids: string[]): Promise<Category[]>;
-  private static async getCategoryById(id: string): Promise<Category>;
-  private static async getCategoryById(categoryId: string[] | string): Promise<Category[] | Category> {
+  static async getCategoryById(ids: string[]): Promise<Category[]>;
+  static async getCategoryById(id: string): Promise<Category>;
+  static async getCategoryById(categoryId: string[] | string): Promise<Category[] | Category> {
     if (typeof categoryId === 'string') {
       return (await Store.apiRoot.categories().withId({ ID: categoryId }).get().execute()).body;
     }

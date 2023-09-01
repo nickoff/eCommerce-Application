@@ -1,7 +1,8 @@
 .logo {
   @include flex-vertical-center;
-  display: inlnie-flex;
+  display: inline-flex;
   padding: 5px;
+
   &:focus {
     outline: none;
   }

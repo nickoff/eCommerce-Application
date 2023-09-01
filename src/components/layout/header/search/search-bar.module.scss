@@ -4,6 +4,7 @@
   right: 0;
   top: 0;
   display: none;
+  z-index: 1;
 
   &.show {
     display: block;
@@ -51,6 +52,10 @@
   svg {
     width: unset;
   }
+}
+
+.search-modal__logo {
+  display: inline-flex;
 }
 
 .search-modal__input-wrapper {
@@ -154,4 +159,23 @@
 .search-results__list {
   padding: 0;
   list-style: none;
+}
+
+.search-results__link {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 1.4rem;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: $primary-color-hover;
+  }
+
+  img {
+    max-width: 44px;
+    height: auto;
+  }
 }
