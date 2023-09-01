@@ -2,10 +2,13 @@ import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Component } from '@shared/lib';
 import { container } from '@styles/shared/index.module.scss';
+import FacebookIcon from '@assets/icons/facebook.element.svg';
+import TwitterIcon from '@assets/icons/twitter.element.svg';
+import InstagramIcon from '@assets/icons/instagram.element.svg';
 import * as s from './footer.module.scss';
-import SiteNav from '../header/site-nav/site-nav';
 import Logo from '../header/logo/logo';
-import FooterText from './config';
+import { FooterSocialLink, FooterText } from './config';
+import FooterSiteNav from './footer-site-nav/footer-site-nav';
 
 class Footer extends Component {
   render(): JSX.Element {
@@ -15,7 +18,7 @@ class Footer extends Component {
           <span className={s.footerRectangle}></span>
           <div className={s.footerTitle}>
             <Logo />
-            {new SiteNav().render()}
+            {new FooterSiteNav().render()}
           </div>
           <div className={s.footerTwoColumn}>
             <div className={s.footerContent}>
@@ -23,9 +26,15 @@ class Footer extends Component {
               <p>{FooterText.Copyright}</p>
             </div>
             <ul className={s.footerSocial}>
-              <li></li>
-              <li></li>
-              <li></li>
+              <li>
+                <a href={FooterSocialLink.Facebook}>{FacebookIcon}</a>
+              </li>
+              <li>
+                <a href={FooterSocialLink.Twitter}>{TwitterIcon}</a>
+              </li>
+              <li>
+                <a href={FooterSocialLink.Instagram}>{InstagramIcon}</a>
+              </li>
             </ul>
           </div>
         </footer>

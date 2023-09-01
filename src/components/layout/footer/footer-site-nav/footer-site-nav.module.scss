@@ -1,0 +1,30 @@
+.footer__site-nav-list {
+  @include flex-vertical-center;
+  list-style: none;
+  gap: 34px;
+  margin: 0;
+  padding-left: 0;
+  @include breakpoint($tablet, $max) {
+    @include flex-column;
+    padding: 43px 0;
+    gap: 16px;
+
+    li {
+      padding: 0;
+    }
+  }
+}
+
+.footer__site-nav-link {
+  @include flex-vertical-center;
+  color: inherit;
+
+  &:focus {
+    outline: none;
+    color: inherit;
+  }
+
+  &:hover {
+    color: $primary-color;
+  }
+}
