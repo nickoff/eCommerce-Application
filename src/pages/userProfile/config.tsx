@@ -118,29 +118,3 @@ export const getCustomer = (): Customer => {
   if (!customer) throw Error(UserPageText.CustomerError);
   return customer;
 };
-
-export const fillResetInfoUser = (): void => {
-  const customer = getCustomer();
-  const inputs = document.querySelectorAll('input,select');
-
-  const errorsMsg = document.querySelectorAll('p');
-
-  errorsMsg.forEach((item) => {
-    const msg = item;
-    msg.textContent = '';
-  });
-
-  const customerKeys = Object.keys(customer);
-  const customerValues = Object.values(customer);
-
-  inputs.forEach((el) => {
-    if (!(el instanceof HTMLInputElement || el instanceof HTMLSelectElement)) return;
-    const input = el;
-    input.disabled = true;
-
-    if (customerKeys.indexOf(input.name) !== -1) {
-      const index = customerKeys.indexOf(input.name);
-      input.value = customerValues[index];
-    }
-  });
-};

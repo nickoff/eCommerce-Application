@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 import { element } from 'tsx-vanilla';
+import { Customer } from '@commercetools/platform-sdk';
+import { buildFormData, isFormValid } from '@shared/utils/form-helpers';
 import { Component } from '@shared/lib';
 import Store from '@app/store/store';
 import { render } from '@shared/utils/misc';
@@ -109,14 +111,17 @@ class UserProfile extends Component {
     return <div>{addressArray}</div>;
   }
 
-  private editFormMode(e: Event): void {
+  private async editFormMode(e: Event): Promise<void> {
     const { target } = e;
-    if (!(target instanceof HTMLElement)) return;
+    if (!(target instanceof HTMLButtonElement)) return;
 
     target.textContent = target.textContent === ButtonsNames.Save ? ButtonsNames.Edit : ButtonsNames.Save;
     const form = target.closest('form');
     if (!form) return;
 
+    const formData = buildFormData<Customer>(form);
+    console.log('formData ===>');
+    console.log(formData);
     const inputs = qsAll('input, select', form);
 
     inputs.forEach((el) => {
@@ -132,6 +137,11 @@ class UserProfile extends Component {
     passFields.forEach((passField) => {
       if (target.textContent === ButtonsNames.Save) passField.classList.remove('hidden');
       else passField.classList.add('hidden');
+    });
+
+    form.addEventListener('change', async () => {
+      if (!(await isFormValid(form))) target.disabled = true;
+      else target.disabled = false;
     });
   }
 
