@@ -14,16 +14,16 @@ export enum UserAccountText {
 const pwdInput = new Input({
   name: InputName.Password,
   type: InputType.Password,
-  label: 'Password',
-  required: true,
+  label: 'New password',
+  required: false,
   withVisibilityToggle: true,
 });
 
 const confirmPwdInput = new Input({
   name: InputName.Password,
   type: InputType.Password,
-  label: 'Confirm Password',
-  required: true,
+  label: 'Confirm new password',
+  required: false,
   withVisibilityToggle: true,
   validationSchema: Schema.PASSWORD_CONFIRM_SCHEMA,
   additionalValidationContext: { getPwdValue: pwdInput.getValue.bind(pwdInput) },
@@ -51,6 +51,13 @@ export const controls = {
   }),
   password: pwdInput,
   passwordConfirm: confirmPwdInput,
+  passwordCurrent: new Input({
+    name: InputName.Password,
+    type: InputType.Password,
+    label: 'Current password',
+    required: true,
+    withVisibilityToggle: true,
+  }),
   phone: new Input({
     name: InputName.Phone,
     type: InputType.Phone,

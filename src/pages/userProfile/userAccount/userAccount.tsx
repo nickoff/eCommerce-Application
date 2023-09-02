@@ -48,6 +48,7 @@ class UserAccount extends Component {
                 c.phone.class(s.phone),
                 c.password.class(s.pwd),
                 c.passwordConfirm.class(s.pwdConfirm),
+                c.passwordCurrent.class(s.pwdCurrent),
               )}
             </div>
             <button className={cx(btn, btnFilled, s.submitBtn)} type="submit">
