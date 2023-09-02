@@ -35,3 +35,13 @@
   list-style: none;
   padding: 0;
 }
+
+@mixin expand-click-area($area: 5px) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -$area;
+  }
+}

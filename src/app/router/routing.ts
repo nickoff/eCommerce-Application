@@ -1,3 +1,5 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable no-console */
 import Main from '@components/layout/main/main';
 import Navigo from 'navigo';
 import PageLogin from '@pages/login/login';
@@ -8,6 +10,9 @@ import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
 import { ProductCategory } from '@shared/enums';
+import ProductListService from '@shared/api/product/product-list.service';
+import DetailedProductPage from '@pages/detailed-product/detailed-product';
+import { isHttpErrorType } from '@shared/utils/type-guards';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -56,6 +61,18 @@ const initRouter = (): void => {
         as: 'user-profile',
         uses: () => Main.setProps({ page: new UserProfile() }),
       },
+    })
+    .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {
+      if (match && match.data) {
+        const slug = match.data[0];
+        const result = await ProductListService.getProductBySlug(Store.apiRoot, slug);
+
+        if (result && !isHttpErrorType(result)) {
+          Main.setProps({ page: new DetailedProductPage({ productData: result }) });
+        } else {
+          Main.setProps({ page: new Page404() });
+        }
+      }
     })
     .notFound(() => Main.setProps({ page: new Page404() }))
     .resolve();

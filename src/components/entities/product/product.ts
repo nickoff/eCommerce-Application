@@ -14,11 +14,14 @@ export default class Product implements IProduct {
 
   readonly attributes: IProduct['attributes'];
 
+  readonly slug: string;
+
   constructor(prod: ProductProjection) {
     this.name = prod.name?.[LANG_CODE];
     this.description = prod.description?.[LANG_CODE] ?? '';
     this.prices = prod.masterVariant.prices as IProduct['prices'];
     this.images = prod.masterVariant.images as IProduct['images'];
+    this.slug = prod.slug[LANG_CODE];
 
     const attributesRespData = prod.masterVariant.attributes;
     this.attributes = createProductAttributesObject(attributesRespData);

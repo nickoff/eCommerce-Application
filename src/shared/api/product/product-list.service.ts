@@ -98,6 +98,16 @@ class ProductListService {
 
     return (attribute.type as AttributeEnumType).values;
   }
+
+  @extractHttpError
+  static async getProductBySlug(apiRoot: ApiRoot, slug: string): Promise<ProductProjection | HttpErrorType> {
+    const response = await apiRoot
+      .productProjections()
+      .get({ queryArgs: { where: `slug(en-US="${slug}")` } })
+      .execute();
+
+    return response.body.results[0];
+  }
 }
 
 export default ProductListService;
