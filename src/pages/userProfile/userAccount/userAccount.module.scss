@@ -1,0 +1,5 @@
+.page-wrapper {
+  @include flex-column;
+  padding-block: 30px;
+  background-color: $grey-1;
+}

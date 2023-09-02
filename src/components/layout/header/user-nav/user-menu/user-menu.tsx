@@ -50,7 +50,7 @@ class UserMenu extends Component {
 
   private onUserProfileClick(): void {
     this.dropdown.hide();
-    router.navigate(Route.UserProfile);
+    router.navigate(Route.UserAccount);
   }
 }
 

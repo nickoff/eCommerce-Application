@@ -6,6 +6,7 @@ import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
 import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
+import UserAccount from '@pages/userProfile/userAccount/userAccount';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -41,6 +42,10 @@ const initRouter = (): void => {
       [Route.UserProfile]: {
         as: 'user-profile',
         uses: () => Main.setProps({ page: new UserProfile() }),
+      },
+      [Route.UserAccount]: {
+        as: 'user-profile/account',
+        uses: () => Main.setProps({ page: new UserAccount() }),
       },
     })
     .notFound(() => Main.setProps({ page: new Page404() }))

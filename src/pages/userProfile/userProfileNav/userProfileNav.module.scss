@@ -1,0 +1,25 @@
+.user-profile__nav-list {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2.5rem;
+  font-family: $base-font;
+  opacity: 0.5;
+  gap: 30px;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      opacity: 1;
+      transition: 0.2s;
+      color: $primary-color;
+    }
+  }
+
+  li {
+    list-style-type: none;
+  }
+}
