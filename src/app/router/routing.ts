@@ -14,6 +14,7 @@ import { ProductCategory } from '@shared/enums';
 import ProductListService from '@shared/api/product/product-list.service';
 import DetailedProductPage from '@pages/detailed-product/detailed-product';
 import { isHttpErrorType } from '@shared/utils/type-guards';
+import UserAddresses from '@pages/userProfile/userAddresses/userAddresses';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -65,6 +66,10 @@ const initRouter = (): void => {
       [Route.UserAccount]: {
         as: 'user-profile/account',
         uses: () => Main.setProps({ page: new UserAccount() }),
+      },
+      [Route.UserAddresses]: {
+        as: 'user-profile/addresses',
+        uses: () => Main.setProps({ page: new UserAddresses() }),
       },
     })
     .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {

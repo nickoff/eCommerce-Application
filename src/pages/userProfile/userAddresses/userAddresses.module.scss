@@ -1,0 +1,33 @@
+.page-wrapper {
+  @include flex-column;
+  background-color: $grey-1;
+}
+
+.activ-link li:nth-child(2) a {
+  position: relative;
+  display: inline-block;
+}
+
+.activ-link li:nth-child(2) a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: $primary-color;
+}
+
+.page-layout {
+  max-width: 650px;
+  background-color: $default-color;
+  border-radius: 8px;
+  width: 100%;
+  padding: 30px;
+  margin: auto;
+
+  h2 {
+    color: $primary-color;
+    margin-bottom: 20px;
+  }
+}

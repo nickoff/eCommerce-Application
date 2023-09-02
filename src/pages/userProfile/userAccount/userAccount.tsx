@@ -3,11 +3,34 @@ import cx from 'clsx';
 import { Component } from '@shared/lib';
 import { render } from '@shared/utils/misc';
 import { btn, btnFilled } from '@styles/shared/index.module.scss';
+import { qsAll } from '@shared/utils/dom-helpers';
 import * as s from './userAccount.module.scss';
-import { controls as c, UserAccountText } from './config';
+import { controls as c, getCustomer, UserAccountText } from './config';
 import UserProfileNav from '../userProfileNav/userProfileNav';
 
 class UserAccount extends Component {
+  private showUserInfoForm(): void {
+    const customer = getCustomer();
+    const inputs = qsAll('input,select', this.getContent());
+
+    const customerKeys = Object.keys(customer);
+    const customerValues = Object.values(customer);
+
+    inputs.forEach((el) => {
+      if (!(el instanceof HTMLInputElement || el instanceof HTMLSelectElement)) return;
+      const input = el;
+
+      if (customerKeys.indexOf(input.name) !== -1 && input.name !== 'password') {
+        const index = customerKeys.indexOf(input.name);
+        input.value = customerValues[index];
+      }
+    });
+  }
+
+  protected componentDidRender(): void {
+    this.showUserInfoForm();
+  }
+
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>

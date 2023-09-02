@@ -1,11 +1,14 @@
 import { InputName, InputType } from '@shared/enums';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
+import { Customer } from '@commercetools/platform-sdk';
+import Store from '@app/store/store';
 
 export enum UserAccountText {
   Title = 'User Profile',
   Subtitle = 'Account settings',
   BtnSubmit = 'UPDATE',
+  CustomerError = 'Customer data is missing',
 }
 
 const pwdInput = new Input({
@@ -61,4 +64,10 @@ export const controls = {
     required: true,
     validationSchema: Schema.DATE_OF_BIRTH_SCHEMA,
   }),
+};
+
+export const getCustomer = (): Customer => {
+  const { customer } = Store.getState();
+  if (!customer) throw Error(UserAccountText.CustomerError);
+  return customer;
 };
