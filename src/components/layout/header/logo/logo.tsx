@@ -3,7 +3,7 @@ import cx from 'clsx';
 import { Route } from '@app/router';
 import * as s from './logo.module.scss';
 
-import LogoIcon from './logo-icon.svg';
+import LogoIcon from './logo-icon.element.svg';
 
 export default function Logo({ className }: IProps): JSX.Element {
   return (

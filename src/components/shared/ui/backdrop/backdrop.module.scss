@@ -1,0 +1,38 @@
+.backdrop {
+  display: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-color: #000;
+  z-index: 100;
+
+  &.show {
+    display: block;
+    animation: fade-in 0.2s forwards;
+  }
+
+  &.closing {
+    pointer-events: none;
+    animation: fade-out 0.2s forwards;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 0;
+  }
+}

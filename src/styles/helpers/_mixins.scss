@@ -16,3 +16,32 @@
     outline-offset: 2px;
   }
 }
+
+@mixin responsive-img {
+  max-width: 100%;
+  height: auto;
+}
+
+@mixin bg-border-none {
+  background: none;
+  border: none;
+}
+
+@mixin transition($property: all) {
+  transition: $property 0.2s ease-in-out;
+}
+
+@mixin list-reset {
+  list-style: none;
+  padding: 0;
+}
+
+@mixin expand-click-area($area: 5px) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -$area;
+  }
+}

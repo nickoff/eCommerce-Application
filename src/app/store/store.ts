@@ -33,6 +33,10 @@ class Store {
     });
   }
 
+  get apiRoot(): ApiRoot {
+    return this.getState().apiRoot;
+  }
+
   async init(): Promise<void> {
     if (this.getState().authFlow !== AuthFlow.ExistingToken) {
       return;

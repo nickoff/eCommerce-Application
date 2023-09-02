@@ -1,3 +1,5 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable no-console */
 import Main from '@components/layout/main/main';
 import Navigo from 'navigo';
 import PageLogin from '@pages/login/login';
@@ -7,6 +9,11 @@ import Page404 from '@pages/page404/page404';
 import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import UserAccount from '@pages/userProfile/userAccount/userAccount';
+import CatalogPage from '@pages/catalog/catalog';
+import { ProductCategory } from '@shared/enums';
+import ProductListService from '@shared/api/product/product-list.service';
+import DetailedProductPage from '@pages/detailed-product/detailed-product';
+import { isHttpErrorType } from '@shared/utils/type-guards';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -39,6 +46,18 @@ const initRouter = (): void => {
           before: beforeHook,
         },
       },
+      [Route.Headphones]: {
+        as: 'headphones-catalog',
+        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Headphones }) }),
+      },
+      [Route.Earphones]: {
+        as: 'earphones-catalog',
+        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Earphones }) }),
+      },
+      [Route.Speakers]: {
+        as: 'speakers-catalog',
+        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
+      },
       [Route.UserProfile]: {
         as: 'user-profile',
         uses: () => Main.setProps({ page: new UserProfile() }),
@@ -47,6 +66,18 @@ const initRouter = (): void => {
         as: 'user-profile/account',
         uses: () => Main.setProps({ page: new UserAccount() }),
       },
+    })
+    .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {
+      if (match && match.data) {
+        const slug = match.data[0];
+        const result = await ProductListService.getProductBySlug(Store.apiRoot, slug);
+
+        if (result && !isHttpErrorType(result)) {
+          Main.setProps({ page: new DetailedProductPage({ productData: result }) });
+        } else {
+          Main.setProps({ page: new Page404() });
+        }
+      }
     })
     .notFound(() => Main.setProps({ page: new Page404() }))
     .resolve();

@@ -12,6 +12,7 @@
   @include breakpoint($nav-hide, $max) {
     padding-top: 15px;
     gap: 20px;
+    padding-bottom: 10px;
   }
 }
 

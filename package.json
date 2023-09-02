@@ -78,12 +78,14 @@
     "@commercetools/platform-sdk": "^5.0.0",
     "@commercetools/sdk-client-v2": "^2.2.0",
     "@faker-js/faker": "^8.0.2",
+    "@fancyapps/ui": "^5.0.22",
     "bootstrap": "^5.3.1",
     "clsx": "^2.0.0",
     "lodash": "^4.17.21",
     "navigo": "^8.11.1",
     "npm": "^9.8.1",
     "promise-loading-spinner": "^3.1.0",
+    "range-slider-input": "^2.4.4",
     "yup": "^1.2.0"
   }
 }
