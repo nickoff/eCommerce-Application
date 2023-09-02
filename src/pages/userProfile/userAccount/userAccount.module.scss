@@ -48,8 +48,7 @@
     'first-name  last-name'
     'email       email'
     'pwd         pwd-confirm'
-    'pwd-current pwd-current'
-    'birth       phone';
+    'pwd-current birth';
   grid-template-columns: 1fr 1fr;
 
   @media (max-width: 580px) {
@@ -60,8 +59,7 @@
       'pwd'
       'pwd-confirm'
       'pwd-current'
-      'birth'
-      'phone';
+      'birth';
     grid-template-columns: 1fr;
   }
 }

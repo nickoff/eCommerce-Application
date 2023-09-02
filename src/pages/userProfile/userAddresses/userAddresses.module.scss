@@ -19,6 +19,7 @@
 }
 
 .page-layout {
+  display: grid;
   max-width: 650px;
   background-color: $default-color;
   border-radius: 8px;
@@ -26,8 +27,19 @@
   padding: 30px;
   margin: auto;
 
+  button {
+    min-width: 270px;
+    margin: 20px auto;
+  }
+
   h2 {
     color: $primary-color;
     margin-bottom: 20px;
   }
+}
+
+.address-cards {
+  @include flex-vertical-center;
+  width: 100%;
+  justify-content: center;
 }

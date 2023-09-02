@@ -58,12 +58,6 @@ export const controls = {
     required: true,
     withVisibilityToggle: true,
   }),
-  phone: new Input({
-    name: InputName.Phone,
-    type: InputType.Phone,
-    label: 'Phone number',
-    validationSchema: Schema.PHONE_SCHEMA,
-  }),
   dateOfBirth: new Input({
     name: InputName.DateOfBirth,
     type: InputType.Date,
@@ -75,6 +69,8 @@ export const controls = {
 
 export const getCustomer = (): Customer => {
   const { customer } = Store.getState();
+  // eslint-disable-next-line no-console
+  console.log(Store.getState().customer);
   if (!customer) throw Error(UserAccountText.CustomerError);
   return customer;
 };

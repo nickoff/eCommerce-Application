@@ -45,7 +45,6 @@ class UserAccount extends Component {
                 c.lastName.class(s.lastName),
                 c.email.class(s.email),
                 c.dateOfBirth.class(s.birth),
-                c.phone.class(s.phone),
                 c.password.class(s.pwd),
                 c.passwordConfirm.class(s.pwdConfirm),
                 c.passwordCurrent.class(s.pwdCurrent),
