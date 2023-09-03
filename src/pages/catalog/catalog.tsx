@@ -41,7 +41,7 @@ class CatalogPage extends Component<ICatalogProps> {
 
   private facets = this.props.filters;
 
-  private lastAppliedFilter?: FilterName;
+  private lastAppliedFilter: FilterName[] = [];
 
   constructor(props: ICatalogProps) {
     super(props);
@@ -110,15 +110,22 @@ class CatalogPage extends Component<ICatalogProps> {
     if (Array.isArray(field)) {
       if (event.payload.status) {
         field.push(event.payload.filter as Category & ProductType & string);
-        this.lastAppliedFilter = filterName;
+        this.lastAppliedFilter?.push(filterName);
       } else {
         const filterIndex = field.findIndex((f) => f === event.payload.filter);
         field.splice(filterIndex, 1);
-        delete this.lastAppliedFilter;
+        this.lastAppliedFilter?.pop();
       }
-    } else {
+
+      return;
+    }
+
+    if (event.payload.status) {
       Object.assign(field, event.payload.filter);
-      this.lastAppliedFilter = filterName;
+      this.lastAppliedFilter?.push(filterName);
+    } else {
+      this.appliedFilters[filterName] = {} as string[] & Category[] & ProductType[] & IRangeFilter;
+      this.lastAppliedFilter?.pop();
     }
   }
 
@@ -131,13 +138,21 @@ class CatalogPage extends Component<ICatalogProps> {
     this.filterTreeEl.classList.remove(s.show);
   }
 
-  private onSortingChange(sortData: ISortBy): void {
+  private async onSortingChange(sortData: ISortBy): Promise<void> {
     this.appliedSorting = sortData;
-    this.load();
+    const catalogData = await this.load();
+
+    if (catalogData && !isHttpErrorType(catalogData)) {
+      this.prodCollection.setProps({ productsData: catalogData.products });
+    }
   }
 
   private async load(): Promise<ICatalogProps | HttpErrorType | null> {
-    const result = await ProductSearchService.fetchProductsWithFilters(this.appliedFilters, this.lastAppliedFilter);
+    const result = await ProductSearchService.fetchProductsWithFilters(
+      this.appliedFilters,
+      this.lastAppliedFilter?.at(-1),
+      this.appliedSorting,
+    );
 
     return result;
   }

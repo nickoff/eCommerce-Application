@@ -64,6 +64,7 @@ class FilterBodyRange extends Component<IFilterBodyProps<IRangeFilter>> implemen
             filterBody: this,
           },
         },
+        bubbles: true,
       }),
     );
   }

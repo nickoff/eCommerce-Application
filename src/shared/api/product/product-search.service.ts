@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 import { isHttpErrorType, isKeyOf } from '@shared/utils/type-guards';
 import { FacetResults, RangeFacetResult, Category, ProductType } from '@commercetools/platform-sdk';
-import { IFilters, IRangeFilter, Color } from '@shared/interfaces';
+import { IFilters, IRangeFilter, Color, ISortBy } from '@shared/interfaces';
 import { centsToMoney } from '@shared/utils/misc';
 import { FilterName } from '@shared/enums';
 import { ICatalogProps } from '@pages/catalog/catalog.interface';
@@ -42,7 +42,11 @@ class ProductSearchService {
     };
   }
 
-  static async fetchProductsWithFilters(filter: IFilters, lastFilter?: FilterName): Promise<ICatalogProps | null> {
+  static async fetchProductsWithFilters(
+    filter: IFilters,
+    lastFilter?: FilterName,
+    sort?: ISortBy,
+  ): Promise<ICatalogProps | null> {
     const facetsToApply = Object.entries(this.facets).reduce((acc, [name, facet]) => {
       if (name !== lastFilter) {
         acc.push(facet);
@@ -51,7 +55,16 @@ class ProductSearchService {
       return acc;
     }, [] as string[]);
 
-    const response = await ProductRepoService.getProductsWithFilter(filter, facetsToApply);
+    const priceRangeFacetIndex = facetsToApply.findIndex((s) => s.includes('variants.price.centAmount'));
+
+    if (priceRangeFacetIndex >= 0 && filter.priceRange.min && filter.priceRange.max) {
+      const facet = `variants.price.centAmount:range (${filter.priceRange.min * 100} to ${
+        filter.priceRange.max * 100
+      }) as priceRange`;
+      facetsToApply.splice(priceRangeFacetIndex, 1, facet);
+    }
+
+    const response = await ProductRepoService.getProductsWithFilter(filter, facetsToApply, sort);
 
     if (isHttpErrorType(response)) {
       return null;

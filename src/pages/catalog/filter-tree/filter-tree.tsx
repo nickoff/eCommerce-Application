@@ -109,7 +109,7 @@ class FilterTree extends Component<IFilterTreeProps> {
   }
 
   private toggleFilterListVisibility(): void {
-    if (this.appliedFiltersList.children) {
+    if (this.appliedFiltersList.children.length) {
       this.appliedFilters.classList.remove('d-none');
     } else {
       this.appliedFilters.classList.add('d-none');
@@ -136,6 +136,18 @@ class FilterTree extends Component<IFilterTreeProps> {
   private updateRangeFilter(payload: IFilterPayload<FilterData>): void {
     const { filterName } = payload.filterBlock.getState();
     const existingRangeFilterItem = this.mapElement.get(filterName);
+
+    if (!payload.status) {
+      const elem = this.mapElement.get(filterName);
+      elem?.remove();
+
+      if (elem) {
+        this.mapPayload.removeByKey(elem);
+      }
+
+      this.mapElement.removeByKey(filterName);
+      return;
+    }
 
     if (existingRangeFilterItem) {
       const newFilterItem = this.renderAppliedFilterItem(payload);
