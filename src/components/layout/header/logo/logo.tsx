@@ -8,7 +8,7 @@ import LogoIcon from './logo-icon.element.svg';
 export default function Logo({ className }: IProps): JSX.Element {
   return (
     <a href={Route.Home} className={cx(s.logo, className)} dataset={{ navigo: '' }}>
-      {LogoIcon}
+      {LogoIcon.cloneNode(true)}
     </a>
   );
 }
