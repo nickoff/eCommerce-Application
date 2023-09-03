@@ -1,18 +1,10 @@
-import { ProductCategory, ProductFilterType } from '@shared/enums';
+import { FilterName } from '@shared/enums';
+import { FilterDataType } from '@shared/types';
+import { FilterBlockType } from './filter-block.types';
 
 export interface IFilterBlockProps extends IProps {
-  filterType: ProductFilterType;
-  category: ProductCategory;
-}
-
-export interface IFilterChangeEvtPayload {
-  type: ProductFilterType;
-  key: string;
-  label: string;
-  status: boolean;
-}
-
-export interface IPriceChangeEvtPayload {
-  from: number;
-  to: number;
+  type: FilterBlockType;
+  filterData: FilterDataType;
+  filterName: FilterName;
+  heading: string;
 }

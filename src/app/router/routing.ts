@@ -9,7 +9,7 @@ import Page404 from '@pages/page404/page404';
 import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
-import { ProductCategory } from '@shared/enums';
+import ProductSearchService from '@shared/api/product/product-search.service';
 import ProductRepoService from '@shared/api/product/product-repo.service';
 import DetailedProductPage from '@pages/detailed-product/detailed-product';
 import { isHttpErrorType } from '@shared/utils/type-guards';
@@ -45,18 +45,6 @@ const initRouter = (): void => {
           before: beforeHook,
         },
       },
-      [Route.Headphones]: {
-        as: 'headphones-catalog',
-        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Headphones }) }),
-      },
-      [Route.Earphones]: {
-        as: 'earphones-catalog',
-        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Earphones }) }),
-      },
-      [Route.Speakers]: {
-        as: 'speakers-catalog',
-        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
-      },
       [Route.UserProfile]: {
         as: 'user-profile',
         uses: () => Main.setProps({ page: new UserProfile() }),
@@ -69,6 +57,19 @@ const initRouter = (): void => {
 
         if (result && !isHttpErrorType(result)) {
           Main.setProps({ page: new DetailedProductPage({ productData: result }) });
+        } else {
+          Main.setProps({ page: new Page404() });
+        }
+      }
+    })
+    .on(/(earphones|headphones|speakers)/, async (match) => {
+      if (match && match.data) {
+        const productTypeKey = match.data[0];
+
+        const catalogData = await ProductSearchService.fetchProductsByProductType(productTypeKey);
+
+        if (catalogData) {
+          Main.setProps({ page: new CatalogPage(catalogData) });
         } else {
           Main.setProps({ page: new Page404() });
         }

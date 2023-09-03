@@ -1,77 +1,86 @@
 import { element } from 'tsx-vanilla';
 import { Child, Component } from '@shared/lib';
-import { ProductFilterType } from '@shared/enums';
-import { render } from '@shared/utils/misc';
+import { render, padDot } from '@shared/utils/misc';
 import cx from 'clsx';
 import CrossIcon from '@assets/icons/cross-icon.element.svg';
 import { capitalize } from 'lodash';
-import { IFilterBy } from '@shared/interfaces';
-import { delegate, qs } from '@shared/utils/dom-helpers';
+import { FilterName } from '@shared/enums';
+import { BiMap } from '@jsdsl/bimap';
+import { delegate } from '@shared/utils/dom-helpers';
 import { MouseEvtName } from '@shared/constants/events';
 import { assertIsHTMLElement } from '@shared/utils/type-guards';
+import { IRangeFilter } from '@shared/interfaces';
+import { Category } from '@commercetools/platform-sdk';
 import * as s from './filter-tree.module.scss';
-import FilterBlock from './filter-block/filter-block';
 import { IFilterTreeProps } from './filter-tree.interface';
-import { FilterBlockEvent } from './filter-block/filter-block.enum';
-import { IFilterChangeEvtPayload, IPriceChangeEvtPayload } from './filter-block/filter-block.interface';
+import {
+  FilterBlockEvent,
+  FilterBlockType,
+  IFilterPayload,
+  FilterChangeEvent,
+  FilterData,
+} from './filter-block/filter-block.types';
+import FilterBlock from './filter-block/filter-block';
 
 class FilterTree extends Component<IFilterTreeProps> {
   @Child(s.appliedFilters) private appliedFilters!: HTMLElement;
 
   @Child(s.appliedFiltersList) private appliedFiltersList!: HTMLElement;
 
-  private filterBlocks = [
-    new FilterBlock({ filterType: ProductFilterType.Vendor, category: this.props.category }),
-    new FilterBlock({ filterType: ProductFilterType.Color, category: this.props.category }),
-    new FilterBlock({ filterType: ProductFilterType.Price, category: this.props.category }),
-  ];
+  private filterBlocks: FilterBlock[];
 
-  private filter: IFilterBy = {
-    category: this.props.category,
-    vendor: [],
-    color: [],
-  };
+  private mapPayload = new BiMap<JSX.Element, IFilterPayload<FilterData>>();
+
+  private mapElement = new BiMap<string, JSX.Element>();
 
   constructor(props: IFilterTreeProps) {
     super(props);
 
-    this.filter = new Proxy(this.filter, {
-      set: (target, property, value): boolean => {
-        Reflect.set(target, property, value);
-        this.props.onFilterChange(this.filter);
-        return true;
-      },
-    });
-  }
+    const { filters } = props;
+    const { vendors, colors, priceRange } = filters;
 
-  private proxifyFilter(): void {
-    this.filter = new Proxy(this.filter, {
-      set: (target, property, value): boolean => {
-        Reflect.set(target, property, value);
-        this.props.onFilterChange(this.filter);
-        return true;
-      },
-    });
+    this.filterBlocks = [
+      new FilterBlock({
+        type: FilterBlockType.List,
+        filterName: FilterName.Vendor,
+        filterData: vendors,
+        heading: 'Vendor',
+      }),
+      new FilterBlock({
+        type: FilterBlockType.Pallete,
+        filterName: FilterName.Color,
+        filterData: colors,
+        heading: 'Color',
+      }),
+      new FilterBlock({
+        type: FilterBlockType.Range,
+        filterName: FilterName.PriceRange,
+        filterData: priceRange,
+        heading: 'Price',
+      }),
+    ];
   }
 
   protected componentDidRender(): void {
     this.getContent().addEventListener(FilterBlockEvent.FilterChange, ({ detail }) =>
-      this.onFilterChange(detail.filter),
+      this.updateAppliedFilters(detail),
     );
 
-    this.getContent().addEventListener(FilterBlockEvent.PriceChange, ({ detail }) => {
-      this.onPriceFilterChange(detail);
-    });
+    delegate(this.appliedFiltersList, padDot(s.removeFilterBtn), MouseEvtName.CLICK, (target) => {
+      const filterItem = target.closest('li');
+      assertIsHTMLElement(filterItem);
+      const savedPayload = this.mapPayload.get(filterItem);
 
-    delegate(this.appliedFilters, `.${s.removeFilterBtn}`, MouseEvtName.CLICK, (target) => {
-      assertIsHTMLElement(target);
-      const { type, key } = target.dataset;
-
-      if (type && key) {
-        this.removeFilter(type as ProductFilterType, key);
+      if (savedPayload) {
+        const { filterBody } = savedPayload;
+        filterBody.unselect(savedPayload as IFilterPayload<string & Category & IRangeFilter>);
       }
     });
   }
+
+  // updateFilters(filters: IFilters) {
+
+  // }
 
   render(): JSX.Element {
     return (
@@ -80,9 +89,7 @@ class FilterTree extends Component<IFilterTreeProps> {
         <div className={cx(s.appliedFilters, 'd-none')}>
           <div className="d-flex align-items-center justify-content-between mb-2">
             <p className="m-0">Refined by</p>
-            <button className={s.clearAllBtn} onclick={this.resetFilters.bind(this)}>
-              Clear all
-            </button>
+            <button className={s.clearAllBtn}>Clear all</button>
           </div>
           <ul className={s.appliedFiltersList}></ul>
         </div>
@@ -91,90 +98,68 @@ class FilterTree extends Component<IFilterTreeProps> {
     );
   }
 
-  private onFilterChange(filterData: IFilterChangeEvtPayload): void {
-    if (filterData.status) {
-      this.addFilter(filterData);
+  private updateAppliedFilters(event: FilterChangeEvent): void {
+    if (event.type === FilterBlockType.Range) {
+      this.updateRangeFilter(event.payload);
     } else {
-      this.removeFilter(filterData.type, filterData.key);
+      this.updateFilter(event.payload);
     }
+
+    this.toggleFilterListVisibility();
   }
 
-  private onPriceFilterChange(payload: IPriceChangeEvtPayload): void {
-    this.filter.price = payload;
-
-    this.appliedFilters.classList.remove('d-none');
-
-    const label = `${payload.from} - ${payload.to}`;
-
-    const newFilterItem = this.renderAppliedFilterItem({ type: ProductFilterType.Price, label, key: 'price' });
-
-    const existingFilterItem = this.appliedFiltersList
-      .querySelector(`[data-type="${ProductFilterType.Price}"]`)
-      ?.closest(`.${s.appliedFilter}`);
-
-    if (existingFilterItem) {
-      existingFilterItem.replaceWith(newFilterItem);
+  private toggleFilterListVisibility(): void {
+    if (this.appliedFiltersList.children) {
+      this.appliedFilters.classList.remove('d-none');
     } else {
-      this.appliedFiltersList.append(newFilterItem);
-    }
-  }
-
-  private resetFilters(): void {
-    const filterItems = [...this.appliedFiltersList.children];
-
-    filterItems.forEach((item) => {
-      const { type, key } = qs(`.${s.removeFilterBtn}`, item).dataset;
-
-      if (type && key) {
-        this.removeFilter(type as ProductFilterType, key, false);
-      }
-    });
-
-    this.filter = { category: this.props.category, vendor: [], color: [] };
-    this.props.onFilterChange(this.filter);
-    this.proxifyFilter();
-  }
-
-  private addFilter({ type, key, label }: IFilterChangeEvtPayload): void {
-    if (type !== ProductFilterType.Price) {
-      this.filter[type] = this.filter[type]?.concat(key);
-    }
-
-    this.appliedFilters.classList.remove('d-none');
-    this.appliedFiltersList.append(this.renderAppliedFilterItem({ type, label, key }));
-  }
-
-  private removeFilter(type: ProductFilterType, key: string, shouldUpdate = true): void {
-    if (shouldUpdate) {
-      if (type !== ProductFilterType.Price) {
-        this.filter[type] = this.filter[type]?.filter((filterKey) => filterKey !== key);
-      } else {
-        this.filter[type] = { from: 0, to: 1000 };
-      }
-    }
-
-    qs(`[data-type="${type}"][data-key="${key}"]`, this.appliedFiltersList).closest(`.${s.appliedFilter}`)?.remove();
-
-    if (!this.appliedFiltersList.children.length) {
       this.appliedFilters.classList.add('d-none');
     }
+  }
 
-    const filterBlock = this.filterBlocks.find((block) => block.getState().filterType === type);
+  private updateFilter(payload: IFilterPayload<FilterData>): void {
+    const { filterLabel } = payload;
 
-    if (filterBlock) {
-      filterBlock.unselectFilter(key);
+    if (payload.status) {
+      const filterItem = this.renderAppliedFilterItem(payload);
+      this.appliedFiltersList.append(filterItem);
+
+      this.mapElement.set(filterLabel, filterItem);
+      this.mapPayload.set(filterItem, payload);
+    } else {
+      const elem = this.mapElement.get(filterLabel);
+      elem?.remove();
+      this.mapElement.removeByKey(filterLabel);
+      if (elem) this.mapPayload.removeByKey(elem);
     }
   }
 
-  private renderAppliedFilterItem({ type, key, label }: Omit<IFilterChangeEvtPayload, 'status'>): JSX.Element {
+  private updateRangeFilter(payload: IFilterPayload<FilterData>): void {
+    const { filterName } = payload.filterBlock.getState();
+    const existingRangeFilterItem = this.mapElement.get(filterName);
+
+    if (existingRangeFilterItem) {
+      const newFilterItem = this.renderAppliedFilterItem(payload);
+      existingRangeFilterItem.replaceWith(newFilterItem);
+      this.mapElement.set(filterName, newFilterItem);
+      this.mapPayload.set(newFilterItem, payload);
+    } else {
+      const filterItem = this.renderAppliedFilterItem(payload);
+      this.appliedFiltersList.append(filterItem);
+      this.mapElement.set(filterName, filterItem);
+      this.mapPayload.set(filterItem, payload);
+    }
+  }
+
+  private renderAppliedFilterItem({
+    filterLabel,
+    filterBlock,
+  }: Pick<IFilterPayload, 'filterLabel' | 'filterBlock'>): JSX.Element {
     return (
       <li className={s.appliedFilter}>
         <div>
-          <span>{capitalize(type)}</span>: <span className="fw-bold">{label}</span>
+          <span>{capitalize(filterBlock.getState().heading)}</span>: <span className="fw-bold">{filterLabel}</span>
         </div>
-        <button className={s.removeFilterBtn} dataset={{ type, key }}>
-          {CrossIcon.cloneNode(true)}
-        </button>
+        <button className={s.removeFilterBtn}>{CrossIcon.cloneNode(true)}</button>
       </li>
     );
   }

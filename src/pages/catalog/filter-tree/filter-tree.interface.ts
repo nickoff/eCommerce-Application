@@ -1,7 +1,7 @@
-import { ProductCategory } from '@shared/enums';
-import { IFilterBy } from '@shared/interfaces';
+import { IFilters } from '@shared/interfaces';
+import { IFilterPayload } from './filter-block/filter-block.types';
 
 export interface IFilterTreeProps extends IProps {
-  category: ProductCategory;
-  onFilterChange: (filter: IFilterBy) => void;
+  filters: IFilters;
+  appliedFilters?: Pick<IFilterPayload, 'filterLabel' | 'filterBlock'>[];
 }

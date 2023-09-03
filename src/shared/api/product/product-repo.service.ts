@@ -2,34 +2,60 @@ import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 import {
   type ProductProjection,
   type Category,
-  type ProductType,
-  type AttributeEnumType,
-  type AttributePlainEnumValue,
   type ProductProjectionPagedSearchResponse,
   type LocalizedString,
 } from '@commercetools/platform-sdk';
-import { ProductCategoryId } from '@shared/enums';
-import { isHttpErrorType } from '@shared/utils/type-guards';
-import { IFilterBy, ISortBy } from '@shared/interfaces';
-import { TermFacetResult, FacetResults } from '@commercetools/platform-sdk';
+import { IFilters, ISortBy } from '@shared/interfaces';
 import Store from '@app/store/store';
 import { LANG_CODE } from '@shared/constants/misc';
 import Product from '@components/entities/product/product';
+import { ProductType } from '@commercetools/platform-sdk';
+import { getFacetTerms } from './helpers';
 import extractHttpError from '../extract-http-error.decorator';
-import { ProductTypeKey } from '../../enums';
 import { filterQueryBuilder } from './filter-query-builder';
 import { searchResultsLimit } from './config';
 
 class ProductRepoService {
   @extractHttpError
-  static async getProductsByCategory(categoryId: ProductCategoryId): Promise<ProductProjection[] | HttpErrorType> {
+  static async getProductsByCategory(
+    categoryId: string,
+    facets?: string[],
+  ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
     const response = await Store.apiRoot
       .productProjections()
       .search()
-      .get({ queryArgs: { filter: `categories.id:"${categoryId}"`, expand: 'categories[*]' } })
+      .get({
+        queryArgs: {
+          filter: `categories.id:"${categoryId}"`,
+          facet: facets,
+          'filter.facets': `categories.id:"${categoryId}"`,
+          expand: 'categories[*]',
+        },
+      })
       .execute();
 
-    return response.body.results;
+    return response.body;
+  }
+
+  @extractHttpError
+  static async getProductsByProductType(
+    productTypeId: string,
+    facets?: string[],
+  ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
+    const response = await Store.apiRoot
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          filter: `productType.id:"${productTypeId}"`,
+          facet: facets,
+          'filter.facets': `productType.id:"${productTypeId}"`,
+          expand: ['categories[*]', 'productType'],
+        },
+      })
+      .execute();
+
+    return response.body;
   }
 
   @extractHttpError
@@ -39,72 +65,55 @@ class ProductRepoService {
   }
 
   @extractHttpError
+  static async getProductTypeByKey(key: string): Promise<ProductType | HttpErrorType> {
+    const response = await Store.apiRoot.productTypes().withKey({ key }).get().execute();
+    return response.body;
+  }
+
+  @extractHttpError
   static async getProductsWithFilter(
-    filter: IFilterBy,
+    filters: IFilters,
+    facet: string[],
     sortConfig?: ISortBy,
-  ): Promise<ProductProjection[] | HttpErrorType> {
-    const query = this.buildFilterQuery(filter);
+  ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
+    const query = this.buildFilterQuery(filters);
 
     const sort = sortConfig ? `${sortConfig.type} ${sortConfig.direction}` : undefined;
 
     const response = await Store.apiRoot
       .productProjections()
       .search()
-      .get({ queryArgs: { filter: query, expand: 'categories[*]', sort } })
+      .get({
+        queryArgs: {
+          filter: query,
+          expand: ['categories[*]', 'productType'],
+          facet,
+          'filter.facets': query,
+          sort,
+        },
+      })
       .execute();
 
-    return response.body.results;
+    return response.body;
   }
 
-  private static buildFilterQuery(filter: IFilterBy): string[] {
-    return Object.entries(filter).reduce((acc, [criteria, values]) => {
-      if (Array.isArray(values) && !values.length) return acc;
-
-      let searchValue = values;
-
-      if (Array.isArray(searchValue)) {
-        searchValue = values.map((val: string) => `"${val}"`).join(',');
+  private static buildFilterQuery(filters: IFilters): string[] {
+    return Object.entries(filters).reduce((acc, [name, filter]) => {
+      if (!filter || !Object.keys(filter).length) {
+        return acc;
       }
 
-      const query = filterQueryBuilder[criteria](searchValue);
-      acc.push(query);
+      acc.push(filterQueryBuilder[name](filter));
 
       return acc;
     }, [] as string[]);
   }
 
   @extractHttpError
-  static async getProductTypeByKey(key: ProductTypeKey): Promise<ProductType | HttpErrorType> {
-    const response = await Store.apiRoot.productTypes().withKey({ key }).get().execute();
-    return response.body;
-  }
-
-  static async getAttributeOfProductType(
-    attrName: string,
-    key: ProductTypeKey,
-  ): Promise<AttributePlainEnumValue[] | HttpErrorType> {
-    const result = await this.getProductTypeByKey(key);
-
-    if (isHttpErrorType(result)) {
-      return result;
-    }
-
-    const { attributes } = result;
-
-    const attribute = attributes?.find((attr) => attr.name === attrName);
-
-    if (!attribute) {
-      throw new Error(`ProductType with ${key} key is missing ${attrName} attribute`);
-    }
-
-    return (attribute.type as AttributeEnumType).values;
-  }
-
-  @extractHttpError
   static async getProductBySlug(slug: string): Promise<ProductProjection | HttpErrorType> {
     const response = await Store.apiRoot
       .productProjections()
-      .get({ queryArgs: { where: `slug(en-US="${slug}")`, expand: 'categories[*]' } })
+      .get({ queryArgs: { where: `slug(en-US="${slug}")`, expand: ['categories[*]', 'productType'] } })
       .execute();
 
     return response.body.results[0];
@@ -113,7 +122,7 @@ class ProductRepoService {
   @extractHttpError
   static async searchProductsWithCategories(text: string): Promise<[Product[], Category[]] | HttpErrorType> {
     const response = await this.searchProducts(text);
-    const categories = await this.getCategoryById(this.getFacetTerms(response.facets, 'categories.id'));
+    const categories = await this.getCategoryById(getFacetTerms(response.facets, 'categories.id') ?? []);
 
     const filter = this.nameMatchFilter.bind(null, text);
 
@@ -138,7 +147,7 @@ class ProductRepoService {
           fuzzy: true,
           fuzzyLevel: text.length === 5 ? 2 : undefined,
           limit: searchResultsLimit,
-          expand: 'categories[*]',
+          expand: ['categories[*]', 'productType'],
         },
       })
       .execute();
@@ -146,14 +155,31 @@ class ProductRepoService {
     return response.body;
   }
 
-  private static getFacetTerms(facets: FacetResults, field: string): string[] {
-    const facetTerms = facets[field];
+  @extractHttpError
+  static async getCategoryBySlug(slug: string): Promise<Category | HttpErrorType | null> {
+    const response = await Store.apiRoot
+      .categories()
+      .get({ queryArgs: { where: `slug(en-US="${slug}")` } })
+      .execute();
 
-    if (!facetTerms) {
-      throw new Error(`No such field "${field}" in provided facets`);
+    return response.body.results[0] ?? null;
+  }
+
+  static async getProductTypeById(ids: string[]): Promise<ProductType[]>;
+  static async getProductTypeById(id: string): Promise<ProductType>;
+  static async getProductTypeById(typeId: string[] | string): Promise<ProductType[] | ProductType> {
+    if (typeof typeId === 'string') {
+      return (await Store.apiRoot.productTypes().withId({ ID: typeId }).get().execute()).body;
     }
 
-    return (facetTerms as TermFacetResult)?.terms.map((t) => t.term as string);
+    if (!typeId.length) return [];
+
+    return (
+      await Store.apiRoot
+        .productTypes()
+        .get({ queryArgs: { where: typeId.map((id) => `id="${id}"`).join(' or ') } })
+        .execute()
+    ).body.results;
   }
 
   static async getCategoryById(ids: string[]): Promise<Category[]>;
