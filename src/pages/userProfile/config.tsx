@@ -115,6 +115,8 @@ export enum ButtonsNames {
 
 export const getCustomer = (): Customer => {
   const { customer } = Store.getState();
+  // eslint-disable-next-line no-console
+  console.log(Store.getState().customer);
   if (!customer) throw Error(UserPageText.CustomerError);
   return customer;
 };

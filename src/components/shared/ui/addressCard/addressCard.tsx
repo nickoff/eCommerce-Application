@@ -5,7 +5,7 @@ import { IAddressProps } from './addressCard.interface';
 
 class AddressCard extends Component<IAddressProps> {
   render(): JSX.Element {
-    const { country, city, street, postalCode, phone } = this.props;
+    const { country, city, streetName, postalCode, phone } = this.props;
 
     return (
       <div className={s.assressCard}>
@@ -19,7 +19,7 @@ class AddressCard extends Component<IAddressProps> {
         </p>
         <p>
           <b>Street: </b>
-          {`${street || ''}`}
+          {`${streetName || ''}`}
         </p>
         <p>
           <b>Postal code: </b>

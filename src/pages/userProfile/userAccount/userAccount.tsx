@@ -5,8 +5,9 @@ import { render } from '@shared/utils/misc';
 import { btn, btnFilled } from '@styles/shared/index.module.scss';
 import { qsAll } from '@shared/utils/dom-helpers';
 import * as s from './userAccount.module.scss';
-import { controls as c, getCustomer, UserAccountText } from './config';
+import { controls as c, UserAccountText } from './config';
 import UserProfileNav from '../userProfileNav/userProfileNav';
+import { getCustomer } from '../config';
 
 class UserAccount extends Component {
   private showUserInfoForm(): void {
