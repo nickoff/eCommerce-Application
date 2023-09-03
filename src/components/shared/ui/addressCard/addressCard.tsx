@@ -2,6 +2,7 @@ import { Component } from '@shared/lib';
 import { element } from 'tsx-vanilla';
 import * as s from './addressCard.module.scss';
 import { IAddressProps } from './addressCard.interface';
+import { countryCode } from './config';
 
 class AddressCard extends Component<IAddressProps> {
   render(): JSX.Element {
@@ -11,7 +12,7 @@ class AddressCard extends Component<IAddressProps> {
       <div className={s.assressCard}>
         <p>
           <b>Country: </b>
-          {`${country}`}
+          {`${countryCode[country]}`}
         </p>
         <p>
           <b>City: </b>
