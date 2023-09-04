@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { BaseAddress, type Customer, type CustomerDraft } from '@commercetools/platform-sdk';
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
 import { INewCustomer, ICustomerCredentials } from '@shared/interfaces';
@@ -83,8 +84,12 @@ class CustomerRepoService {
 
     const addresses = [this.createBaseAddress(customerData, AddressType.Shipping)];
 
+    const shippingAddresses = [0];
+    const billingAddresses = [0];
+
     if (!useShippingAddress) {
       addresses.push(this.createBaseAddress(customerData, AddressType.Billing));
+      billingAddresses[0] = 1;
     }
 
     const customerDraft: CustomerDraft = {
@@ -94,6 +99,8 @@ class CustomerRepoService {
       password,
       dateOfBirth,
       addresses,
+      shippingAddresses,
+      billingAddresses,
     };
 
     if (isDefaultShipping) {

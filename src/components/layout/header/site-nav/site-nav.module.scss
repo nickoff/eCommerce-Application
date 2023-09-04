@@ -12,6 +12,13 @@
   @include breakpoint($nav-hide, $max) {
     padding-top: 15px;
     gap: 20px;
+    padding-bottom: 10px;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  @media (max-width: 479.98px) {
+    flex-direction: column;
   }
 }
 

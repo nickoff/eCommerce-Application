@@ -1,0 +1,27 @@
+.range-input-wrapper {
+  @include flex-vertical-center;
+  justify-content: center;
+  gap: 10px;
+  padding-inline: 20px;
+  margin-bottom: 25px;
+  margin-top: 10px;
+}
+
+.range-input {
+  height: 36px;
+  padding: 1px 5px;
+  padding-left: 20px;
+  font-size: 1.4rem;
+  border: 1px solid #e3e3e3;
+  flex: 1;
+  text-align: center;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.range-slider {
+  text-decoration: none;
+  margin-bottom: 20px;
+}

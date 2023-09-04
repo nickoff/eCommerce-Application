@@ -1,0 +1,44 @@
+.filter-list {
+  font-size: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.filter__item {
+  &[data-selected] {
+    .filter__checkbox::before {
+      content: '';
+      width: 9px;
+      height: 6px;
+      border: 2px solid #000;
+      border-top: none;
+      border-right: none;
+      background: 0 0;
+      transform: rotate(-50deg);
+      box-sizing: border-box;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+    }
+
+    .filter__name {
+      font-weight: 600;
+    }
+  }
+}
+
+.filter__btn {
+  @include flex-vertical-center;
+  @include bg-border-none;
+  width: 100%;
+  padding: 0;
+}
+
+.filter__checkbox {
+  position: relative;
+  margin-right: 6px;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}

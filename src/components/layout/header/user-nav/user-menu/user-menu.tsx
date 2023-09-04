@@ -9,7 +9,7 @@ import AuthService from '@app/auth.service';
 import * as s from './user-menu.module.scss';
 import { btn, btnFilled } from '../../../../../styles/shared/index.module.scss';
 import { navItem, navLink } from '../../common.module.scss';
-import UserIcon from '../assets/profile-icon.svg';
+import UserIcon from '../assets/profile-icon.element.svg';
 
 class UserMenu extends Component {
   private dropdown!: bs.Dropdown;
@@ -27,13 +27,18 @@ class UserMenu extends Component {
           className={cx('dropdown-toggle', navLink, s.dropdownToggle)}
           dataset={{ bsToggle: 'dropdown', bsOffset: '0,35', bsAutoClose: 'outside' }}
         >
-          {UserIcon}
+          {UserIcon.cloneNode(true)}
         </button>
         <div className={cx('dropdown-menu', 'dropdown-menu-end', s.menuContainer)}>
-          <p className={s.emailPara}>{customer?.email}</p>
-          <button className={cx(btn, btnFilled, s.logOutBtn)} onclick={this.onLogOutClick.bind(this)}>
-            LOG OUT
-          </button>
+          <div className={s.menuWrapper}>
+            <p className={s.emailPara}>{customer?.email}</p>
+            <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onUserProfileClick.bind(this)}>
+              PROFILE
+            </button>
+            <button className={cx(btn, btnFilled, s.logOutBtn)} onclick={this.onLogOutClick.bind(this)}>
+              LOG OUT
+            </button>
+          </div>
         </div>
       </li>
     );
@@ -43,6 +48,11 @@ class UserMenu extends Component {
     this.dropdown.hide();
     AuthService.logout();
     router.navigate(Route.Home);
+  }
+
+  private onUserProfileClick(): void {
+    this.dropdown.hide();
+    router.navigate(Route.UserAccount);
   }
 }
 

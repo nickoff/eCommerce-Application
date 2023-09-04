@@ -1,0 +1,140 @@
+.card {
+  font-family: $base-font;
+  background-color: $default-color;
+  padding: 30px;
+}
+
+.card__seperator {
+  width: 100%;
+  margin: 24px 0;
+  border-top: 2px solid #dee2e6;
+}
+
+.card__heading {
+  font-size: 2.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.143px;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: clamp(1.5rem, 1.245rem + 1.27vw, 2.2rem);
+  }
+}
+
+.layout-container {
+  display: grid;
+  row-gap: 20px;
+  column-gap: 30px;
+  grid-template-areas:
+    'gallery  meta'
+    'desc     meta';
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 1000px) {
+    grid-template-areas:
+      'gallery'
+      'meta'
+      'desc';
+    grid-template-columns: 1fr;
+  }
+}
+
+.gallery {
+  grid-area: gallery;
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.meta {
+  grid-area: meta;
+  position: sticky;
+  top: 96px;
+  align-self: start;
+
+  @media (max-width: 1000px) {
+    position: static;
+  }
+}
+
+.desc {
+  grid-area: desc;
+  padding-bottom: 0;
+}
+
+.desc__expandable {
+  padding-bottom: 30px;
+}
+
+.prod-name {
+  font-weight: 700;
+  line-height: 1.43;
+  font-size: 2.5rem;
+  padding-bottom: 14px;
+}
+
+.prod-vendor {
+  font-size: 1.5rem;
+}
+
+.prod-price {
+  color: $primary-color;
+  font-size: 2.5rem;
+  font-family: $price-font;
+  font-weight: 300;
+  display: flex;
+  gap: 15px;
+}
+
+.desc-text-container {
+  font-size: 1.5rem;
+
+  h3 {
+    font-size: 1.5rem;
+    text-transform: none;
+    font-weight: 600;
+    letter-spacing: unset;
+  }
+}
+
+.quantity-counter {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  background-color: #f1f1f1;
+  width: 120px;
+  height: 48px;
+  font-size: 1.3rem;
+  margin-right: 16px;
+
+  @media (max-width: 400px) {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  & * {
+    width: 100%;
+  }
+
+  output {
+    font-weight: 700;
+  }
+
+  button {
+    @include bg-border-none;
+    height: 100%;
+  }
+}
+
+.add-to-cart-btn {
+  padding: 15px 30px;
+  line-height: normal;
+}
+
+.prod-old-price {
+  color: $primary-color-hover;
+  text-decoration: line-through $primary-color-hover 2px;
+}

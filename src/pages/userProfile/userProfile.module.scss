@@ -1,0 +1,93 @@
+.page-wrapper {
+  padding-block: 30px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.user-info h2 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: $primary-color;
+  color: $default-color;
+  padding: 0.5rem;
+}
+
+.user-info select {
+  width: 90%;
+}
+
+.def-addres {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: $second-color;
+  color: $default-color;
+  padding: 0.5rem;
+}
+
+.user-info {
+  position: relative;
+  margin: auto;
+  max-width: 60rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 3.5rem 1rem 2.5rem;
+  border: 0.1rem solid $primary-color;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  box-shadow: 0.8rem 0.7rem 0.8rem 0 rgba(34, 60, 80, 0.2);
+}
+
+.user-info div {
+  width: 50%;
+}
+
+.user-info div div {
+  text-align: center;
+  width: 90%;
+}
+
+.buttons-wrapper {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-align: right;
+  font-size: 1.2rem;
+
+  button {
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    padding: 0.6rem 1rem;
+    color: $default-color;
+    background-color: $primary-color;
+    border: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:hover {
+      background-color: $primary-color-hover;
+      transition: 0.2s;
+    }
+
+    &:active {
+      transform: scale(1.2);
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
+  }
+}
