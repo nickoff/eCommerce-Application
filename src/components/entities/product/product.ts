@@ -1,5 +1,5 @@
 import { IProduct } from '@shared/interfaces';
-import { ProductProjection, ProductType } from '@commercetools/platform-sdk';
+import { ProductProjection, ProductType, Category } from '@commercetools/platform-sdk';
 import { LANG_CODE } from '@shared/constants/misc';
 import createProductAttributesObject from './createProductAttributesObject';
 
@@ -20,7 +20,7 @@ export default class Product implements IProduct {
 
   readonly productType: ProductType;
 
-  readonly vendor: string;
+  readonly vendor: Category;
 
   constructor(prod: ProductProjection) {
     this.name = prod.name?.[LANG_CODE];
@@ -29,7 +29,7 @@ export default class Product implements IProduct {
     this.images = prod.masterVariant.images as IProduct['images'];
     this.slug = prod.slug[LANG_CODE];
     this.productType = prod.productType.obj as ProductType;
-    this.vendor = prod.categories.find((cat) => cat.obj?.key?.includes('vendor'))?.obj?.name[LANG_CODE] as string;
+    this.vendor = prod.categories.find((cat) => cat.obj?.key?.includes('vendor'))?.obj as Category;
     this.detailsPath = `/${this.productType.key}/${this.slug}`;
 
     const attributesRespData = prod.masterVariant.attributes;

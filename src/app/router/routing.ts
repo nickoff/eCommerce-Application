@@ -16,6 +16,7 @@ import { isHttpErrorType } from '@shared/utils/type-guards';
 import { capitalize } from 'lodash';
 import { LANG_CODE } from '@shared/constants/misc';
 import { LocalizedString } from '@commercetools/platform-sdk';
+import { SITE_TITLE } from '@shared/constants/seo';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -83,7 +84,11 @@ const initRouter = (): void => {
 
         if (catalogData) {
           Main.setProps({
-            page: new CatalogPage({ catalogData, includeTypeFilter: false }),
+            page: new CatalogPage({
+              catalogData,
+              includeTypeFilter: false,
+              pageTitle: `${capitalize(productTypeKey)} | ${SITE_TITLE}`,
+            }),
             showBreadcrumps: true,
             breadcrumpsPath: [
               { link: '/', label: 'Home' },
@@ -103,7 +108,11 @@ const initRouter = (): void => {
 
         if (catalogData) {
           Main.setProps({
-            page: new CatalogPage({ catalogData, includeTypeFilter: true }),
+            page: new CatalogPage({
+              catalogData,
+              includeTypeFilter: true,
+              pageTitle: `${catalogData.filters.vendors[0].name[LANG_CODE]} | ${SITE_TITLE}`,
+            }),
             showBreadcrumps: true,
             breadcrumpsPath: [
               { link: '/', label: 'Home' },

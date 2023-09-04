@@ -26,7 +26,7 @@ class ProductCard extends Component<IProductCardProps> {
   }
 
   renderExpanded(): JSX.Element {
-    const { name, images, attributes, prices, description } = this.props.productData;
+    const { name, images, attributes, prices, description, detailsPath } = this.props.productData;
 
     return (
       <div className={cx(s.prodCard, s.prodCardExpanded)}>
@@ -37,7 +37,7 @@ class ProductCard extends Component<IProductCardProps> {
         <div className={s.prodCardBody}>
           <p className={s.prodCardVendor}>{attributes?.vendor}</p>
           <p className={s.prodCardPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
-          <a className={s.prodCardName} dataset={{ navigo: '' }}>
+          <a href={detailsPath} className={s.prodCardName} dataset={{ navigo: '' }}>
             {name}
           </a>
           <div className={cx(s.prodCardDesc)} innerHTML={description}></div>

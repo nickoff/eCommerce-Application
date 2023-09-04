@@ -1,4 +1,4 @@
-import { type ProductVariant, type ProductType } from '@commercetools/platform-sdk';
+import { type ProductVariant, type ProductType, type Category } from '@commercetools/platform-sdk';
 import { type IProductAttributes } from './product-attributes';
 
 export interface IProduct {
@@ -9,6 +9,6 @@ export interface IProduct {
   readonly images: NonNullable<ProductVariant['images']>;
   readonly detailsPath: string;
   readonly productType: ProductType;
-  readonly vendor: string;
+  readonly vendor: Category;
   readonly attributes?: IProductAttributes;
 }

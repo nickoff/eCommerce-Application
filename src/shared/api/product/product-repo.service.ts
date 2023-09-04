@@ -10,7 +10,6 @@ import Store from '@app/store/store';
 import { LANG_CODE } from '@shared/constants/misc';
 import Product from '@components/entities/product/product';
 import { ProductType } from '@commercetools/platform-sdk';
-import { getFacetTerms } from './helpers';
 import extractHttpError from '../extract-http-error.decorator';
 import { filterQueryBuilder } from './filter-query-builder';
 import { searchResultsLimit } from './config';
@@ -120,16 +119,38 @@ class ProductRepoService {
   }
 
   @extractHttpError
-  static async searchProductsWithCategories(text: string): Promise<[Product[], Category[]] | HttpErrorType> {
+  static async searchProductsWithCategories(
+    text: string,
+  ): Promise<[Product[], Category[], ProductType[]] | HttpErrorType> {
     const response = await this.searchProducts(text);
-    const categories = await this.getCategoryById(getFacetTerms(response.facets, 'categories.id') ?? []);
 
     const filter = this.nameMatchFilter.bind(null, text);
 
     const productsFiltered = response.results.filter(filter).map((p) => new Product(p));
-    const categoriesFiltered = categories.filter(filter);
+    const vendors = this.getVendorSetOfProducts(productsFiltered);
+    const types = this.getProductTypeSetOfProducts(productsFiltered);
 
-    return [productsFiltered, categoriesFiltered];
+    return [productsFiltered, vendors, types];
+  }
+
+  private static getVendorSetOfProducts(products: Product[]): Category[] {
+    return products.reduce<Category[]>((acc, prod) => {
+      if (!acc.find((v) => v.name[LANG_CODE] === prod.vendor.name[LANG_CODE])) {
+        acc.push(prod.vendor);
+      }
+
+      return acc;
+    }, []);
+  }
+
+  private static getProductTypeSetOfProducts(products: Product[]): ProductType[] {
+    return products.reduce<ProductType[]>((acc, prod) => {
+      if (!acc.find((pt) => pt.name === prod.productType.name)) {
+        acc.push(prod.productType);
+      }
+
+      return acc;
+    }, []);
   }
 
   private static nameMatchFilter<T extends { name: LocalizedString }>(text: string, item: T): boolean {
@@ -143,7 +164,6 @@ class ProductRepoService {
       .get({
         queryArgs: {
           [`text.${LANG_CODE}`]: text,
-          facet: 'categories.id',
           fuzzy: true,
           fuzzyLevel: text.length === 5 ? 2 : undefined,
           limit: searchResultsLimit,

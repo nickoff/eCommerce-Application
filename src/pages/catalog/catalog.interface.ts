@@ -3,6 +3,7 @@ import { IFilters } from '@shared/interfaces';
 
 export interface ICatalogProps extends IProps {
   catalogData: ICatalogData;
+  pageTitle?: string;
   includeTypeFilter: boolean;
 }
 

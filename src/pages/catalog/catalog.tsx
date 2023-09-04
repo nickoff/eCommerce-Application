@@ -46,7 +46,7 @@ class CatalogPage extends Component<ICatalogProps> {
 
   constructor(props: ICatalogProps) {
     super(props);
-    document.title = `Catalog | ${SITE_TITLE}`;
+    document.title = this.props.pageTitle ?? `Catalog | ${SITE_TITLE}`;
 
     const { selectedFilters } = this.props.catalogData;
 
@@ -91,8 +91,6 @@ class CatalogPage extends Component<ICatalogProps> {
   private async onFilterChange(event: FilterChangeEvent): Promise<void> {
     this.updateAppliedFilters(event);
     const catalogData = await this.load();
-    // eslint-disable-next-line no-console
-    console.log(catalogData);
 
     if (isHttpErrorType(catalogData)) {
       return;

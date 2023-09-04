@@ -8,7 +8,7 @@ import CrossIcon from '@assets/icons/cross-lg-icon.element.svg';
 import { toggleScrollCompensate, qs } from '@shared/utils/dom-helpers';
 import ProductRepoService from '@shared/api/product/product-repo.service';
 import { isHttpErrorType } from '@shared/utils/type-guards';
-import { Category } from '@commercetools/platform-sdk';
+import { Category, ProductType } from '@commercetools/platform-sdk';
 import { LANG_CODE } from '@shared/constants/misc';
 import Product from '@components/entities/product/product';
 import * as s from './search-bar.module.scss';
@@ -38,7 +38,7 @@ class SearchModal extends Component {
   render(): JSX.Element {
     return (
       <div>
-        <button className={cx(s.searchToggle, navLink)} onclick={this.showModal.bind(this)}>
+        <button id="searchbar-toggle" className={cx(s.searchToggle, navLink)} onclick={this.showModal.bind(this)}>
           {SearchIcon}
         </button>
 
@@ -70,31 +70,51 @@ class SearchModal extends Component {
     );
   }
 
-  private renderResults(products?: Product[], categories?: Category[]): JSX.Element {
+  private renderResults(products: Product[], vendors: Category[], types: ProductType[]): JSX.Element {
+    if (!products.length && !vendors.length && !types.length) {
+      return (
+        <div className={s.searchResultsContainer}>
+          <p className={s.noResultPara}>No results</p>
+        </div>
+      );
+    }
+
     return (
-      <div className={s.searchResultsContainer}>
-        <div className={s.searchResults}>
+      <div className={cx(s.searchResultsContainer, 'row')}>
+        <div className={cx(s.searchResults, 'col-12', 'col-sm-6', 'col-md-5')}>
           <p className={s.searchResultsHeading}>Categories</p>
+          {!!vendors.length && <p className={s.categoryNamePara}>Vendor</p>}
           <ul className={s.searchResultsList}>
-            {categories &&
-              categories.map((c) => (
+            {!!vendors.length &&
+              vendors.map((v) => (
                 <li>
-                  <a href={c.slug[LANG_CODE]} className={s.searchResultsLink} dataset={{ navigo: '' }}>
-                    {c.name[LANG_CODE]}
+                  <a href={`/${v.slug[LANG_CODE]}`} className={s.searchResultsLink} dataset={{ navigo: '' }}>
+                    {v.name[LANG_CODE]}
+                  </a>
+                </li>
+              ))}
+          </ul>
+          {!!types.length && <p className={s.categoryNamePara}>Type</p>}
+          <ul className={s.searchResultsList}>
+            {!!types.length &&
+              types.map((t) => (
+                <li>
+                  <a href={`/${t.key}`} className={s.searchResultsLink} dataset={{ navigo: '' }}>
+                    {t.name}
                   </a>
                 </li>
               ))}
           </ul>
         </div>
-        <div className={s.searchResults}>
+        <div className={cx(s.searchResults, 'col-12', 'col-sm-6', 'col-md-5')}>
           <p className={s.searchResultsHeading}>Suggested products</p>
           <ul className={s.searchResultsList}>
-            {products &&
+            {!!products.length &&
               products.map((p) => (
                 <li>
                   <a className={s.searchResultsLink} href={p.detailsPath} dataset={{ navigo: '' }}>
                     <img src={p.images[0].url} alt={p.images[0].label} />
-                    {p.name}
+                    <span>{p.name}</span>
                   </a>
                 </li>
               ))}
@@ -104,8 +124,8 @@ class SearchModal extends Component {
     );
   }
 
-  private updateResults(products?: Product[], categories?: Category[]): void {
-    const newSearchResultsEl = this.renderResults(...[products, categories]);
+  private updateResults(products: Product[], vendors: Category[], types: ProductType[]): void {
+    const newSearchResultsEl = this.renderResults(...[products, vendors, types]);
 
     if (this.searchResultsContainer) {
       this.searchResultsContainer.replaceWith(newSearchResultsEl);

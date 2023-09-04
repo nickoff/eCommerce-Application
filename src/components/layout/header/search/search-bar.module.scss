@@ -140,12 +140,17 @@
   width: 100%;
   justify-content: space-between;
   margin-top: 20px;
+
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
 }
 
 .search-results {
   display: flex;
   flex-direction: column;
-  flex-basis: 40%;
   color: $second-color;
 }
 
@@ -170,6 +175,14 @@
   cursor: pointer;
   transition: background-color 0.2s;
 
+  span {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: pre-wrap;
+  }
+
   &:hover {
     background-color: $primary-color-hover;
   }
@@ -178,4 +191,19 @@
     max-width: 44px;
     height: auto;
   }
+}
+
+.no-result-para {
+  text-align: center;
+  margin: auto !important;
+  margin: 0;
+  padding: 0;
+  color: $primary-color;
+  font-size: 2rem;
+}
+
+.category-name-para {
+  margin: 0;
+  font-weight: 500;
+  color: #777;
 }
