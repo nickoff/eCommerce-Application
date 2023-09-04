@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { element } from 'tsx-vanilla';
-import { Address, Customer } from '@commercetools/platform-sdk';
+import { Customer } from '@commercetools/platform-sdk';
+import { buildFormData, isFormValid } from '@shared/utils/form-helpers';
 import { Component } from '@shared/lib';
 import Store from '@app/store/store';
 import { render } from '@shared/utils/misc';
@@ -8,13 +9,13 @@ import { qsAll } from '@shared/utils/dom-helpers';
 import { AddressType } from '@shared/enums/address.enum';
 import * as s from './userProfile.module.scss';
 import './userProfile.scss';
-import { controls as c, newAdressControls, UserPageText } from './config';
+import { controls as c, newAdressControls, UserPageText, ButtonsNames, getCustomer } from './config';
 
 class UserProfile extends Component {
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
-        <h1>User Profile</h1>
+        <h1 className="text-center">User Profile</h1>
         <form className={s.userInfo}>
           <h2>User information</h2>
           {render(
@@ -22,9 +23,10 @@ class UserProfile extends Component {
             c.lastName,
             c.email,
             c.dateOfBirth,
-            c.password.class('hidden'),
-            c.passwordConfirm.class('hidden'),
+            c.password.class('hidden pas'),
+            c.passwordConfirm.class('hidden pas'),
           )}
+          {this.buttonsInfo()}
         </form>
         {this.insertAddressForms()}
       </div>
@@ -32,26 +34,31 @@ class UserProfile extends Component {
   }
 
   protected componentDidRender(): void {
-    const forms = qsAll('[data-id]', this.getContent());
-
     const { customer } = Store.getState();
+
     if (!customer) return;
 
-    this.showUserInfoForm(customer);
-    this.showUserAddressForms(forms, customer.addresses);
+    const buttons = qsAll('button', this.getContent());
+    buttons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+      });
+    });
+    this.showUserInfoForm();
+    this.showUserAddressForms();
   }
 
-  private showUserInfoForm(customer: Customer): void {
-    const inputs = qsAll('input', this.getContent());
-    if (!customer) return;
+  private showUserInfoForm(): void {
+    const customer = getCustomer();
+    const inputs = qsAll('input,select', this.getContent());
 
     const customerKeys = Object.keys(customer);
     const customerValues = Object.values(customer);
 
     inputs.forEach((el) => {
-      if (!(el instanceof HTMLInputElement)) return;
+      if (!(el instanceof HTMLInputElement || el instanceof HTMLSelectElement)) return;
       const input = el;
-      input.readOnly = true;
+      input.disabled = true;
 
       if (customerKeys.indexOf(input.name) !== -1) {
         const index = customerKeys.indexOf(input.name);
@@ -60,7 +67,9 @@ class UserProfile extends Component {
     });
   }
 
-  private showUserAddressForms(forms: HTMLElement[], addresses: Address[]): void {
+  private showUserAddressForms(): void {
+    const { addresses } = getCustomer();
+    const forms = qsAll('[data-id]', this.getContent());
     forms.forEach((el, index) => {
       const fields: HTMLInputElement[] = qsAll('select,input', el);
 
@@ -74,8 +83,6 @@ class UserProfile extends Component {
   private insertAddressForms(): JSX.Element {
     const { customer } = Store.getState();
     if (!customer) throw Error(UserPageText.CustomerError);
-
-    console.log(customer);
 
     const addressArray = customer.addresses.map((el) => {
       if (!el.id) throw Error(UserPageText.CustomerError);
@@ -95,10 +102,71 @@ class UserProfile extends Component {
           <h2>{typeAddres} Addres</h2>
           <span className={s.defAddres}>{defAddres}</span>
           {render(newAdressControls(typeAddres))}
+          {this.buttonsAddress()}
         </form>
       );
     });
     return <div>{addressArray}</div>;
+  }
+
+  private async editFormMode(e: Event): Promise<void> {
+    const { target } = e;
+    if (!(target instanceof HTMLButtonElement)) return;
+
+    target.textContent = target.textContent === ButtonsNames.Save ? ButtonsNames.Edit : ButtonsNames.Save;
+    const form = target.closest('form');
+    if (!form) return;
+
+    const formData = buildFormData<Customer>(form);
+    console.log('formData ===>');
+    console.log(formData);
+    const inputs = qsAll('input, select', form);
+
+    inputs.forEach((el) => {
+      if (!(el instanceof HTMLInputElement || el instanceof HTMLSelectElement)) return;
+      const input = el;
+      if (target.textContent === ButtonsNames.Save) input.disabled = false;
+      else input.disabled = true;
+    });
+
+    const passFields = form.querySelectorAll('.pas');
+    if (!passFields) return;
+
+    passFields.forEach((passField) => {
+      if (target.textContent === ButtonsNames.Save) passField.classList.remove('hidden');
+      else passField.classList.add('hidden');
+    });
+
+    form.addEventListener('change', async () => {
+      if (!(await isFormValid(form))) target.disabled = true;
+      else target.disabled = false;
+    });
+  }
+
+  private buttonsInfo(): JSX.Element {
+    return (
+      <div className={s.buttonsWrapper}>
+        <button onclick={this.editFormMode}>edit</button>
+        <button
+          onclick={(): void => {
+            this.showUserInfoForm();
+          }}
+        >
+          reset
+        </button>
+      </div>
+    );
+  }
+
+  private buttonsAddress(): JSX.Element {
+    return (
+      <div className={s.buttonsWrapper}>
+        <button onclick={this.editFormMode}>edit</button>
+        <button disabled>reset</button>
+        <button disabled>add</button>
+        <button disabled>delete</button>
+      </div>
+    );
   }
 }
 export default UserProfile;

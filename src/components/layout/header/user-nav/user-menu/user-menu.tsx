@@ -30,13 +30,15 @@ class UserMenu extends Component {
           {UserIcon.cloneNode(true)}
         </button>
         <div className={cx('dropdown-menu', 'dropdown-menu-end', s.menuContainer)}>
-          <p className={s.emailPara}>{customer?.email}</p>
-          <button className={cx(btn, btnFilled, s.logOutBtn)} onclick={this.onLogOutClick.bind(this)}>
-            LOG OUT
-          </button>
-          <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onUserProfileClick.bind(this)}>
-            PROFILE
-          </button>
+          <div className={s.menuWrapper}>
+            <p className={s.emailPara}>{customer?.email}</p>
+            <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onUserProfileClick.bind(this)}>
+              PROFILE
+            </button>
+            <button className={cx(btn, btnFilled, s.logOutBtn)} onclick={this.onLogOutClick.bind(this)}>
+              LOG OUT
+            </button>
+          </div>
         </div>
       </li>
     );
@@ -50,7 +52,7 @@ class UserMenu extends Component {
 
   private onUserProfileClick(): void {
     this.dropdown.hide();
-    router.navigate(Route.UserProfile);
+    router.navigate(Route.UserAccount);
   }
 }
 

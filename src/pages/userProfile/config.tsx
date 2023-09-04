@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
 import { InputName, InputType } from '@shared/enums';
 import Select from '@components/shared/ui/select/select';
 import { type FormControlType } from '@shared/types';
 import { Input } from '@components/shared/ui/input/input';
 import * as Schema from '@shared/validation/constants/schemas.constant';
 import { AddressType } from '@shared/enums/address.enum';
+import { Customer } from '@commercetools/platform-sdk';
+import Store from '@app/store/store';
 
 const pwdInput = new Input({
   name: InputName.Password,
@@ -26,7 +29,6 @@ const confirmPwdInput = new Input({
 pwdInput.afterRender((component) => {
   component.input.addEventListener('input', () => confirmPwdInput.isValid());
 });
-
 export const controls = {
   firstName: new Input({
     name: InputName.FirstName,
@@ -77,7 +79,6 @@ export function newAdressControls(variant: AddressType): FormControlType[] {
       selectedOption: 0,
       labelText: 'Country',
       required: true,
-      disabled: true,
     }),
     new Input({
       name: `${InputName.City}${variant}`,
@@ -106,3 +107,14 @@ export enum UserPageText {
   Empty = '',
   GeneralAddress = 'General address',
 }
+
+export enum ButtonsNames {
+  Edit = 'edit',
+  Save = 'save',
+}
+
+export const getCustomer = (): Customer => {
+  const { customer } = Store.getState();
+  if (!customer) throw Error(UserPageText.CustomerError);
+  return customer;
+};

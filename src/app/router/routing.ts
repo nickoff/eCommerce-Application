@@ -6,13 +6,14 @@ import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import NotFoundPage from '@pages/not-found/not-found';
-import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
+import UserAccount from '@pages/userProfile/userAccount/userAccount';
 import CatalogPage from '@pages/catalog/catalog';
 import ProductSearchService from '@shared/api/product/product-search.service';
 import ProductRepoService from '@shared/api/product/product-repo.service';
 import DetailedProductPage from '@pages/detailed-product/detailed-product';
 import { isHttpErrorType } from '@shared/utils/type-guards';
+import UserAddresses from '@pages/userProfile/userAddresses/userAddresses';
 import { capitalize } from 'lodash';
 import { LANG_CODE } from '@shared/constants/misc';
 import { LocalizedString } from '@commercetools/platform-sdk';
@@ -25,6 +26,15 @@ const beforeHook = (done: (p?: boolean) => void): void => {
   if (Store.getState().customer) {
     done(false);
     router.navigate(Route.Home);
+  } else {
+    done();
+  }
+};
+
+const userProfileBeforeHook = (done: (p?: boolean) => void): void => {
+  if (!Store.getState().customer) {
+    done(false);
+    router.navigate(Route.Login);
   } else {
     done();
   }
@@ -49,9 +59,19 @@ const initRouter = (): void => {
           before: beforeHook,
         },
       },
-      [Route.UserProfile]: {
-        as: 'user-profile',
-        uses: () => Main.setProps({ page: new UserProfile() }),
+      [Route.UserAccount]: {
+        as: 'user-profile/account',
+        uses: () => Main.setProps({ page: new UserAccount(), showBreadcrumps: false }),
+        hooks: {
+          before: userProfileBeforeHook,
+        },
+      },
+      [Route.UserAddresses]: {
+        as: 'user-profile/addresses',
+        uses: () => Main.setProps({ page: new UserAddresses(), showBreadcrumps: false }),
+        hooks: {
+          before: userProfileBeforeHook,
+        },
       },
     })
     .on(/(earphones|headphones|speakers)\/(.+)/, async (match) => {

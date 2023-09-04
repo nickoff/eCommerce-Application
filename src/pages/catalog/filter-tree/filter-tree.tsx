@@ -96,7 +96,6 @@ class FilterTree extends Component<IFilterTreeProps> {
         <div className={cx(s.appliedFilters, 'd-none')}>
           <div className="d-flex align-items-center justify-content-between mb-2">
             <p className="m-0">Refined by</p>
-            <button className={s.clearAllBtn}>Clear all</button>
           </div>
           <ul className={s.appliedFiltersList}></ul>
         </div>

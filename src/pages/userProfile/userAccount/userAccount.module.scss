@@ -1,0 +1,98 @@
+.page-wrapper {
+  @include flex-column;
+  background-color: $grey-1;
+}
+
+.activ-link li:nth-child(1) a {
+  position: relative;
+  display: inline-block;
+}
+
+.activ-link li:nth-child(1) a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: $primary-color;
+}
+
+.page-layout {
+  max-width: 650px;
+  background-color: $default-color;
+  border-radius: 8px;
+  width: 100%;
+  padding: 30px;
+  margin: auto;
+  margin-bottom: 40px;
+
+  h2 {
+    color: $primary-color;
+    margin-bottom: 20px;
+  }
+}
+
+.form {
+  display: grid;
+  button {
+    min-width: 270px;
+    margin: 20px auto;
+  }
+}
+
+.account-settings {
+  display: grid;
+  row-gap: 10px;
+  column-gap: 20px;
+  grid-template-areas:
+    'first-name  last-name'
+    'email       email'
+    'pwd         pwd-confirm'
+    'pwd-current birth';
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 580px) {
+    grid-template-areas:
+      'first-name'
+      'last-name'
+      'email'
+      'pwd'
+      'pwd-confirm'
+      'pwd-current'
+      'birth';
+    grid-template-columns: 1fr;
+  }
+}
+
+.first-name {
+  grid-area: first-name;
+}
+
+.last-name {
+  grid-area: last-name;
+}
+
+.email {
+  grid-area: email;
+}
+
+.pwd {
+  grid-area: pwd;
+}
+
+.pwd-confirm {
+  grid-area: pwd-confirm;
+}
+
+.pwd-current {
+  grid-area: pwd-current;
+}
+
+.birth {
+  grid-area: birth;
+}
+
+.phone {
+  grid-area: phone;
+}
