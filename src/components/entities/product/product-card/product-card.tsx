@@ -2,6 +2,7 @@ import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Component } from '@shared/lib';
 import { centsToMoney } from '@shared/utils/misc';
+import { LANG_CODE } from '@shared/constants/misc';
 import * as s from './product-card.module.scss';
 import { btn, btnFilled } from '../../../../styles/shared/index.module.scss';
 import { IProductCardProps } from './product-card.interface';
@@ -10,12 +11,17 @@ class ProductCard extends Component<IProductCardProps> {
   render(): JSX.Element {
     if (this.props.expanded) return this.renderExpanded();
 
-    const { name, images, attributes, prices, detailsPath } = this.props.productData;
+    const { name, images, prices, detailsPath, vendor } = this.props.productData;
 
     return (
       <div className={s.prodCard}>
-        <img className={s.prodCardImg} src={images[0].url} alt={images[0].label} />
-        <p className={s.prodCardVendor}>{attributes?.vendor}</p>
+        <a className={s.imgLink} href={detailsPath} dataset={{ navigo: '' }}>
+          <img className={s.prodCardImg} dataset={{ img: '1' }} src={images[0].url} alt={images[0].label} />
+          <img className={cx(s.prodCardImg)} dataset={{ img: '2' }} src={images[1].url} alt={images[1].label} />
+        </a>
+        <a href={`/${vendor.slug[LANG_CODE]}`} className={s.prodCardVendor}>
+          {vendor.name[LANG_CODE]}
+        </a>
         <p className={s.prodCardPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
         <a className={s.prodCardName} href={detailsPath} dataset={{ navigo: '' }}>
           {name}
@@ -26,16 +32,21 @@ class ProductCard extends Component<IProductCardProps> {
   }
 
   renderExpanded(): JSX.Element {
-    const { name, images, attributes, prices, description, detailsPath } = this.props.productData;
+    const { name, images, vendor, prices, description, detailsPath } = this.props.productData;
 
     return (
       <div className={cx(s.prodCard, s.prodCardExpanded)}>
         <div className={s.prodCardImgContainer}>
-          <img className={s.prodCardImg} src={images[0].url} alt={images[0].label} />
+          <a href={detailsPath} dataset={{ navigo: '' }}>
+            <img className={s.prodCardImg} dataset={{ img: '1' }} src={images[0].url} alt={images[0].label} />
+            <img className={cx(s.prodCardImg)} dataset={{ img: '2' }} src={images[1].url} alt={images[1].label} />
+          </a>
           <button className={cx(btn, btnFilled, s.prodCardBtn)}>ADD TO CART</button>
         </div>
         <div className={s.prodCardBody}>
-          <p className={s.prodCardVendor}>{attributes?.vendor}</p>
+          <a href={`/${vendor.slug[LANG_CODE]}`} className={s.prodCardVendor}>
+            {vendor.name[LANG_CODE]}
+          </a>
           <p className={s.prodCardPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
           <a href={detailsPath} className={s.prodCardName} dataset={{ navigo: '' }}>
             {name}

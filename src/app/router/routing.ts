@@ -5,7 +5,7 @@ import Navigo from 'navigo';
 import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
-import Page404 from '@pages/page404/page404';
+import NotFoundPage from '@pages/not-found/not-found';
 import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
@@ -72,7 +72,7 @@ const initRouter = (): void => {
             ],
           });
         } else {
-          Main.setProps({ page: new Page404() });
+          Main.setProps({ page: new NotFoundPage() });
         }
       }
     })
@@ -96,7 +96,7 @@ const initRouter = (): void => {
             ],
           });
         } else {
-          Main.setProps({ page: new Page404() });
+          Main.setProps({ page: new NotFoundPage() });
         }
       }
     })
@@ -120,11 +120,11 @@ const initRouter = (): void => {
             ],
           });
         } else {
-          Main.setProps({ page: new Page404() });
+          Main.setProps({ page: new NotFoundPage() });
         }
       }
     })
-    .notFound(() => Main.setProps({ page: new Page404() }))
+    .notFound(() => Main.setProps({ page: new NotFoundPage() }))
     .resolve();
 };
 
