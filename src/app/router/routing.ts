@@ -6,7 +6,6 @@ import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import Page404 from '@pages/page404/page404';
-import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import UserAccount from '@pages/userProfile/userAccount/userAccount';
 import CatalogPage from '@pages/catalog/catalog';
@@ -58,10 +57,6 @@ const initRouter = (): void => {
       [Route.Speakers]: {
         as: 'speakers-catalog',
         uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
-      },
-      [Route.UserProfile]: {
-        as: 'user-profile',
-        uses: () => Main.setProps({ page: new UserProfile() }),
       },
       [Route.UserAccount]: {
         as: 'user-profile/account',

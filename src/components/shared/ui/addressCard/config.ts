@@ -2,6 +2,20 @@ interface CountryCode {
   [key: string]: string;
 }
 
+export enum AddressCardText {
+  Country = 'Country: ',
+  City = 'City: ',
+  Street = 'Street: ',
+  PostalCode = 'Postal code: ',
+  Phone = 'Phone: ',
+  BillingAddress = 'Billing address',
+  ShippingAddress = 'Shipping address',
+  DefaultBillingAddress = 'Default billing address',
+  DefaultShippingAddress = 'Default shipping address',
+  BtnEdit = 'Edit',
+  BtnDelete = 'Delete',
+}
+
 export const countryCode: CountryCode = {
   AF: 'Afghanistan',
   AX: 'Aland Islands',

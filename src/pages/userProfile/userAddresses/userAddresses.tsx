@@ -16,7 +16,7 @@ class UserAddresses extends Component {
         <div className={s.pageLayout}>
           <h2>{UserAddressesText.Subtitle}</h2>
           <div className={s.addressCards}>{getArrAddressCard().map((el) => el.render())}</div>
-          <button className={cx(btn, btnFilled, s.submitBtn)} type="submit">
+          <button className={cx(btn, btnFilled, s.addButton)} type="submit">
             {UserAddressesText.BtnSubmit}
           </button>
         </div>
