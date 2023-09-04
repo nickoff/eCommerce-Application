@@ -5,10 +5,15 @@
 }
 
 .main {
-  padding-block: 50px;
+  padding-top: 25px;
+  padding-bottom: 50px;
   position: relative;
   overflow-x: clip;
   height: 100%;
+}
+
+.main-breadcrumps {
+  margin-bottom: 20px;
 }
 
 html {

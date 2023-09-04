@@ -13,6 +13,9 @@ import ProductSearchService from '@shared/api/product/product-search.service';
 import ProductRepoService from '@shared/api/product/product-repo.service';
 import DetailedProductPage from '@pages/detailed-product/detailed-product';
 import { isHttpErrorType } from '@shared/utils/type-guards';
+import { capitalize } from 'lodash';
+import { LANG_CODE } from '@shared/constants/misc';
+import { LocalizedString } from '@commercetools/platform-sdk';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -30,17 +33,17 @@ const initRouter = (): void => {
   router
     .on(() => Main.setProps({ page: new PageHome() }))
     .on({
-      [Route.Home]: () => Main.setProps({ page: new PageHome() }),
+      [Route.Home]: () => Main.setProps({ page: new PageHome(), showBreadcrumps: false }),
       [Route.Login]: {
         as: 'login-page',
-        uses: () => Main.setProps({ page: new PageLogin() }),
+        uses: () => Main.setProps({ page: new PageLogin(), showBreadcrumps: false }),
         hooks: {
           before: beforeHook,
         },
       },
       [Route.Registration]: {
         as: 'reg-page',
-        uses: () => Main.setProps({ page: new PageReg() }),
+        uses: () => Main.setProps({ page: new PageReg(), showBreadcrumps: false }),
         hooks: {
           before: beforeHook,
         },
@@ -50,13 +53,23 @@ const initRouter = (): void => {
         uses: () => Main.setProps({ page: new UserProfile() }),
       },
     })
-    .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {
+    .on(/(earphones|headphones|speakers)\/(.+)/, async (match) => {
       if (match && match.data) {
-        const slug = match.data[0];
+        const type = match.data[0];
+        const slug = match.data[1];
         const result = await ProductRepoService.getProductBySlug(slug);
+        const prodName = (result.name as LocalizedString)[LANG_CODE];
 
         if (result && !isHttpErrorType(result)) {
-          Main.setProps({ page: new DetailedProductPage({ productData: result }) });
+          Main.setProps({
+            page: new DetailedProductPage({ productData: result }),
+            showBreadcrumps: true,
+            breadcrumpsPath: [
+              { link: '/', label: 'Home' },
+              { link: `/${type}`, label: `${capitalize(type)}` },
+              { link: `/${type}/${slug}`, label: `${prodName}` },
+            ],
+          });
         } else {
           Main.setProps({ page: new Page404() });
         }
@@ -69,7 +82,14 @@ const initRouter = (): void => {
         const catalogData = await ProductSearchService.fetchProductsByProductType(productTypeKey);
 
         if (catalogData) {
-          Main.setProps({ page: new CatalogPage(catalogData) });
+          Main.setProps({
+            page: new CatalogPage(catalogData),
+            showBreadcrumps: true,
+            breadcrumpsPath: [
+              { link: '/', label: 'Home' },
+              { link: `/${productTypeKey}`, label: `${capitalize(productTypeKey)}` },
+            ],
+          });
         } else {
           Main.setProps({ page: new Page404() });
         }

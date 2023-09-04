@@ -7,6 +7,7 @@ import { btn, btnFilled } from '../../../../styles/shared/button-like.module.scs
 import { navItem, navLink } from '../common.module.scss';
 import * as s from './user-nav.module.scss';
 import CartIcon from './assets/cart-icon.element.svg';
+import UserIcon from './assets/profile-icon.element.svg';
 import UserMenu from './user-menu/user-menu';
 import SearchModal from '../search/search-bar';
 
@@ -44,6 +45,26 @@ class UserNav extends Component {
           <a className={cx(btn, s.signInLink)} href={Route.Login} dataset={{ navigo: '' }}>
             SIGN IN
           </a>
+        </li>
+        <li className={cx('dropdown', s.authDropdown, navItem)}>
+          <button
+            className={cx('dropdown-toggle', navLink, s.dropdownToggle)}
+            dataset={{ bsToggle: 'dropdown', bsOffset: '0,35' }}
+          >
+            {UserIcon.cloneNode(true)}
+          </button>
+          <ul className={cx('dropdown-menu', 'dropdown-menu-end')}>
+            <li>
+              <a className="dropdown-item" href={Route.Registration} dataset={{ navigo: '' }}>
+                SIGN UP
+              </a>
+            </li>
+            <li>
+              <a className="dropdown-item" href={Route.Login} dataset={{ navigo: '' }}>
+                SIGN IN
+              </a>
+            </li>
+          </ul>
         </li>
       </>
     );
