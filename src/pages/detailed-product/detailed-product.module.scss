@@ -85,6 +85,8 @@
   font-size: 2.5rem;
   font-family: $price-font;
   font-weight: 300;
+  display: flex;
+  gap: 15px;
 }
 
 .desc-text-container {
@@ -130,4 +132,9 @@
 .add-to-cart-btn {
   padding: 15px 30px;
   line-height: normal;
+}
+
+.prod-old-price {
+  color: $primary-color-hover;
+  text-decoration: line-through $primary-color-hover 2px;
 }

@@ -22,10 +22,13 @@ export default class Product implements IProduct {
 
   readonly vendor: Category;
 
+  readonly discountedPrice?: number;
+
   constructor(prod: ProductProjection) {
     this.name = prod.name?.[LANG_CODE];
     this.description = prod.description?.[LANG_CODE] ?? '';
     this.prices = prod.masterVariant.prices as IProduct['prices'];
+    this.discountedPrice = this.prices[0].discounted?.value.centAmount;
     this.images = prod.masterVariant.images as IProduct['images'];
     this.slug = prod.slug[LANG_CODE];
     this.productType = prod.productType.obj as ProductType;

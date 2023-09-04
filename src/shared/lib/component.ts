@@ -30,6 +30,8 @@ export abstract class Component<Props extends IProps = IProps> {
 
   protected readonly props: Props;
 
+  protected readonly propsProxyfied: Props;
+
   protected elementAttributes: Record<string, string> = {};
 
   protected elementClasses: string[] = [];
@@ -41,7 +43,8 @@ export abstract class Component<Props extends IProps = IProps> {
   protected beforeRenderCallbacks: Callback<any>[] = [];
 
   constructor(props: Props = {} as Props) {
-    this.props = new Proxy(props, this.propChangeHandler);
+    this.props = props;
+    this.propsProxyfied = new Proxy(props, this.propChangeHandler);
     this.render = new Proxy(this.render, this.renderHandler);
 
     if (!this.componentDidRender) {
@@ -79,7 +82,13 @@ export abstract class Component<Props extends IProps = IProps> {
   }
 
   setProps(props: Partial<Props>): void {
-    Object.assign(this.props, props);
+    Object.keys(props).forEach((key, i, arr) => {
+      if (i === arr.length - 1) {
+        Object.assign(this.propsProxyfied, { [key]: props[key as keyof typeof props] });
+      } else {
+        Object.assign(this.props, { [key]: props[key as keyof typeof props] });
+      }
+    });
   }
 
   attr(attrs: Record<string, string>): this {

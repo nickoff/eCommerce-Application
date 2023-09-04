@@ -11,7 +11,7 @@ class ProductCard extends Component<IProductCardProps> {
   render(): JSX.Element {
     if (this.props.expanded) return this.renderExpanded();
 
-    const { name, images, prices, detailsPath, vendor } = this.props.productData;
+    const { name, images, prices, detailsPath, vendor, discountedPrice } = this.props.productData;
 
     return (
       <div className={s.prodCard}>
@@ -22,7 +22,10 @@ class ProductCard extends Component<IProductCardProps> {
         <a href={`/${vendor.slug[LANG_CODE]}`} className={s.prodCardVendor}>
           {vendor.name[LANG_CODE]}
         </a>
-        <p className={s.prodCardPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
+        <p className={s.prodCardPrice}>
+          <span>{`$${centsToMoney(discountedPrice || prices[0].value.centAmount)}`}</span>
+          <span className={s.prodOldPrice}>{discountedPrice && `$${centsToMoney(prices[0].value.centAmount)}`}</span>
+        </p>
         <a className={s.prodCardName} href={detailsPath} dataset={{ navigo: '' }}>
           {name}
         </a>
@@ -32,7 +35,7 @@ class ProductCard extends Component<IProductCardProps> {
   }
 
   renderExpanded(): JSX.Element {
-    const { name, images, vendor, prices, description, detailsPath } = this.props.productData;
+    const { name, images, vendor, prices, description, detailsPath, discountedPrice } = this.props.productData;
 
     return (
       <div className={cx(s.prodCard, s.prodCardExpanded)}>
@@ -47,7 +50,10 @@ class ProductCard extends Component<IProductCardProps> {
           <a href={`/${vendor.slug[LANG_CODE]}`} className={s.prodCardVendor}>
             {vendor.name[LANG_CODE]}
           </a>
-          <p className={s.prodCardPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
+          <p className={s.prodCardPrice}>
+            <span>{`$${centsToMoney(discountedPrice || prices[0].value.centAmount)}`}</span>
+            <span className={s.prodOldPrice}>{discountedPrice && `$${centsToMoney(prices[0].value.centAmount)}`}</span>
+          </p>
           <a href={detailsPath} className={s.prodCardName} dataset={{ navigo: '' }}>
             {name}
           </a>

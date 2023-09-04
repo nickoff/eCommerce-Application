@@ -97,6 +97,8 @@ $breakpoin-sm: 570px;
   font-size: 2rem;
   font-family: $price-font;
   font-weight: 300;
+  display: flex;
+  gap: 15px;
 }
 
 .prod-card__name {
@@ -153,4 +155,9 @@ $breakpoin-sm: 570px;
 
 .img-link {
   position: relative;
+}
+
+.prod-old-price {
+  color: $primary-color-hover;
+  text-decoration: line-through $primary-color-hover 2px;
 }

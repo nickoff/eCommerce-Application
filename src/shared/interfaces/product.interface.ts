@@ -6,6 +6,7 @@ export interface IProduct {
   readonly description: string;
   readonly slug: string;
   readonly prices: NonNullable<ProductVariant['prices']>;
+  readonly discountedPrice?: number;
   readonly images: NonNullable<ProductVariant['images']>;
   readonly detailsPath: string;
   readonly productType: ProductType;
