@@ -2,10 +2,10 @@ import { element } from 'tsx-vanilla';
 import { Component } from '@shared/lib';
 import { Route } from '@app/router';
 import { PageTitle } from '@pages/page-title.decorator';
-import * as s from './page404.module.scss';
+import * as s from './not-found.module.scss';
 
 @PageTitle('404')
-class Page404 extends Component {
+class NotFoundPage extends Component {
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
@@ -21,4 +21,4 @@ class Page404 extends Component {
   }
 }
 
-export default Page404;
+export default NotFoundPage;

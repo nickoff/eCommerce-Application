@@ -1,11 +1,25 @@
 .main-wrapper {
   padding-top: 96px;
   background-color: $grey-1;
+  position: relative;
 }
 
 .main {
-  padding-top: 50px;
+  padding-top: 25px;
+  padding-bottom: 50px;
   position: relative;
   overflow-x: clip;
   height: 100%;
+}
+
+.main-breadcrumps {
+  margin-bottom: 20px;
+}
+
+html {
+  &[data-scrollbar-compensate] {
+    .main-wrapper {
+      padding-right: var(--scrollbar-compensate);
+    }
+  }
 }

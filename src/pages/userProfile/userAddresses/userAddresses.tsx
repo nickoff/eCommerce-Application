@@ -11,7 +11,7 @@ class UserAddresses extends Component {
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
-        <h1>{UserAddressesText.Title}</h1>
+        <h1 className="text-center mb-4">{UserAddressesText.Title}</h1>
         {new UserProfileNav({ className: s.activLink }).render()}
         <div className={s.pageLayout}>
           <h2>{UserAddressesText.Subtitle}</h2>

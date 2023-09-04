@@ -9,7 +9,9 @@ class UserProfileNav extends Component {
       <ul className={s.userProfileNavList}>
         {userProfileLinks.map((link) => (
           <li>
-            <a href={link.route}>{link.text}</a>
+            <a href={link.route} dataset={{ navigo: '' }}>
+              {link.text}
+            </a>
           </li>
         ))}
       </ul>

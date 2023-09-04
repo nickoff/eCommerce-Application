@@ -53,3 +53,19 @@ export function delegate<T extends Element = Element>(
     }
   });
 }
+
+export function toggleScrollCompensate(): number {
+  if (document.documentElement.hasAttribute('data-scrollbar-compensate')) {
+    let text = document.documentElement.style.cssText;
+    const scrollbarWidth = parseInt(text.match(/--scrollbar-compensate:(.+?);/)?.[1] ?? '', 10);
+    text = text.replace(/--scrollbar-compensate:.+?;/, '');
+    document.documentElement.style.cssText = text;
+    document.documentElement.removeAttribute('data-scrollbar-compensate');
+    return scrollbarWidth;
+  }
+
+  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.documentElement.style.cssText += `--scrollbar-compensate: ${scrollbarWidth}px;`;
+  document.documentElement.setAttribute('data-scrollbar-compensate', '');
+  return scrollbarWidth;
+}

@@ -1,0 +1,22 @@
+.breadcrumps__list {
+  list-style: none;
+  display: flex;
+  gap: 5px;
+  padding: 0;
+  font-size: 1.5rem;
+}
+
+.breadcrumps__item {
+  display: flex;
+  gap: 5px;
+
+  &.text-truncate {
+    overflow: hidden;
+
+    a {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}

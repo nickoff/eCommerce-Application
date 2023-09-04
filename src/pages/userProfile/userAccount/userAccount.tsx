@@ -35,7 +35,7 @@ class UserAccount extends Component {
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
-        <h1>{UserAccountText.Title}</h1>
+        <h1 className="text-center mb-4">{UserAccountText.Title}</h1>
         {new UserProfileNav({ className: s.activLink }).render()}
         <div className={s.pageLayout}>
           <h2>{UserAccountText.Subtitle}</h2>
@@ -51,7 +51,7 @@ class UserAccount extends Component {
                 c.passwordCurrent.class(s.pwdCurrent),
               )}
             </div>
-            <button className={cx(btn, btnFilled, s.submitBtn)} type="submit">
+            <button className={cx(btn, btnFilled)} type="submit">
               {UserAccountText.BtnSubmit}
             </button>
           </form>

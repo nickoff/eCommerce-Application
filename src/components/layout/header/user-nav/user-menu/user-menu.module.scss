@@ -5,8 +5,13 @@
   border-radius: 8px;
 }
 
+.menu-wrapper {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
 .email-para {
-  margin-bottom: 30px;
   font-size: 1.2rem;
   color: $second-color;
   padding: 5px 10px;
@@ -20,7 +25,7 @@
 
 .log-profile-btn {
   padding: 6px 10px;
-  border-left: 1px solid $default-color;
+  // border-left: 1px solid $default-color;
   background-color: $primary-color;
 }
 

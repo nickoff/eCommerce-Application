@@ -15,7 +15,7 @@ class UserProfile extends Component {
   render(): JSX.Element {
     return (
       <div className={s.pageWrapper}>
-        <h1>User Profile</h1>
+        <h1 className="text-center">User Profile</h1>
         <form className={s.userInfo}>
           <h2>User information</h2>
           {render(
@@ -83,8 +83,6 @@ class UserProfile extends Component {
   private insertAddressForms(): JSX.Element {
     const { customer } = Store.getState();
     if (!customer) throw Error(UserPageText.CustomerError);
-
-    console.log(customer);
 
     const addressArray = customer.addresses.map((el) => {
       if (!el.id) throw Error(UserPageText.CustomerError);
