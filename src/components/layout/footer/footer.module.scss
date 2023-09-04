@@ -1,5 +1,6 @@
 .footer-wrapper {
   background: $second-color;
+  padding-right: var(--scrollbar-compensate);
 }
 
 .footer {

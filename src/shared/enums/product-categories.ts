@@ -10,7 +10,7 @@ export enum ProductCategoryId {
   Speakers = '918b988a-e840-481e-b081-3d3756b29611',
 }
 
-export enum ProductTypeKey {
+export enum ProductType {
   Headphones = 'headphones',
   Speakers = 'speakers',
   Earphones = 'earphones',

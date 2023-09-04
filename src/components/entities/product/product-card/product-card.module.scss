@@ -49,6 +49,32 @@ $breakpoin-sm: 570px;
 .prod-card__img {
   @include responsive-img;
   margin-bottom: 10px;
+  transition: opacity 0.1s;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.2s;
+
+  &[data-img='1'] {
+    &:hover {
+      opacity: 0;
+    }
+  }
+
+  &[data-img='2'] {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 .prod-card__body {
@@ -57,8 +83,13 @@ $breakpoin-sm: 570px;
 }
 
 .prod-card__vendor {
-  color: #777;
+  color: #777 !important;
   font-size: 1.4rem;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .prod-card__price {
@@ -66,6 +97,8 @@ $breakpoin-sm: 570px;
   font-size: 2rem;
   font-family: $price-font;
   font-weight: 300;
+  display: flex;
+  gap: 15px;
 }
 
 .prod-card__name {
@@ -92,6 +125,7 @@ $breakpoin-sm: 570px;
 .prod-card__img-container {
   text-align: center;
   max-width: 180px;
+  position: relative;
 
   @media (max-width: $breakpoin-sm) {
     max-width: 200px;
@@ -117,4 +151,13 @@ $breakpoin-sm: 570px;
     text-transform: none;
     letter-spacing: unset;
   }
+}
+
+.img-link {
+  position: relative;
+}
+
+.prod-old-price {
+  color: $primary-color-hover;
+  text-decoration: line-through $primary-color-hover 2px;
 }

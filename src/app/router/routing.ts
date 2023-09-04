@@ -5,14 +5,18 @@ import Navigo from 'navigo';
 import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
-import Page404 from '@pages/page404/page404';
+import NotFoundPage from '@pages/not-found/not-found';
 import UserProfile from '@pages/userProfile/userProfile';
 import Store from '@app/store/store';
 import CatalogPage from '@pages/catalog/catalog';
-import { ProductCategory } from '@shared/enums';
-import ProductListService from '@shared/api/product/product-list.service';
+import ProductSearchService from '@shared/api/product/product-search.service';
+import ProductRepoService from '@shared/api/product/product-repo.service';
 import DetailedProductPage from '@pages/detailed-product/detailed-product';
 import { isHttpErrorType } from '@shared/utils/type-guards';
+import { capitalize } from 'lodash';
+import { LANG_CODE } from '@shared/constants/misc';
+import { LocalizedString } from '@commercetools/platform-sdk';
+import { SITE_TITLE } from '@shared/constants/seo';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -30,51 +34,97 @@ const initRouter = (): void => {
   router
     .on(() => Main.setProps({ page: new PageHome() }))
     .on({
-      [Route.Home]: () => Main.setProps({ page: new PageHome() }),
+      [Route.Home]: () => Main.setProps({ page: new PageHome(), showBreadcrumps: false }),
       [Route.Login]: {
         as: 'login-page',
-        uses: () => Main.setProps({ page: new PageLogin() }),
+        uses: () => Main.setProps({ page: new PageLogin(), showBreadcrumps: false }),
         hooks: {
           before: beforeHook,
         },
       },
       [Route.Registration]: {
         as: 'reg-page',
-        uses: () => Main.setProps({ page: new PageReg() }),
+        uses: () => Main.setProps({ page: new PageReg(), showBreadcrumps: false }),
         hooks: {
           before: beforeHook,
         },
-      },
-      [Route.Headphones]: {
-        as: 'headphones-catalog',
-        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Headphones }) }),
-      },
-      [Route.Earphones]: {
-        as: 'earphones-catalog',
-        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Earphones }) }),
-      },
-      [Route.Speakers]: {
-        as: 'speakers-catalog',
-        uses: () => Main.setProps({ page: new CatalogPage({ category: ProductCategory.Speakers }) }),
       },
       [Route.UserProfile]: {
         as: 'user-profile',
         uses: () => Main.setProps({ page: new UserProfile() }),
       },
     })
-    .on(/(?:earphones|headphones|speakers)\/(.+)/, async (match) => {
+    .on(/(earphones|headphones|speakers)\/(.+)/, async (match) => {
       if (match && match.data) {
-        const slug = match.data[0];
-        const result = await ProductListService.getProductBySlug(Store.apiRoot, slug);
+        const type = match.data[0];
+        const slug = match.data[1];
+        const result = await ProductRepoService.getProductBySlug(slug);
+        const prodName = (result.name as LocalizedString)[LANG_CODE];
 
         if (result && !isHttpErrorType(result)) {
-          Main.setProps({ page: new DetailedProductPage({ productData: result }) });
+          Main.setProps({
+            page: new DetailedProductPage({ productData: result }),
+            showBreadcrumps: true,
+            breadcrumpsPath: [
+              { link: '/', label: 'Home' },
+              { link: `/${type}`, label: `${capitalize(type)}` },
+              { link: `/${type}/${slug}`, label: `${prodName}` },
+            ],
+          });
         } else {
-          Main.setProps({ page: new Page404() });
+          Main.setProps({ page: new NotFoundPage() });
         }
       }
     })
-    .notFound(() => Main.setProps({ page: new Page404() }))
+    .on(/(earphones|headphones|speakers)/, async (match) => {
+      if (match && match.data) {
+        const productTypeKey = match.data[0];
+
+        const catalogData = await ProductSearchService.fetchProductsByProductType(productTypeKey);
+
+        if (catalogData) {
+          Main.setProps({
+            page: new CatalogPage({
+              catalogData,
+              includeTypeFilter: false,
+              pageTitle: `${capitalize(productTypeKey)} | ${SITE_TITLE}`,
+            }),
+            showBreadcrumps: true,
+            breadcrumpsPath: [
+              { link: '/', label: 'Home' },
+              { link: `/${productTypeKey}`, label: `${capitalize(productTypeKey)}` },
+            ],
+          });
+        } else {
+          Main.setProps({ page: new NotFoundPage() });
+        }
+      }
+    })
+    .on('/:vendorSlug', async (match) => {
+      if (match && match.data) {
+        const { vendorSlug } = match.data;
+
+        const catalogData = await ProductSearchService.fetchProductsByCategory(vendorSlug);
+
+        if (catalogData) {
+          Main.setProps({
+            page: new CatalogPage({
+              catalogData,
+              includeTypeFilter: true,
+              pageTitle: `${catalogData.filters.vendors[0].name[LANG_CODE]} | ${SITE_TITLE}`,
+            }),
+            showBreadcrumps: true,
+            breadcrumpsPath: [
+              { link: '/', label: 'Home' },
+              { link: `/${vendorSlug}`, label: `${capitalize(vendorSlug)}` },
+            ],
+          });
+        } else {
+          Main.setProps({ page: new NotFoundPage() });
+        }
+      }
+    })
+    .notFound(() => Main.setProps({ page: new NotFoundPage() }))
     .resolve();
 };
 

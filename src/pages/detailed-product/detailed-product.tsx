@@ -39,7 +39,7 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
   }
 
   render(): JSX.Element {
-    const { name, description, attributes, prices } = this.product;
+    const { name, description, attributes, prices, discountedPrice } = this.product;
 
     return (
       <div className={s.layoutContainer}>
@@ -48,7 +48,10 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
           <p className={s.cardHeading}>{name}</p>
           <p className={s.prodVendor}>{attributes?.vendor}</p>
           <hr className={s.cardSeperator} />
-          <p className={s.prodPrice}>{`$${centsToMoney(prices[0].value.centAmount)}`}</p>
+          <p className={s.prodPrice}>
+            <span>{`$${centsToMoney(discountedPrice || prices[0].value.centAmount)}`}</span>
+            <span className={s.prodOldPrice}>{discountedPrice && `$${centsToMoney(prices[0].value.centAmount)}`}</span>
+          </p>
           <div className={s.quantityCounter}>
             <button onclick={this.decreaseQuantity.bind(this)}>-</button>
             <output>1</output>

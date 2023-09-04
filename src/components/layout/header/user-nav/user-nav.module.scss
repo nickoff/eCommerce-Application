@@ -6,7 +6,7 @@
 }
 
 .user-nav__item {
-  margin-inline: 10px;
+  margin-right: 10px;
 
   &:first-of-type {
     margin-left: 0;
@@ -17,7 +17,7 @@
   }
 
   @include breakpoint($sign-up-hide, $max) {
-    margin-inline: 5px;
+    margin-inline: 0px;
   }
 }
 
@@ -33,8 +33,28 @@
   }
 }
 
-.sign-up-item {
+.sign-up-item,
+.sign-in-item {
   @include breakpoint($sign-up-hide, $max) {
     display: none;
+  }
+}
+
+.auth-dropdown {
+  display: none;
+
+  @include breakpoint($sign-up-hide, $max) {
+    display: block;
+  }
+
+  a {
+    font-size: 1.5rem;
+    padding-block: 5px;
+  }
+}
+
+.dropdown-toggle {
+  &::after {
+    all: unset;
   }
 }

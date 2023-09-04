@@ -27,7 +27,7 @@ class UserMenu extends Component {
           className={cx('dropdown-toggle', navLink, s.dropdownToggle)}
           dataset={{ bsToggle: 'dropdown', bsOffset: '0,35', bsAutoClose: 'outside' }}
         >
-          {UserIcon}
+          {UserIcon.cloneNode(true)}
         </button>
         <div className={cx('dropdown-menu', 'dropdown-menu-end', s.menuContainer)}>
           <p className={s.emailPara}>{customer?.email}</p>
