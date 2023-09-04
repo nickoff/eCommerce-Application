@@ -79,7 +79,9 @@ class SearchModal extends Component {
             {categories &&
               categories.map((c) => (
                 <li>
-                  <a className={s.searchResultsLink}>{c.name[LANG_CODE]}</a>
+                  <a href={c.slug[LANG_CODE]} className={s.searchResultsLink} dataset={{ navigo: '' }}>
+                    {c.name[LANG_CODE]}
+                  </a>
                 </li>
               ))}
           </ul>

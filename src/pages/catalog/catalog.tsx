@@ -13,7 +13,7 @@ import * as s from './catalog.module.scss';
 import Toolbar from './toolbar/toolbar';
 import FilterTree from './filter-tree/filter-tree';
 import { ToolbarEvent } from './toolbar/toolbar.enum';
-import { ICatalogProps } from './catalog.interface';
+import { ICatalogProps, ICatalogData } from './catalog.interface';
 import ProductCollection from './product-collection/product-collection';
 import { FilterBlockEvent, FilterChangeEvent } from './filter-tree/filter-block/filter-block.types';
 import FilterObserver from './filter-observer';
@@ -22,13 +22,14 @@ class CatalogPage extends Component<ICatalogProps> {
   @Child(s.productsFilterTree) private filterTreeEl!: HTMLElement;
 
   private filterTree = new FilterTree({
-    filters: this.props.filters,
+    filters: this.props.catalogData.filters,
+    includeTypeFilter: this.props.includeTypeFilter,
     className: s.productsFilterTree,
   });
 
   private backdrop = new Backdrop({ onclick: this.hideFilterWindow.bind(this) });
 
-  private prodCollection = new ProductCollection({ productsData: this.props.products });
+  private prodCollection = new ProductCollection({ productsData: this.props.catalogData.products });
 
   private appliedSorting?: ISortBy;
 
@@ -39,7 +40,7 @@ class CatalogPage extends Component<ICatalogProps> {
     [FilterName.PriceRange]: {} as IRangeFilter,
   };
 
-  private facets = this.props.filters;
+  private facets = this.props.catalogData.filters;
 
   private lastAppliedFilter: FilterName[] = [];
 
@@ -47,7 +48,7 @@ class CatalogPage extends Component<ICatalogProps> {
     super(props);
     document.title = `Catalog | ${SITE_TITLE}`;
 
-    const { selectedFilters } = this.props;
+    const { selectedFilters } = this.props.catalogData;
 
     if (selectedFilters) {
       Object.assign(this.appliedFilters, selectedFilters);
@@ -147,7 +148,7 @@ class CatalogPage extends Component<ICatalogProps> {
     }
   }
 
-  private async load(): Promise<ICatalogProps | HttpErrorType | null> {
+  private async load(): Promise<ICatalogData | HttpErrorType | null> {
     const result = await ProductSearchService.fetchProductsWithFilters(
       this.appliedFilters,
       this.lastAppliedFilter?.at(-1),

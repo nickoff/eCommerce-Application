@@ -83,11 +83,31 @@ const initRouter = (): void => {
 
         if (catalogData) {
           Main.setProps({
-            page: new CatalogPage(catalogData),
+            page: new CatalogPage({ catalogData, includeTypeFilter: false }),
             showBreadcrumps: true,
             breadcrumpsPath: [
               { link: '/', label: 'Home' },
               { link: `/${productTypeKey}`, label: `${capitalize(productTypeKey)}` },
+            ],
+          });
+        } else {
+          Main.setProps({ page: new Page404() });
+        }
+      }
+    })
+    .on('/:vendorSlug', async (match) => {
+      if (match && match.data) {
+        const { vendorSlug } = match.data;
+
+        const catalogData = await ProductSearchService.fetchProductsByCategory(vendorSlug);
+
+        if (catalogData) {
+          Main.setProps({
+            page: new CatalogPage({ catalogData, includeTypeFilter: true }),
+            showBreadcrumps: true,
+            breadcrumpsPath: [
+              { link: '/', label: 'Home' },
+              { link: `/${vendorSlug}`, label: `${capitalize(vendorSlug)}` },
             ],
           });
         } else {

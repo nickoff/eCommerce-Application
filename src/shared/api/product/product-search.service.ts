@@ -5,7 +5,7 @@ import { FacetResults, RangeFacetResult, Category, ProductType } from '@commerce
 import { IFilters, IRangeFilter, Color, ISortBy } from '@shared/interfaces';
 import { centsToMoney } from '@shared/utils/misc';
 import { FilterName } from '@shared/enums';
-import { ICatalogProps } from '@pages/catalog/catalog.interface';
+import { ICatalogData } from '@pages/catalog/catalog.interface';
 import ProductRepoService from './product-repo.service';
 import { getFacetTerms } from './helpers';
 
@@ -17,7 +17,7 @@ class ProductSearchService {
     [FilterName.PriceRange]: 'variants.price.centAmount:range (0 to *) as priceRange',
   };
 
-  static async fetchProductsByProductType(typeKey: string): Promise<ICatalogProps | null> {
+  static async fetchProductsByProductType(typeKey: string): Promise<ICatalogData | null> {
     const productType = await ProductRepoService.getProductTypeByKey(typeKey);
 
     if (isHttpErrorType(productType)) {
@@ -42,11 +42,36 @@ class ProductSearchService {
     };
   }
 
+  static async fetchProductsByCategory(categorySlug: string): Promise<ICatalogData | null> {
+    const vendorCategory = await ProductRepoService.getCategoryBySlug(categorySlug);
+
+    if (!vendorCategory || isHttpErrorType(vendorCategory)) {
+      return null;
+    }
+
+    const productsResp = await ProductRepoService.getProductsByCategory(
+      vendorCategory.id,
+      Object.values(this.facets).flat(),
+    );
+
+    if (isHttpErrorType(productsResp)) {
+      return null;
+    }
+
+    const filters = (await this.buildFiltersFromFacets(productsResp.facets)) as IFilters;
+
+    return {
+      selectedFilters: { [FilterName.Vendor]: [vendorCategory] },
+      products: productsResp.results,
+      filters,
+    };
+  }
+
   static async fetchProductsWithFilters(
     filter: IFilters,
     lastFilter?: FilterName,
     sort?: ISortBy,
-  ): Promise<ICatalogProps | null> {
+  ): Promise<ICatalogData | null> {
     const facetsToApply = Object.entries(this.facets).reduce((acc, [name, facet]) => {
       if (name !== lastFilter) {
         acc.push(facet);

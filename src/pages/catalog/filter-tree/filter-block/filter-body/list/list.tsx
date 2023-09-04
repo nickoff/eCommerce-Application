@@ -1,7 +1,7 @@
 import { element } from 'tsx-vanilla';
 import { Component } from '@shared/lib';
 import { LANG_CODE } from '@shared/constants/misc';
-import { Category } from '@commercetools/platform-sdk';
+import { Category, ProductType } from '@commercetools/platform-sdk';
 import { BiMap } from '@jsdsl/bimap';
 import { delegate } from '@shared/utils/dom-helpers';
 import { MouseEvtName } from '@shared/constants/events';
@@ -11,8 +11,8 @@ import * as s from './list.module.scss';
 import { FilterBlockEvent, ListChangeEvent, FilterBlockType, IFilterPayload } from '../../filter-block.types';
 import { IFilterBody, IFilterBodyProps } from '../filter-body.interface';
 
-class FilterBodyList extends Component<IFilterBodyProps<Category[]>> implements IFilterBody {
-  private map = new BiMap<Category, JSX.Element>();
+class FilterBodyList extends Component<IFilterBodyProps<Category[] | ProductType[]>> implements IFilterBody {
+  private map = new BiMap<Category | ProductType, JSX.Element>();
 
   protected componentDidRender(): void {
     delegate(this.getContent(), padDot(s.filterBtn), MouseEvtName.CLICK, (target) => {
@@ -53,7 +53,9 @@ class FilterBodyList extends Component<IFilterBodyProps<Category[]>> implements 
             <li className={s.filterItem}>
               <button className={s.filterBtn}>
                 <span className={s.filterCheckbox}></span>
-                <span className={s.filterName}>{category.name[LANG_CODE]}</span>
+                <span className={s.filterName}>
+                  {typeof category.name === 'string' ? category.name : category.name[LANG_CODE]}
+                </span>
               </button>
             </li>
           );
@@ -65,7 +67,7 @@ class FilterBodyList extends Component<IFilterBodyProps<Category[]>> implements 
     );
   }
 
-  private notifyFilterChange(category: Category, status: boolean): void {
+  private notifyFilterChange(category: Category | ProductType, status: boolean): void {
     const { filterBlock } = this.props;
 
     this.getContent().dispatchEvent(
@@ -75,7 +77,7 @@ class FilterBodyList extends Component<IFilterBodyProps<Category[]>> implements 
           payload: {
             filter: category,
             status,
-            filterLabel: `${category.name[LANG_CODE]}`,
+            filterLabel: `${typeof category.name === 'string' ? category.name : category.name[LANG_CODE]}`,
             filterBlock,
             filterBody: this,
           },

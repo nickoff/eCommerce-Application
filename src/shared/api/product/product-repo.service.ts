@@ -29,7 +29,7 @@ class ProductRepoService {
           filter: `categories.id:"${categoryId}"`,
           facet: facets,
           'filter.facets': `categories.id:"${categoryId}"`,
-          expand: 'categories[*]',
+          expand: ['categories[*]', 'productType'],
         },
       })
       .execute();

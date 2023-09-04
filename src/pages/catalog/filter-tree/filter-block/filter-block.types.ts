@@ -1,5 +1,5 @@
 import { IRangeFilter, Color } from '@shared/interfaces';
-import { Category } from '@commercetools/platform-sdk';
+import { Category, ProductType } from '@commercetools/platform-sdk';
 import FilterBlock from './filter-block';
 // eslint-disable-next-line import/no-cycle
 import { IFilterBody } from './filter-body/filter-body.interface';
@@ -10,7 +10,7 @@ export enum FilterBlockType {
   Range = 'range',
 }
 
-export type FilterData = Category | Color | IRangeFilter;
+export type FilterData = Category | Color | IRangeFilter | ProductType;
 
 export enum FilterBlockEvent {
   FilterChange = 'filterblock:filterchange',
@@ -26,7 +26,7 @@ export interface IFilterPayload<T = unknown> {
 
 export type ListChangeEvent = {
   type: FilterBlockType.List;
-  payload: IFilterPayload<Category>;
+  payload: IFilterPayload<Category | ProductType>;
 };
 
 export type PalleteChangeEvent = {

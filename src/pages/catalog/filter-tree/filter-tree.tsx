@@ -37,7 +37,7 @@ class FilterTree extends Component<IFilterTreeProps> {
     super(props);
 
     const { filters } = props;
-    const { vendors, colors, priceRange } = filters;
+    const { vendors, colors, priceRange, types } = filters;
 
     this.filterBlocks = [
       new FilterBlock({
@@ -59,6 +59,17 @@ class FilterTree extends Component<IFilterTreeProps> {
         heading: 'Price',
       }),
     ];
+
+    if (this.props.includeTypeFilter) {
+      const typeBlock = new FilterBlock({
+        type: FilterBlockType.List,
+        filterName: FilterName.Type,
+        filterData: types,
+        heading: 'Type',
+      });
+
+      this.filterBlocks.splice(1, 0, typeBlock);
+    }
   }
 
   protected componentDidRender(): void {
@@ -77,10 +88,6 @@ class FilterTree extends Component<IFilterTreeProps> {
       }
     });
   }
-
-  // updateFilters(filters: IFilters) {
-
-  // }
 
   render(): JSX.Element {
     return (
