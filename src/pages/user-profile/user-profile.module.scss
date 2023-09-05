@@ -1,0 +1,114 @@
+.page-wrapper {
+  padding-block: 50px;
+  min-height: 700px;
+}
+
+.page-nav {
+  text-decoration: none;
+}
+
+.user-info {
+  margin: auto;
+
+  a {
+    text-decoration: none;
+    line-height: normal;
+  }
+}
+
+.dlist {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 10px 40px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: $default-color;
+  font-size: 1.7rem;
+  display: flex;
+  padding: 70px;
+  max-width: 900px;
+  margin: auto;
+  padding-right: 50px;
+  border-radius: 8px;
+}
+
+.inner-card {
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid rgb(0, 0, 0, 11%);
+  box-shadow: 6px 6px 15px 1px rgba(0, 0, 0, 0.07);
+  padding: 40px;
+  border-radius: 8px;
+  margin: auto;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+
+  button {
+    padding: 5px;
+    @include bg-border-none;
+  }
+}
+
+.buttons-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.info-controls-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.edit-info-form {
+  width: 100%;
+  margin: auto;
+
+  button {
+    width: 100px;
+  }
+}
+
+.update-msg {
+  display: flex;
+  gap: 10px;
+  padding: 5px 10px;
+  margin-top: 20px;
+
+  &--succes {
+    svg {
+      color: green;
+    }
+
+    background-color: #d5ffd8;
+  }
+
+  &--error {
+    svg {
+      color: red;
+    }
+
+    background-color: #ffcccc;
+  }
+}
+
+.content {
+  position: relative;
+  margin: auto;
+  width: 100%;
+}
+
+.update-msg-container {
+  position: absolute;
+  top: -70px;
+  left: 50%;
+  translate: -50% 0;
+
+  div {
+    white-space: nowrap;
+  }
+}

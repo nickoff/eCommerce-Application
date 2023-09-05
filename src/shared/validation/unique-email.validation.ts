@@ -7,14 +7,18 @@ const { apiRoot } = Store.getState();
 
 const DEBOUNCE_TIMEOUT = 500;
 
-const debounced = debounce(async (value: string, resolve: (v: boolean) => void): Promise<void> => {
-  const res = await CustomerRepoService.isEmailUnique(apiRoot, value);
-  resolve(res);
-}, DEBOUNCE_TIMEOUT);
+const debounced = debounce(
+  async (value: string, resolve: (v: boolean) => void, excludeEmail?: string): Promise<void> => {
+    if (value === excludeEmail) resolve(true);
+    const res = await CustomerRepoService.isEmailUnique(apiRoot, value);
+    resolve(res);
+  },
+  DEBOUNCE_TIMEOUT,
+);
 
-const isEmailUniqueDebounced = (email: string): Promise<boolean | ValidationError> =>
+const isEmailUniqueDebounced = (email: string, excludeEmail?: string): Promise<boolean | ValidationError> =>
   new Promise((resolve) => {
-    debounced(email, resolve);
+    debounced(email, resolve, excludeEmail);
   });
 
 export default isEmailUniqueDebounced;

@@ -6,6 +6,7 @@ export interface IInputProps extends IProps {
   type?: InputType;
   placeholder?: string;
   label?: string;
+  value?: string;
   required?: boolean;
   disabled?: boolean;
   validationSchema?: Schema | Schema[];

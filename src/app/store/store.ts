@@ -71,7 +71,7 @@ class Store {
     localStorage.removeItem(StorageKey.TokenCache);
   }
 
-  private setState(newState: Partial<IState>): void {
+  setState(newState: Partial<IState>): void {
     Object.assign(this.state, newState);
   }
 

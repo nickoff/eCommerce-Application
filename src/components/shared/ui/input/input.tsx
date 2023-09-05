@@ -31,7 +31,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
   render(): JSX.Element {
     this.hasError = false;
 
-    const { name, label, type, placeholder, disabled, required, withVisibilityToggle } = this.props;
+    const { name, label, type, placeholder, disabled, required, withVisibilityToggle, value } = this.props;
 
     const inputRef = ref<HTMLInputElement>();
 
@@ -49,6 +49,7 @@ export class Input extends Component<IInputProps> implements IFormControl {
             disabled={disabled}
             required={required}
             attributes={{ [COMPONENT_CHILD_ATTR]: '' }}
+            value={value || ''}
             ref={inputRef}
           />
           {withVisibilityToggle &&
