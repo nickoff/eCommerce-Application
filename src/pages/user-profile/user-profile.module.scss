@@ -155,8 +155,25 @@
 }
 
 .newAddressBtn {
-  position: absolute;
-  top: -56px;
-  left: 50%;
-  translate: -50% 0;
+  margin: auto;
+  display: block;
+  margin-top: -40px;
+  margin-bottom: 20px;
+}
+
+.address-types-dlist {
+  dt {
+    font-weight: 500;
+  }
+
+  dd {
+    @include flex-vertical-center;
+    gap: 20px;
+  }
+
+  label {
+    @include flex-vertical-center;
+    gap: 5px;
+    user-select: none;
+  }
 }

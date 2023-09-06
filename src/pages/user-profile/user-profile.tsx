@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -17,8 +18,14 @@ import { StorageKey, AddressType } from '@shared/enums';
 import { Address } from '@commercetools/platform-sdk';
 import { btn, btnFilled, btnOutline } from '../../styles/shared/index.module.scss';
 import * as s from './user-profile.module.scss';
-import { getUserInfoControls, passwordControls } from './input-controls';
-import { IUserProfilePageProps, IUserProfileInfo, IUserPwdChangeInfo } from './user-profile.interface';
+import { getUserInfoControls, passwordControls, getAddressControls } from './input-controls';
+import {
+  IUserProfilePageProps,
+  IUserProfileInfo,
+  IUserPwdChangeInfo,
+  IAddressChangeInfo,
+  IUpdateAddressActions,
+} from './user-profile.interface';
 import BangIcon from './assets/bang.element.svg';
 import CheckIcon from './assets/check.element.svg';
 
@@ -33,6 +40,8 @@ function isRequestErrorArray(value: unknown): value is IRequestError[] {
 }
 
 class UserProfilePage extends Component<IUserProfilePageProps> {
+  private editingAddress!: Address;
+
   private formMsgContainer: HTMLElement | null = null;
 
   protected componentDidRender(): void {
@@ -49,7 +58,7 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
                 <button onclick={this.goToInfo.bind(this)}>Profile</button>
               </li>
               <li>
-                <button onclick={(): void => this.setProps({ visibleContent: 'addresses' })}>Addresses</button>
+                <button onclick={this.goToAddressBook.bind(this)}>Addresses</button>
               </li>
               <li>
                 <button>Log out</button>
@@ -65,6 +74,10 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
     );
   }
 
+  private goToAddressBook(): void {
+    this.setProps({ visibleContent: 'addresses' });
+  }
+
   private resolveContent(): JSX.Element {
     const { visibleContent } = this.props;
 
@@ -72,11 +85,13 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
       case 'info':
         return this.renderUserInfo();
       case 'edit':
-        return this.renderEditor('info');
+        return this.renderEditor('info', this.updateUserInfo.bind(this));
       case 'change-pwd':
-        return this.renderEditor('pwd');
+        return this.renderEditor('pwd', this.changePassword.bind(this));
       case 'addresses':
         return this.renderAddressBook();
+      case 'edit-address':
+        return this.renderEditor('address', this.updateAddress.bind(this));
       default:
         throw new NeverError(visibleContent);
     }
@@ -101,10 +116,25 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
                 <dt>Postal code</dt>
                 <dd>{address.postalCode}</dd>
                 <dt>Type</dt>
-                <dd>{this.getAddressType(address).join(', ')}</dd>
+                <dd>
+                  {this.getAddressTypes(address)
+                    .reduce((acc, t) => {
+                      acc.push(`${t.type} ${t.isDefault ? '(default)' : ''}`);
+                      return acc;
+                    }, [] as string[])
+                    .join(', ')}
+                </dd>
               </dl>
               <div className={cx(s.buttonsWrapper, s.addressBtns)}>
-                <button className={cx(btn, btnFilled)}>Edit</button>
+                <button
+                  className={cx(btn, btnFilled)}
+                  onclick={(): void => {
+                    this.editingAddress = address;
+                    this.setProps({ visibleContent: 'edit-address' });
+                  }}
+                >
+                  Edit
+                </button>
                 <button className={cx(btn, btnOutline)}>Delete</button>
               </div>
             </div>
@@ -114,19 +144,19 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
     );
   }
 
-  private getAddressType(address: Address): string[] {
+  private getAddressTypes(address: Address): { type: AddressType; isDefault: boolean }[] {
     const { customer } = Store.getState();
 
-    const types: string[] = [];
+    const types: { type: AddressType; isDefault: boolean }[] = [];
 
     const addressId = address.id as string;
 
     if (customer?.shippingAddressIds?.includes(addressId)) {
-      types.push(AddressType.Shipping);
+      types.push({ type: AddressType.Shipping, isDefault: customer.defaultShippingAddressId === addressId });
     }
 
     if (customer?.billingAddressIds?.includes(addressId)) {
-      types.push(AddressType.Billing);
+      types.push({ type: AddressType.Billing, isDefault: customer.defaultBillingAddressId === addressId });
     }
 
     return types;
@@ -164,25 +194,83 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
     );
   }
 
-  private renderEditor(type: 'info' | 'pwd'): JSX.Element {
-    const handler = (e: Event): Promise<void> =>
-      this.onEditFormSubmit(e, type === 'info' ? this.updateUserInfo.bind(this) : this.changePassword.bind(this));
+  private renderEditor(
+    type: 'info' | 'pwd' | 'address',
+    submitHandler: (form: HTMLFormElement) => Promise<void>,
+  ): JSX.Element {
+    const handler = (e: Event): Promise<void> => this.onEditFormSubmit(e, submitHandler);
 
     return (
       <div className={s.innerCard}>
         <form className={s.editInfoForm} onsubmit={handler.bind(this)}>
           <div className={s.infoControlsContainer}>
-            {render(type === 'info' ? getUserInfoControls() : passwordControls)}
+            {type === 'address'
+              ? this.renderAddressEditorContent()
+              : render(type === 'info' ? getUserInfoControls() : passwordControls)}
           </div>
           <div className={s.buttonsWrapper}>
             <button type="submit" className={cx(btn, btnFilled)}>
               Save
             </button>
-            <button type="button" className={cx(btn, btnOutline)} onclick={this.goToInfo.bind(this)}>
+            <button
+              type="button"
+              className={cx(btn, btnOutline)}
+              onclick={type === 'info' ? this.goToInfo.bind(this) : this.goToAddressBook.bind(this)}
+            >
               Cancel
             </button>
           </div>
         </form>
+      </div>
+    );
+  }
+
+  private renderAddressEditorContent(): JSX.Element {
+    const addressTypes = this.getAddressTypes(this.editingAddress);
+
+    return (
+      <div>
+        {render(getAddressControls(this.editingAddress))}
+        <dl className={cx(s.dlist, s.addressTypesDlist)}>
+          <dt>Type</dt>
+          <dd>
+            <label>
+              <input
+                name="isShipping"
+                type="checkbox"
+                checked={addressTypes.some((t) => t.type === AddressType.Shipping)}
+              />
+              {AddressType.Shipping}
+            </label>
+            <label>
+              <input
+                name="isBilling"
+                type="checkbox"
+                checked={addressTypes.some((t) => t.type === AddressType.Billing)}
+              />
+              {AddressType.Billing}
+            </label>
+          </dd>
+          <dt>Default</dt>
+          <dd>
+            <label>
+              <input
+                name="isDefaultShipping"
+                type="checkbox"
+                checked={addressTypes.some((t) => t.type === AddressType.Shipping && t.isDefault)}
+              />
+              {AddressType.Shipping}
+            </label>
+            <label>
+              <input
+                name="isDefaultBilling"
+                type="checkbox"
+                checked={addressTypes.some((t) => t.type === AddressType.Billing && t.isDefault)}
+              />
+              {AddressType.Billing}
+            </label>
+          </dd>
+        </dl>
       </div>
     );
   }
@@ -194,6 +282,36 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
         {msg}
       </div>
     );
+  }
+
+  private async updateAddress(form: HTMLFormElement): Promise<void> {
+    const { customer } = Store.getState();
+    const formData = buildFormData<IAddressChangeInfo>(form);
+    const { country, city, streetName, postalCode, isBilling, isShipping, isDefaultBilling, isDefaultShipping } =
+      formData;
+
+    const addressId = this.editingAddress.id as string;
+
+    const actions: IUpdateAddressActions = {
+      update: { country, city, streetName, postalCode },
+      addBilling: Boolean(isBilling),
+      addShipping: Boolean(isShipping),
+      removeBilling: !isBilling && !!customer?.billingAddressIds?.includes(addressId),
+      removeShipping: !isShipping && !!customer?.shippingAddressIds?.includes(addressId),
+      setDefaultBilling: Boolean(isDefaultBilling),
+      setDefaultShipping: Boolean(isDefaultShipping),
+    };
+
+    const response = await UpdateCustomerService.updateAddress(this.editingAddress.id as string, actions);
+
+    if (!isHttpErrorType(response)) {
+      Store.setState({ customer: response });
+      const msg = 'The address has been updated';
+      this.formMsgContainer?.replaceChildren(this.renderUpdateInfoMessage('success', msg));
+    } else {
+      const msg = 'Something went wrong, try again later';
+      this.formMsgContainer?.replaceChildren(this.renderUpdateInfoMessage('error', msg));
+    }
   }
 
   private async changePassword(form: HTMLFormElement): Promise<void> {
