@@ -16,6 +16,8 @@ import AuthService from '@app/auth.service';
 import { ICustomerCredentials } from '@shared/interfaces';
 import { StorageKey, AddressType } from '@shared/enums';
 import { Address } from '@commercetools/platform-sdk';
+import { Route, router } from '@app/router';
+import { PageTitle } from '@pages/page-title.decorator';
 import { btn, btnFilled, btnOutline } from '../../styles/shared/index.module.scss';
 import * as s from './user-profile.module.scss';
 import { getUserInfoControls, passwordControls, getAddressControls } from './input-controls';
@@ -39,6 +41,7 @@ function isRequestErrorArray(value: unknown): value is IRequestError[] {
   return value.every((v) => v && typeof v === 'object' && 'code' in v && 'message' in v);
 }
 
+@PageTitle('Profile')
 class UserProfilePage extends Component<IUserProfilePageProps> {
   private editingAddress!: Address;
 
@@ -55,13 +58,23 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
           <nav className={s.pageNav}>
             <ul className={s.navList}>
               <li>
-                <button onclick={this.goToInfo.bind(this)}>Profile</button>
+                <button
+                  className={cx(['info', 'edit', 'change-pwd'].includes(this.props.visibleContent) && 'fw-bold')}
+                  onclick={this.goToInfo.bind(this)}
+                >
+                  Profile
+                </button>
               </li>
               <li>
-                <button onclick={this.goToAddressBook.bind(this)}>Addresses</button>
+                <button
+                  className={cx(['addresses', 'edit-address'].includes(this.props.visibleContent) && 'fw-bold')}
+                  onclick={this.goToAddressBook.bind(this)}
+                >
+                  Addresses
+                </button>
               </li>
               <li>
-                <button>Log out</button>
+                <button onclick={this.onLogOutClick.bind(this)}>Log out</button>
               </li>
             </ul>
           </nav>
@@ -72,6 +85,11 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
         </div>
       </div>
     );
+  }
+
+  private onLogOutClick(): void {
+    AuthService.logout();
+    router.navigate(Route.Home);
   }
 
   private goToAddressBook(): void {
