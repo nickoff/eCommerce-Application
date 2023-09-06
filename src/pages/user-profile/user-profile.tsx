@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-underscore-dangle */
-import { element } from 'tsx-vanilla';
+import { element, fragment } from 'tsx-vanilla';
 import { Component } from '@shared/lib';
 import cx from 'clsx';
 import Store from '@app/store/store';
@@ -13,7 +13,8 @@ import { isHttpErrorType, isKeyOf } from '@shared/utils/type-guards';
 import UpdateCustomerService from '@shared/api/customer/update-customer.service';
 import AuthService from '@app/auth.service';
 import { ICustomerCredentials } from '@shared/interfaces';
-import { StorageKey } from '@shared/enums';
+import { StorageKey, AddressType } from '@shared/enums';
+import { Address } from '@commercetools/platform-sdk';
 import { btn, btnFilled, btnOutline } from '../../styles/shared/index.module.scss';
 import * as s from './user-profile.module.scss';
 import { getUserInfoControls, passwordControls } from './input-controls';
@@ -48,7 +49,7 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
                 <button onclick={this.goToInfo.bind(this)}>Profile</button>
               </li>
               <li>
-                <button>Addresses</button>
+                <button onclick={(): void => this.setProps({ visibleContent: 'addresses' })}>Addresses</button>
               </li>
               <li>
                 <button>Log out</button>
@@ -75,10 +76,60 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
       case 'change-pwd':
         return this.renderEditor('pwd');
       case 'addresses':
-        return <div></div>;
+        return this.renderAddressBook();
       default:
         throw new NeverError(visibleContent);
     }
+  }
+
+  private renderAddressBook(): JSX.Element {
+    const { customer } = Store.getState();
+
+    return (
+      <>
+        <button className={cx(btn, btnOutline, s.newAddressBtn)}>New address</button>
+        {customer?.addresses.map((address) => {
+          return (
+            <div className={s.innerCard}>
+              <dl className={s.dlist}>
+                <dt>Country</dt>
+                <dd>{address.country}</dd>
+                <dt>City</dt>
+                <dd>{address.city}</dd>
+                <dt>Street</dt>
+                <dd>{address.streetName}</dd>
+                <dt>Postal code</dt>
+                <dd>{address.postalCode}</dd>
+                <dt>Type</dt>
+                <dd>{this.getAddressType(address).join(', ')}</dd>
+              </dl>
+              <div className={cx(s.buttonsWrapper, s.addressBtns)}>
+                <button className={cx(btn, btnFilled)}>Edit</button>
+                <button className={cx(btn, btnOutline)}>Delete</button>
+              </div>
+            </div>
+          );
+        })}
+      </>
+    );
+  }
+
+  private getAddressType(address: Address): string[] {
+    const { customer } = Store.getState();
+
+    const types: string[] = [];
+
+    const addressId = address.id as string;
+
+    if (customer?.shippingAddressIds?.includes(addressId)) {
+      types.push(AddressType.Shipping);
+    }
+
+    if (customer?.billingAddressIds?.includes(addressId)) {
+      types.push(AddressType.Billing);
+    }
+
+    return types;
   }
 
   private renderUserInfo(): JSX.Element {
