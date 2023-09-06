@@ -1,4 +1,9 @@
-import { IUserProfileInfo, IAddressLocation, IUpdateAddressActions } from '@pages/user-profile/user-profile.interface';
+import {
+  IUserProfileInfo,
+  IAddressLocation,
+  IUpdateAddressActions,
+  ICreateAddressActions,
+} from '@pages/user-profile/user-profile.interface';
 import Store from '@app/store/store';
 import {
   type Customer,
@@ -15,6 +20,7 @@ import {
   type MyCustomerRemoveShippingAddressIdAction,
   type MyCustomerSetDefaultBillingAddressAction,
   type MyCustomerSetDefaultShippingAddressAction,
+  type MyCustomerAddAddressAction,
 } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import extractHttpError from '../extract-http-error.decorator';
@@ -27,6 +33,7 @@ const updateActionsCreator: Record<keyof IUserProfileInfo, (field: string) => My
 };
 
 type AddressUpdateAction =
+  | MyCustomerAddAddressAction
   | MyCustomerChangeAddressAction
   | MyCustomerAddBillingAddressIdAction
   | MyCustomerAddShippingAddressIdAction
@@ -84,7 +91,10 @@ class UpdateCustomerService {
     return updatedCustomer;
   }
 
-  private static createAddressUpdateActions(addressId: string, actions: IUpdateAddressActions): AddressUpdateAction[] {
+  private static createAddressUpdateActions(
+    addressId: string,
+    actions: IUpdateAddressActions | ICreateAddressActions,
+  ): AddressUpdateAction[] {
     return Object.entries(actions).reduce<AddressUpdateAction[]>((acc, [key, value]) => {
       if (value) {
         acc.push(updateAddressActionsCreator[key as keyof IUpdateAddressActions](addressId, value));
@@ -95,11 +105,35 @@ class UpdateCustomerService {
   }
 
   @extractHttpError
-  static async updateAddress(addressId: string, rawActions: IUpdateAddressActions): Promise<Customer | HttpErrorType> {
+  static async updateAddress(
+    addressId: string,
+    rawActions: IUpdateAddressActions | ICreateAddressActions,
+  ): Promise<Customer | HttpErrorType> {
     const version = this.getCustomerVersion();
     const actions = this.createAddressUpdateActions(addressId, rawActions);
 
     return (await Store.apiRoot.me().post({ body: { version, actions } }).execute()).body;
+  }
+
+  @extractHttpError
+  static async createAddress(
+    address: IAddressLocation,
+    rawActions: ICreateAddressActions,
+  ): Promise<Customer | HttpErrorType> {
+    const version = this.getCustomerVersion();
+
+    const customer = (
+      await Store.apiRoot
+        .me()
+        .post({ body: { version, actions: [{ action: 'addAddress', address }] } })
+        .execute()
+    ).body;
+
+    Store.setState({ customer });
+
+    const createdAddressId = customer.addresses.at(-1)?.id as string;
+
+    return this.updateAddress(createdAddressId, rawActions);
   }
 
   @extractHttpError

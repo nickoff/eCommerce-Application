@@ -177,3 +177,12 @@
     user-select: none;
   }
 }
+
+.address-card:not(:last-of-type) {
+  margin-bottom: 20px;
+}
+
+.address-list {
+  display: flex;
+  overflow: auto;
+}

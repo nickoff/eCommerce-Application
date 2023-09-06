@@ -20,13 +20,14 @@ import { Route, router } from '@app/router';
 import { PageTitle } from '@pages/page-title.decorator';
 import { btn, btnFilled, btnOutline } from '../../styles/shared/index.module.scss';
 import * as s from './user-profile.module.scss';
-import { getUserInfoControls, passwordControls, getAddressControls } from './input-controls';
+import { getUserInfoControls, passwordControls, getAddressControls, getNewAddressControls } from './input-controls';
 import {
   IUserProfilePageProps,
   IUserProfileInfo,
   IUserPwdChangeInfo,
   IAddressChangeInfo,
   IUpdateAddressActions,
+  ICreateAddressActions,
 } from './user-profile.interface';
 import BangIcon from './assets/bang.element.svg';
 import CheckIcon from './assets/check.element.svg';
@@ -110,8 +111,36 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
         return this.renderAddressBook();
       case 'edit-address':
         return this.renderEditor('address', this.updateAddress.bind(this));
+      case 'new-address':
+        return this.renderEditor('address', this.createAddress.bind(this));
       default:
         throw new NeverError(visibleContent);
+    }
+  }
+
+  private async createAddress(form: HTMLFormElement): Promise<void> {
+    const formData = buildFormData<IAddressChangeInfo>(form);
+    const { country, city, streetName, postalCode, isBilling, isShipping, isDefaultBilling, isDefaultShipping } =
+      formData;
+
+    const address = { country, city, streetName, postalCode };
+
+    const actions: ICreateAddressActions = {
+      addBilling: Boolean(isBilling),
+      addShipping: Boolean(isShipping),
+      setDefaultBilling: Boolean(isDefaultBilling),
+      setDefaultShipping: Boolean(isDefaultShipping),
+    };
+
+    const response = await UpdateCustomerService.createAddress(address, actions);
+
+    if (!isHttpErrorType(response)) {
+      Store.setState({ customer: response });
+      const msg = 'The address has been created';
+      this.formMsgContainer?.replaceChildren(this.renderUpdateInfoMessage('success', msg));
+    } else {
+      const msg = 'Something went wrong, try again later';
+      this.formMsgContainer?.replaceChildren(this.renderUpdateInfoMessage('error', msg));
     }
   }
 
@@ -120,44 +149,51 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
 
     return (
       <>
-        <button className={cx(btn, btnOutline, s.newAddressBtn)}>New address</button>
-        {customer?.addresses.map((address) => {
-          return (
-            <div className={s.innerCard}>
-              <dl className={s.dlist}>
-                <dt>Country</dt>
-                <dd>{address.country}</dd>
-                <dt>City</dt>
-                <dd>{address.city}</dd>
-                <dt>Street</dt>
-                <dd>{address.streetName}</dd>
-                <dt>Postal code</dt>
-                <dd>{address.postalCode}</dd>
-                <dt>Type</dt>
-                <dd>
-                  {this.getAddressTypes(address)
-                    .reduce((acc, t) => {
-                      acc.push(`${t.type} ${t.isDefault ? '(default)' : ''}`);
-                      return acc;
-                    }, [] as string[])
-                    .join(', ')}
-                </dd>
-              </dl>
-              <div className={cx(s.buttonsWrapper, s.addressBtns)}>
-                <button
-                  className={cx(btn, btnFilled)}
-                  onclick={(): void => {
-                    this.editingAddress = address;
-                    this.setProps({ visibleContent: 'edit-address' });
-                  }}
-                >
-                  Edit
-                </button>
-                <button className={cx(btn, btnOutline)}>Delete</button>
+        <button
+          className={cx(btn, btnOutline, s.newAddressBtn)}
+          onclick={(): void => this.setProps({ visibleContent: 'new-address' })}
+        >
+          New address
+        </button>
+        <div>
+          {customer?.addresses.map((address) => {
+            return (
+              <div className={cx(s.innerCard, s.addressCard)}>
+                <dl className={s.dlist}>
+                  <dt>Country</dt>
+                  <dd>{address.country}</dd>
+                  <dt>City</dt>
+                  <dd>{address.city}</dd>
+                  <dt>Street</dt>
+                  <dd>{address.streetName}</dd>
+                  <dt>Postal code</dt>
+                  <dd>{address.postalCode}</dd>
+                  <dt>Type</dt>
+                  <dd>
+                    {this.getAddressTypes(address)
+                      .reduce((acc, t) => {
+                        acc.push(`${t.type} ${t.isDefault ? '(default)' : ''}`);
+                        return acc;
+                      }, [] as string[])
+                      .join(', ')}
+                  </dd>
+                </dl>
+                <div className={cx(s.buttonsWrapper, s.addressBtns)}>
+                  <button
+                    className={cx(btn, btnFilled)}
+                    onclick={(): void => {
+                      this.editingAddress = address;
+                      this.setProps({ visibleContent: 'edit-address' });
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button className={cx(btn, btnOutline)}>Delete</button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </>
     );
   }
@@ -244,11 +280,12 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
   }
 
   private renderAddressEditorContent(): JSX.Element {
-    const addressTypes = this.getAddressTypes(this.editingAddress);
+    const isEditingAddress = this.props.visibleContent === 'edit-address';
+    const addressTypes = isEditingAddress ? this.getAddressTypes(this.editingAddress) : null;
 
     return (
       <div>
-        {render(getAddressControls(this.editingAddress))}
+        {render(isEditingAddress ? getAddressControls(this.editingAddress) : getNewAddressControls())}
         <dl className={cx(s.dlist, s.addressTypesDlist)}>
           <dt>Type</dt>
           <dd>
@@ -256,7 +293,7 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
               <input
                 name="isShipping"
                 type="checkbox"
-                checked={addressTypes.some((t) => t.type === AddressType.Shipping)}
+                checked={!!addressTypes && addressTypes.some((t) => t.type === AddressType.Shipping)}
               />
               {AddressType.Shipping}
             </label>
@@ -264,7 +301,7 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
               <input
                 name="isBilling"
                 type="checkbox"
-                checked={addressTypes.some((t) => t.type === AddressType.Billing)}
+                checked={!!addressTypes && addressTypes.some((t) => t.type === AddressType.Billing)}
               />
               {AddressType.Billing}
             </label>
@@ -275,7 +312,7 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
               <input
                 name="isDefaultShipping"
                 type="checkbox"
-                checked={addressTypes.some((t) => t.type === AddressType.Shipping && t.isDefault)}
+                checked={!!addressTypes && addressTypes.some((t) => t.type === AddressType.Shipping && t.isDefault)}
               />
               {AddressType.Shipping}
             </label>
@@ -283,7 +320,7 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
               <input
                 name="isDefaultBilling"
                 type="checkbox"
-                checked={addressTypes.some((t) => t.type === AddressType.Billing && t.isDefault)}
+                checked={!!addressTypes && addressTypes.some((t) => t.type === AddressType.Billing && t.isDefault)}
               />
               {AddressType.Billing}
             </label>

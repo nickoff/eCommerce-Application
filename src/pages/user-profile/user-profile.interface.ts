@@ -1,5 +1,5 @@
 export interface IUserProfilePageProps extends IProps {
-  visibleContent: 'info' | 'edit' | 'change-pwd' | 'addresses' | 'edit-address';
+  visibleContent: 'info' | 'edit' | 'change-pwd' | 'addresses' | 'edit-address' | 'new-address';
 }
 
 export interface IUserProfileInfo {
@@ -35,6 +35,13 @@ export interface IUpdateAddressActions {
   addShipping: boolean;
   removeBilling: boolean;
   removeShipping: boolean;
+  setDefaultBilling: boolean;
+  setDefaultShipping: boolean;
+}
+
+export interface ICreateAddressActions {
+  addBilling: boolean;
+  addShipping: boolean;
   setDefaultBilling: boolean;
   setDefaultShipping: boolean;
 }

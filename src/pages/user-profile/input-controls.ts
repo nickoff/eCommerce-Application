@@ -79,6 +79,43 @@ export function getAddressControls(address: Address): FormControlType[] {
   ];
 }
 
+export function getNewAddressControls(): FormControlType[] {
+  const countryOptions = [
+    { value: '', content: '', disabled: true },
+    { value: 'RU', content: 'Russia' },
+    { value: 'BY', content: 'Belarus' },
+    { value: 'KZ', content: 'Kazakhstan' },
+  ];
+
+  return [
+    new Select({
+      name: InputName.Country,
+      options: countryOptions,
+      selectedOption: 0,
+      labelText: 'Country',
+      required: true,
+    }),
+    new Input({
+      name: InputName.City,
+      label: 'City',
+      required: true,
+      validationSchema: Schema.NO_SPECIAL_SCHEMA,
+    }),
+    new Input({
+      name: 'streetName',
+      label: 'Street',
+      required: true,
+      validationSchema: Schema.DEFAULT_STRING_SCHEMA,
+    }),
+    new Input({
+      name: InputName.PostalCode,
+      label: 'Postal code',
+      required: true,
+      validationSchema: Schema.POSTAL_CODE_SCHEMA,
+    }),
+  ];
+}
+
 export function getUserInfoControls(): Input[] {
   const { customer } = Store.getState();
 
