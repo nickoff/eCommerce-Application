@@ -20,7 +20,7 @@ class ProductRepoService {
     categoryId: string,
     facets?: string[],
   ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
-    const response = await Store.apiRoot
+    return Store.apiRoot
       .productProjections()
       .search()
       .get({
@@ -31,9 +31,8 @@ class ProductRepoService {
           expand: ['categories[*]', 'productType'],
         },
       })
-      .execute();
-
-    return response.body;
+      .execute()
+      .then(({ body }) => body);
   }
 
   @extractHttpError
@@ -41,7 +40,7 @@ class ProductRepoService {
     productTypeId: string,
     facets?: string[],
   ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
-    const response = await Store.apiRoot
+    return Store.apiRoot
       .productProjections()
       .search()
       .get({
@@ -52,21 +51,27 @@ class ProductRepoService {
           expand: ['categories[*]', 'productType'],
         },
       })
-      .execute();
-
-    return response.body;
+      .execute()
+      .then(({ body }) => body);
   }
 
   @extractHttpError
   static async getCategories(): Promise<Category[] | HttpErrorType> {
-    const response = await Store.apiRoot.categories().get().execute();
-    return response.body.results;
+    return Store.apiRoot
+      .categories()
+      .get()
+      .execute()
+      .then(({ body }) => body.results);
   }
 
   @extractHttpError
   static async getProductTypeByKey(key: string): Promise<ProductType | HttpErrorType> {
-    const response = await Store.apiRoot.productTypes().withKey({ key }).get().execute();
-    return response.body;
+    return Store.apiRoot
+      .productTypes()
+      .withKey({ key })
+      .get()
+      .execute()
+      .then(({ body }) => body);
   }
 
   @extractHttpError
@@ -79,7 +84,7 @@ class ProductRepoService {
 
     const sort = sortConfig ? `${sortConfig.type} ${sortConfig.direction}` : undefined;
 
-    const response = await Store.apiRoot
+    return Store.apiRoot
       .productProjections()
       .search()
       .get({
@@ -91,9 +96,8 @@ class ProductRepoService {
           sort,
         },
       })
-      .execute();
-
-    return response.body;
+      .execute()
+      .then(({ body }) => body);
   }
 
   private static buildFilterQuery(filters: IFilters): string[] {
@@ -110,12 +114,11 @@ class ProductRepoService {
 
   @extractHttpError
   static async getProductBySlug(slug: string): Promise<ProductProjection | HttpErrorType> {
-    const response = await Store.apiRoot
+    return Store.apiRoot
       .productProjections()
       .get({ queryArgs: { where: `slug(en-US="${slug}")`, expand: ['categories[*]', 'productType'] } })
-      .execute();
-
-    return response.body.results[0];
+      .execute()
+      .then(({ body }) => body.results[0]);
   }
 
   @extractHttpError
@@ -158,7 +161,7 @@ class ProductRepoService {
   }
 
   private static async searchProducts(text: string): Promise<ProductProjectionPagedSearchResponse> {
-    const response = await Store.apiRoot
+    return Store.apiRoot
       .productProjections()
       .search()
       .get({
@@ -170,53 +173,59 @@ class ProductRepoService {
           expand: ['categories[*]', 'productType'],
         },
       })
-      .execute();
-
-    return response.body;
+      .execute()
+      .then(({ body }) => body);
   }
 
   @extractHttpError
   static async getCategoryBySlug(slug: string): Promise<Category | HttpErrorType | null> {
-    const response = await Store.apiRoot
+    return Store.apiRoot
       .categories()
       .get({ queryArgs: { where: `slug(en-US="${slug}")` } })
-      .execute();
-
-    return response.body.results[0] ?? null;
+      .execute()
+      .then(({ body }) => body.results[0] ?? null);
   }
 
   static async getProductTypeById(ids: string[]): Promise<ProductType[]>;
   static async getProductTypeById(id: string): Promise<ProductType>;
   static async getProductTypeById(typeId: string[] | string): Promise<ProductType[] | ProductType> {
     if (typeof typeId === 'string') {
-      return (await Store.apiRoot.productTypes().withId({ ID: typeId }).get().execute()).body;
+      return Store.apiRoot
+        .productTypes()
+        .withId({ ID: typeId })
+        .get()
+        .execute()
+        .then(({ body }) => body);
     }
 
     if (!typeId.length) return [];
 
-    return (
-      await Store.apiRoot
-        .productTypes()
-        .get({ queryArgs: { where: typeId.map((id) => `id="${id}"`).join(' or ') } })
-        .execute()
-    ).body.results;
+    return Store.apiRoot
+      .productTypes()
+      .get({ queryArgs: { where: typeId.map((id) => `id="${id}"`).join(' or ') } })
+      .execute()
+      .then(({ body }) => body.results);
   }
 
   static async getCategoryById(ids: string[]): Promise<Category[]>;
   static async getCategoryById(id: string): Promise<Category>;
   static async getCategoryById(categoryId: string[] | string): Promise<Category[] | Category> {
     if (typeof categoryId === 'string') {
-      return (await Store.apiRoot.categories().withId({ ID: categoryId }).get().execute()).body;
+      return Store.apiRoot
+        .categories()
+        .withId({ ID: categoryId })
+        .get()
+        .execute()
+        .then(({ body }) => body);
     }
 
     if (!categoryId.length) return [];
 
-    return (
-      await Store.apiRoot
-        .categories()
-        .get({ queryArgs: { where: categoryId.map((id) => `id="${id}"`).join(' or '), sort: 'orderHint asc' } })
-        .execute()
-    ).body.results;
+    return Store.apiRoot
+      .categories()
+      .get({ queryArgs: { where: categoryId.map((id) => `id="${id}"`).join(' or '), sort: 'orderHint asc' } })
+      .execute()
+      .then(({ body }) => body.results);
   }
 }
 

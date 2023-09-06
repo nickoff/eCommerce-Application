@@ -9,15 +9,13 @@ import extractHttpError from '../extract-http-error.decorator';
 class CustomerRepoService {
   @extractHttpError
   static async createCustomer(apiRoot: ApiRoot, customerDraft: CustomerDraft): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot
+    return apiRoot
       .customers()
       .post({
         body: customerDraft,
       })
-      .execute();
-
-    const { customer } = response.body;
-    return customer;
+      .execute()
+      .then(({ body }) => body.customer);
   }
 
   @extractHttpError
@@ -25,7 +23,7 @@ class CustomerRepoService {
     apiRoot: ApiRoot,
     { email, password }: ICustomerCredentials,
   ): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot
+    return apiRoot
       .me()
       .login()
       .post({
@@ -34,24 +32,27 @@ class CustomerRepoService {
           password,
         },
       })
-      .execute();
-
-    const { customer } = response.body;
-    return customer;
+      .execute()
+      .then(({ body }) => body.customer);
   }
 
   @extractHttpError
   static async getMe(apiRoot: ApiRoot): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot.me().get().execute();
-    return response.body;
+    return apiRoot
+      .me()
+      .get()
+      .execute()
+      .then(({ body }) => body);
   }
 
   @extractHttpError
   static async getCustomerById(apiRoot: ApiRoot, ID: string): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot.customers().withId({ ID }).get().execute();
-    const customer = response.body;
-
-    return customer;
+    return apiRoot
+      .customers()
+      .withId({ ID })
+      .get()
+      .execute()
+      .then(({ body }) => body);
   }
 
   static async isEmailUnique(apiRoot: ApiRoot, email: string): Promise<boolean> {

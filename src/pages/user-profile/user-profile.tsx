@@ -1,9 +1,5 @@
 /* eslint-disable max-lines-per-function */
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-underscore-dangle */
-import { element, fragment } from 'tsx-vanilla';
+import { element, fragment, ref } from 'tsx-vanilla';
 import { Component } from '@shared/lib';
 import cx from 'clsx';
 import Store from '@app/store/store';
@@ -157,8 +153,10 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
         </button>
         <div>
           {customer?.addresses.map((address) => {
+            const addressCardRef = ref<HTMLDivElement>();
+
             return (
-              <div className={cx(s.innerCard, s.addressCard)}>
+              <div className={cx(s.innerCard, s.addressCard)} ref={addressCardRef}>
                 <dl className={s.dlist}>
                   <dt>Country</dt>
                   <dd>{address.country}</dd>
@@ -188,7 +186,12 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
                   >
                     Edit
                   </button>
-                  <button className={cx(btn, btnOutline)}>Delete</button>
+                  <button
+                    className={cx(btn, btnOutline)}
+                    onclick={(): Promise<void> => this.deleteAddress(addressCardRef, address.id as string)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             );
@@ -196,6 +199,17 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
         </div>
       </>
     );
+  }
+
+  private async deleteAddress(cardRef: { value: HTMLDivElement | null | undefined }, addressId: string): Promise<void> {
+    const addressCard = cardRef.value;
+
+    const customer = await UpdateCustomerService.deleteAddress(addressId);
+
+    if (!isHttpErrorType(customer)) {
+      Store.setState({ customer });
+      if (addressCard) addressCard.remove();
+    }
   }
 
   private getAddressTypes(address: Address): { type: AddressType; isDefault: boolean }[] {

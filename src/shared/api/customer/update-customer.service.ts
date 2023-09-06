@@ -86,9 +86,11 @@ class UpdateCustomerService {
 
     if (!actions.length) return null;
 
-    const updatedCustomer = (await Store.apiRoot.me().post({ body: { version, actions } }).execute()).body;
-
-    return updatedCustomer;
+    return Store.apiRoot
+      .me()
+      .post({ body: { version, actions } })
+      .execute()
+      .then((resp) => resp.body);
   }
 
   private static createAddressUpdateActions(
@@ -112,7 +114,11 @@ class UpdateCustomerService {
     const version = this.getCustomerVersion();
     const actions = this.createAddressUpdateActions(addressId, rawActions);
 
-    return (await Store.apiRoot.me().post({ body: { version, actions } }).execute()).body;
+    return Store.apiRoot
+      .me()
+      .post({ body: { version, actions } })
+      .execute()
+      .then((resp) => resp.body);
   }
 
   @extractHttpError
@@ -137,16 +143,26 @@ class UpdateCustomerService {
   }
 
   @extractHttpError
+  static async deleteAddress(addressId: string): Promise<Customer | HttpErrorType> {
+    const version = this.getCustomerVersion();
+
+    return Store.apiRoot
+      .me()
+      .post({ body: { version, actions: [{ action: 'removeAddress', addressId }] } })
+      .execute()
+      .then((resp) => resp.body);
+  }
+
+  @extractHttpError
   static async changePassword(data: Omit<MyCustomerChangePassword, 'version'>): Promise<Customer | HttpErrorType> {
     const version = this.getCustomerVersion();
 
-    return (
-      await Store.apiRoot
-        .me()
-        .password()
-        .post({ body: { version, ...data } })
-        .execute()
-    ).body;
+    return Store.apiRoot
+      .me()
+      .password()
+      .post({ body: { version, ...data } })
+      .execute()
+      .then((resp) => resp.body);
   }
 
   private static createInfoUpdateActions(data: Partial<IUserProfileInfo>): MyCustomerUpdateAction[] {
