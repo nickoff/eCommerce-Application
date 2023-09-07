@@ -76,6 +76,7 @@ class Select extends Component<ISelectProps> implements IFormControl {
   }
 
   private isValueSelected(): boolean {
+    if (this.select.options.item(0)?.value !== '') return true;
     return this.select.selectedIndex !== 0;
   }
 }

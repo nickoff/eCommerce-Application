@@ -76,11 +76,15 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
 
     return (
       <div className="f-carousel" id="myCarousel">
-        {images.map((i) => (
-          <div className="f-carousel__slide" dataset={{ fancybox: 'gallery', src: i.url }}>
-            <img src={i.url} data-lazy-src={i.url} alt={i.label} />
-          </div>
-        ))}
+        {images
+          .filter((i) => i.dimensions.w > 400)
+          .map((i) => {
+            return (
+              <div className="f-carousel__slide" dataset={{ fancybox: 'gallery', src: i.url }}>
+                <img src={i.url} data-lazy-src={i.url} alt={i.label} />
+              </div>
+            );
+          })}
       </div>
     );
   }

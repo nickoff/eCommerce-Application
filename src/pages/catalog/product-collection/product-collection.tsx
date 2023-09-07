@@ -40,7 +40,7 @@ class ProductCollection extends Component<IProdCollectionProps> {
 
   private renderProdCards(productsData: ProductProjection[]): JSX.Element[] {
     this.prodCards = productsData.map((prodData) => new ProductCard({ productData: new Product(prodData) }));
-    return this.prodCards.map((card) => <div className="col d-flex">{card.render()}</div>);
+    return this.prodCards.map((card) => <div className={cx('col', 'd-flex', s.prodGridItem)}>{card.render()}</div>);
   }
 }
 

@@ -32,7 +32,7 @@ class UserMenu extends Component {
         <div className={cx('dropdown-menu', 'dropdown-menu-end', s.menuContainer)}>
           <div className={s.menuWrapper}>
             <p className={s.emailPara}>{customer?.email}</p>
-            <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onUserProfileClick.bind(this)}>
+            <button className={cx(btn, btnFilled, s.logProfileBtn)} onclick={this.onProfileClick.bind(this)}>
               PROFILE
             </button>
             <button className={cx(btn, btnFilled, s.logOutBtn)} onclick={this.onLogOutClick.bind(this)}>
@@ -44,15 +44,15 @@ class UserMenu extends Component {
     );
   }
 
+  private onProfileClick(): void {
+    this.dropdown.hide();
+    router.navigate(Route.UserProfile);
+  }
+
   private onLogOutClick(): void {
     this.dropdown.hide();
     AuthService.logout();
     router.navigate(Route.Home);
-  }
-
-  private onUserProfileClick(): void {
-    this.dropdown.hide();
-    router.navigate(Route.UserAccount);
   }
 }
 

@@ -7,17 +7,16 @@ import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
 import NotFoundPage from '@pages/not-found/not-found';
 import Store from '@app/store/store';
-import UserAccount from '@pages/userProfile/userAccount/userAccount';
 import CatalogPage from '@pages/catalog/catalog';
 import ProductSearchService from '@shared/api/product/product-search.service';
 import ProductRepoService from '@shared/api/product/product-repo.service';
 import DetailedProductPage from '@pages/detailed-product/detailed-product';
 import { isHttpErrorType } from '@shared/utils/type-guards';
-import UserAddresses from '@pages/userProfile/userAddresses/userAddresses';
 import { capitalize } from 'lodash';
 import { LANG_CODE } from '@shared/constants/misc';
 import { LocalizedString } from '@commercetools/platform-sdk';
 import { SITE_TITLE } from '@shared/constants/seo';
+import UserProfilePage from '@pages/user-profile/user-profile';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -59,16 +58,9 @@ const initRouter = (): void => {
           before: beforeHook,
         },
       },
-      [Route.UserAccount]: {
-        as: 'user-profile/account',
-        uses: () => Main.setProps({ page: new UserAccount(), showBreadcrumps: false }),
-        hooks: {
-          before: userProfileBeforeHook,
-        },
-      },
-      [Route.UserAddresses]: {
-        as: 'user-profile/addresses',
-        uses: () => Main.setProps({ page: new UserAddresses(), showBreadcrumps: false }),
+      [Route.UserProfile]: {
+        as: 'user-profile',
+        uses: () => Main.setProps({ page: new UserProfilePage({ visibleContent: 'info' }), showBreadcrumps: false }),
         hooks: {
           before: userProfileBeforeHook,
         },
