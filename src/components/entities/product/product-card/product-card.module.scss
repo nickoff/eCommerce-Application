@@ -8,6 +8,7 @@ $breakpoin-sm: 570px;
   font-family: $base-font;
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   &--expanded {
     padding: 20px 25px;
@@ -156,6 +157,8 @@ $breakpoin-sm: 570px;
 
 .img-link {
   position: relative;
+  display: block;
+  margin: auto;
 }
 
 .prod-old-price {
