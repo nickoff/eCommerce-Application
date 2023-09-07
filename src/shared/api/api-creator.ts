@@ -4,7 +4,12 @@ import { ApiRoot } from '@shared/types';
 import { ICustomerCredentials } from '@shared/interfaces';
 import { StorageKey, AuthFlow } from '@shared/enums';
 import { PROJECT_KEY } from './constants';
-import { httpMiddlewareOptions, authMiddlewareOptions, getPassAuthMiddlewareOptions } from './middlewares.config';
+import {
+  httpMiddlewareOptions,
+  authMiddlewareOptions,
+  getPassAuthMiddlewareOptions,
+  getAnonymousAuthMiddlewareOptions,
+} from './middlewares.config';
 
 const initialToken: TokenStore = {
   token: '',
@@ -15,7 +20,7 @@ type ApiCreatorReturn = [ApiRoot, AuthFlow, Client];
 
 export default class ApiCreator {
   static initFlow(): ApiCreatorReturn {
-    return this.isTokenCached() ? this.createExistingTokenFlow() : this.createCredentialsFlow();
+    return this.isTokenCached() ? this.createExistingTokenFlow() : this.createAnonymousFlow();
   }
 
   static createCredentialsFlow(): ApiCreatorReturn {
@@ -25,6 +30,17 @@ export default class ApiCreator {
       .build();
 
     return [this.createApiRoot(client), AuthFlow.Credentials, client];
+  }
+
+  static createAnonymousFlow(): ApiCreatorReturn {
+    const options = getAnonymousAuthMiddlewareOptions(this.tokenCache);
+
+    const client = new ClientBuilder()
+      .withAnonymousSessionFlow(options)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .build();
+
+    return [this.createApiRoot(client), AuthFlow.Anonymous, client];
   }
 
   static createPasswordFlow({ email: username, password }: ICustomerCredentials): ApiCreatorReturn {

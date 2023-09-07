@@ -4,6 +4,7 @@ import {
   type UserAuthOptions,
   type HttpMiddlewareOptions,
   type TokenCache,
+  AnonymousAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 import * as CTP from './constants';
 
@@ -38,6 +39,14 @@ export function getPassAuthMiddlewareOptions(
         password,
       },
     },
+    tokenCache,
+  };
+}
+
+export function getAnonymousAuthMiddlewareOptions(tokenCache?: TokenCache): AnonymousAuthMiddlewareOptions {
+  return {
+    ...authMiddlewareOptions,
+    credentials: { ...baseCredentials },
     tokenCache,
   };
 }
