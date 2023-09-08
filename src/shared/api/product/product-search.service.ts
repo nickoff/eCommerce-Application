@@ -17,7 +17,7 @@ class ProductSearchService {
     [FilterName.PriceRange]: 'variants.price.centAmount:range (0 to *) as priceRange',
   };
 
-  static async fetchProductsByProductType(typeKey: string): Promise<ICatalogData | null> {
+  static async fetchProductsByProductType(typeKey: string, page?: number): Promise<ICatalogData | null> {
     const productType = await ProductRepoService.getProductTypeByKey(typeKey);
 
     if (isHttpErrorType(productType)) {
@@ -27,6 +27,7 @@ class ProductSearchService {
     const productsResp = await ProductRepoService.getProductsByProductType(
       productType.id,
       Object.values(this.facets).flat(),
+      page,
     );
 
     if (isHttpErrorType(productsResp)) {
@@ -42,7 +43,7 @@ class ProductSearchService {
     };
   }
 
-  static async fetchProductsByCategory(categorySlug: string): Promise<ICatalogData | null> {
+  static async fetchProductsByCategory(categorySlug: string, page?: number): Promise<ICatalogData | null> {
     const vendorCategory = await ProductRepoService.getCategoryBySlug(categorySlug);
 
     if (!vendorCategory || isHttpErrorType(vendorCategory)) {
@@ -52,6 +53,7 @@ class ProductSearchService {
     const productsResp = await ProductRepoService.getProductsByCategory(
       vendorCategory.id,
       Object.values(this.facets).flat(),
+      page,
     );
 
     if (isHttpErrorType(productsResp)) {
