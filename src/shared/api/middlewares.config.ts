@@ -4,7 +4,7 @@ import {
   type UserAuthOptions,
   type HttpMiddlewareOptions,
   type TokenCache,
-  AnonymousAuthMiddlewareOptions,
+  type AnonymousAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 import * as CTP from './constants';
 
