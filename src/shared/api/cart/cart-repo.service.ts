@@ -37,7 +37,7 @@ class CartRepoService {
   }
 
   @extractHttpError
-  static async getMeActiveCart(apiRoot: ApiRoot): Promise<Cart | HttpErrorType | CartPagedQueryResponse> {
+  static async getMyActiveCart(apiRoot: ApiRoot): Promise<Cart | HttpErrorType | CartPagedQueryResponse> {
     return apiRoot
       .me()
       .carts()
