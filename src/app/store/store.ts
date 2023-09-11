@@ -42,7 +42,7 @@ class Store {
     if (this.getState().authFlow !== AuthFlow.ExistingToken) {
       return;
     }
-    console.log(this.getState().apiRoot);
+
     const result = await CustomerRepoService.getMe(this.getState().apiRoot);
 
     if (!isHttpErrorType(result)) {
