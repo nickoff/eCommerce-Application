@@ -40,7 +40,7 @@ class CartRepoService {
   static async getMyActiveCart(apiRoot: ApiRoot): Promise<Cart | HttpErrorType | CartPagedQueryResponse> {
     return apiRoot
       .me()
-      .carts()
+      .activeCart()
       .get()
       .execute()
       .then(({ body }) => body);
