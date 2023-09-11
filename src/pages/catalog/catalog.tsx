@@ -17,9 +17,13 @@ import { ICatalogProps, ICatalogData } from './catalog.interface';
 import ProductCollection from './product-collection/product-collection';
 import { FilterBlockEvent, FilterChangeEvent } from './filter-tree/filter-block/filter-block.types';
 import FilterObserver from './filter-observer';
+import Pagination from './pagination/pagination';
+import { IPaginationProps, PAGE_CHANGE_EVENT } from './pagination/pagination.interface';
 
 class CatalogPage extends Component<ICatalogProps> {
   @Child(s.productsFilterTree) private filterTreeEl!: HTMLElement;
+
+  private pagination: Pagination;
 
   private filterTree = new FilterTree({
     filters: this.props.catalogData.filters,
@@ -61,6 +65,9 @@ class CatalogPage extends Component<ICatalogProps> {
         return true;
       },
     });
+
+    const { paginationData } = this.props.catalogData;
+    this.pagination = new Pagination({ ...paginationData });
   }
 
   protected componentDidRender(): void {
@@ -69,10 +76,9 @@ class CatalogPage extends Component<ICatalogProps> {
     );
 
     this.getContent().addEventListener(ToolbarEvent.SoringChange, ({ detail }) => this.onSortingChange(detail));
-
     this.getContent().addEventListener(ToolbarEvent.FilterOpen, this.showFilterWindow.bind(this));
-
     this.getContent().addEventListener(FilterBlockEvent.FilterChange, ({ detail }) => this.onFilterChange(detail));
+    this.getContent().addEventListener(PAGE_CHANGE_EVENT, ({ detail }) => this.onPageChange(detail.page));
   }
 
   render(): JSX.Element {
@@ -82,21 +88,38 @@ class CatalogPage extends Component<ICatalogProps> {
         <div className={cx(s.productsContainer, 'container-fluid')}>
           {new Toolbar({ className: s.productsToolbar }).render()}
           {this.prodCollection.render()}
+          {this.pagination.render()}
         </div>
         {this.backdrop.render()}
       </div>
     );
   }
 
+  private async onPageChange(page: number): Promise<void> {
+    const catalogData = await this.updateCatalog(page);
+
+    if (catalogData && !isHttpErrorType(catalogData)) {
+      const { paginationData } = catalogData;
+      this.updatePagination(paginationData);
+    }
+  }
+
+  private updatePagination(paginationData: IPaginationProps): void {
+    this.pagination.setProps({ ...paginationData });
+  }
+
   private async onFilterChange(event: FilterChangeEvent): Promise<void> {
     this.updateAppliedFilters(event);
     const catalogData = await this.load();
 
-    if (isHttpErrorType(catalogData)) {
+    if (!catalogData || isHttpErrorType(catalogData)) {
       return;
     }
 
-    this.prodCollection.setProps({ productsData: catalogData?.products });
+    const { products, paginationData } = catalogData;
+
+    this.prodCollection.setProps({ productsData: products });
+    this.pagination.setProps({ ...paginationData });
 
     Object.assign(this.facets, catalogData?.filters);
   }
@@ -139,18 +162,25 @@ class CatalogPage extends Component<ICatalogProps> {
 
   private async onSortingChange(sortData: ISortBy): Promise<void> {
     this.appliedSorting = sortData;
-    const catalogData = await this.load();
+    this.updateCatalog();
+  }
+
+  private async updateCatalog(page?: number): Promise<ICatalogData | HttpErrorType | null> {
+    const catalogData = await this.load(page);
 
     if (catalogData && !isHttpErrorType(catalogData)) {
       this.prodCollection.setProps({ productsData: catalogData.products });
     }
+
+    return catalogData;
   }
 
-  private async load(): Promise<ICatalogData | HttpErrorType | null> {
+  private async load(page?: number): Promise<ICatalogData | HttpErrorType | null> {
     const result = await ProductSearchService.fetchProductsWithFilters(
       this.appliedFilters,
       this.lastAppliedFilter?.at(-1),
       this.appliedSorting,
+      page,
     );
 
     return result;
