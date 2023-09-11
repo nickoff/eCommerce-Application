@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable no-console */
 import Main from '@components/layout/main/main';
-import Navigo from 'navigo';
+import Navigo, { Match } from 'navigo';
 import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
@@ -37,6 +37,16 @@ const userProfileBeforeHook = (done: (p?: boolean) => void): void => {
   } else {
     done();
   }
+};
+
+const getPageParam = (match: Match): number | undefined => {
+  if (!(match.params && match.params.page)) {
+    return undefined;
+  }
+
+  const page = parseInt(match.params.page, 10);
+
+  return Number.isNaN(page) ? undefined : page;
 };
 
 const initRouter = (): void => {
@@ -92,7 +102,9 @@ const initRouter = (): void => {
       if (match && match.data) {
         const productTypeKey = match.data[0];
 
-        const catalogData = await ProductSearchService.fetchProductsByProductType(productTypeKey);
+        const page = getPageParam(match);
+
+        const catalogData = await ProductSearchService.fetchProductsByProductType(productTypeKey, page);
 
         if (catalogData) {
           Main.setProps({
@@ -115,8 +127,9 @@ const initRouter = (): void => {
     .on('/:vendorSlug', async (match) => {
       if (match && match.data) {
         const { vendorSlug } = match.data;
+        const page = getPageParam(match);
 
-        const catalogData = await ProductSearchService.fetchProductsByCategory(vendorSlug);
+        const catalogData = await ProductSearchService.fetchProductsByCategory(vendorSlug, page);
 
         if (catalogData) {
           Main.setProps({

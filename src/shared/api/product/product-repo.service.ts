@@ -19,6 +19,7 @@ class ProductRepoService {
   static async getProductsByCategory(
     categoryId: string,
     facets?: string[],
+    page?: number,
   ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
     return Store.apiRoot
       .productProjections()
@@ -29,6 +30,8 @@ class ProductRepoService {
           facet: facets,
           'filter.facets': `categories.id:"${categoryId}"`,
           expand: ['categories[*]', 'productType'],
+          limit: searchResultsLimit,
+          offset: page ? searchResultsLimit * (page - 1) : undefined,
         },
       })
       .execute()
@@ -39,6 +42,7 @@ class ProductRepoService {
   static async getProductsByProductType(
     productTypeId: string,
     facets?: string[],
+    page?: number,
   ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
     return Store.apiRoot
       .productProjections()
@@ -49,6 +53,8 @@ class ProductRepoService {
           facet: facets,
           'filter.facets': `productType.id:"${productTypeId}"`,
           expand: ['categories[*]', 'productType'],
+          limit: searchResultsLimit,
+          offset: page ? searchResultsLimit * (page - 1) : undefined,
         },
       })
       .execute()
@@ -79,6 +85,7 @@ class ProductRepoService {
     filters: IFilters,
     facet: string[],
     sortConfig?: ISortBy,
+    page?: number,
   ): Promise<ProductProjectionPagedSearchResponse | HttpErrorType> {
     const query = this.buildFilterQuery(filters);
 
@@ -94,6 +101,8 @@ class ProductRepoService {
           facet,
           'filter.facets': query,
           sort,
+          limit: searchResultsLimit,
+          offset: page ? searchResultsLimit * (page - 1) : undefined,
         },
       })
       .execute()
