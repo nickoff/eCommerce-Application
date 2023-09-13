@@ -8,6 +8,7 @@ import { ApiRoot } from '@shared/types';
 import ApiCreator from '@shared/api/api-creator';
 import { AuthFlow } from '@shared/enums/auth-flow.enum';
 import { Client } from '@commercetools/sdk-client-v2';
+import CartRepoService from '@shared/api/cart/cart-repo.service';
 import IState from './state.interface';
 
 class Store {
@@ -52,6 +53,12 @@ class Store {
         localStorage.removeItem(StorageKey.TokenCachePass);
       }
     }
+
+    const activeCart = await CartRepoService.getMyActiveCart(this.getState().apiRoot);
+
+    if (!isHttpErrorType(activeCart)) {
+      this.setState({ cart: activeCart });
+    }
   }
 
   getState(): IState {
@@ -85,4 +92,4 @@ class Store {
 
 const [apiRoot, authFlow, apiClient] = ApiCreator.initFlow();
 
-export default new Store({ customer: null, apiRoot, authFlow, apiClient });
+export default new Store({ customer: null, cart: null, apiRoot, authFlow, apiClient });

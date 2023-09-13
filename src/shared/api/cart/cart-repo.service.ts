@@ -1,6 +1,6 @@
 import { ApiRoot } from '@shared/types';
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
-import { Cart, CartDraft, CartPagedQueryResponse } from '@commercetools/platform-sdk';
+import { Cart, CartDraft } from '@commercetools/platform-sdk';
 import extractHttpError from '../extract-http-error.decorator';
 
 class CartRepoService {
@@ -37,7 +37,7 @@ class CartRepoService {
   }
 
   @extractHttpError
-  static async getMyActiveCart(apiRoot: ApiRoot): Promise<Cart | HttpErrorType | CartPagedQueryResponse> {
+  static async getMyActiveCart(apiRoot: ApiRoot): Promise<Cart | HttpErrorType> {
     return apiRoot
       .me()
       .activeCart()
