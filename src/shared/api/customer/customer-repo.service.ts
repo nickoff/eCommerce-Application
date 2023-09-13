@@ -71,7 +71,11 @@ class CustomerRepoService {
     }
   }
 
-  static createCustomerDraft(customerData: INewCustomer): CustomerDraft {
+  static createCustomerDraft(
+    customerData: INewCustomer,
+    anonymousId?: string,
+    anonymousCartId?: string,
+  ): CustomerDraft {
     const {
       firstName,
       lastName,
@@ -102,6 +106,8 @@ class CustomerRepoService {
       addresses,
       shippingAddresses,
       billingAddresses,
+      anonymousId,
+      anonymousCartId,
     };
 
     if (isDefaultShipping) {

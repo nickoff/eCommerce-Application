@@ -77,6 +77,7 @@ class Store {
 
   logout(): void {
     localStorage.removeItem(StorageKey.TokenCachePass);
+    localStorage.removeItem(StorageKey.TokenCacheAnonym);
     const [apiRoot, authFlow, apiClient] = ApiCreator.createAnonymousFlow();
     this.setState({ customer: null, apiRoot, authFlow, apiClient });
   }

@@ -8,7 +8,9 @@ import Store from './store/store';
 class AuthService {
   static async register(customerData: INewCustomer): Promise<AuthResult> {
     const { apiRoot } = Store.getState();
-    const customerDraft = CustomerRepoService.createCustomerDraft(customerData);
+    const anonymousId = Store.getState().cart?.anonymousId;
+    const anonymousCartId = Store.getState().cart?.id;
+    const customerDraft = CustomerRepoService.createCustomerDraft(customerData, anonymousId, anonymousCartId);
     const result = await CustomerRepoService.createCustomer(apiRoot, customerDraft);
 
     if (isHttpErrorType(result)) {
