@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Customer } from '@commercetools/platform-sdk';
 import { Component } from '@shared/lib';
 import { isKeyOf, isHttpErrorType } from '@shared/utils/type-guards';
@@ -42,12 +43,14 @@ class Store {
       return;
     }
 
-    const result = await CustomerRepoService.getMe(this.getState().apiRoot);
+    if (localStorage.getItem(StorageKey.TokenCachePass)) {
+      const result = await CustomerRepoService.getMe(this.getState().apiRoot);
 
-    if (!isHttpErrorType(result)) {
-      this.setState({ customer: result });
-    } else {
-      localStorage.removeItem(StorageKey.TokenCache);
+      if (!isHttpErrorType(result)) {
+        this.setState({ customer: result });
+      } else {
+        localStorage.removeItem(StorageKey.TokenCachePass);
+      }
     }
   }
 
@@ -66,9 +69,9 @@ class Store {
   }
 
   logout(): void {
-    const [apiRoot, authFlow, apiClient] = ApiCreator.createCredentialsFlow();
+    localStorage.removeItem(StorageKey.TokenCachePass);
+    const [apiRoot, authFlow, apiClient] = ApiCreator.createAnonymousFlow();
     this.setState({ customer: null, apiRoot, authFlow, apiClient });
-    localStorage.removeItem(StorageKey.TokenCache);
   }
 
   setState(newState: Partial<IState>): void {
