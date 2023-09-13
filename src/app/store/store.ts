@@ -43,12 +43,14 @@ class Store {
       return;
     }
 
-    const result = await CustomerRepoService.getMe(this.getState().apiRoot);
+    if (localStorage.getItem(StorageKey.TokenCachePass)) {
+      const result = await CustomerRepoService.getMe(this.getState().apiRoot);
 
-    if (!isHttpErrorType(result)) {
-      this.setState({ customer: result });
-    } else {
-      localStorage.removeItem(StorageKey.TokenCachePass);
+      if (!isHttpErrorType(result)) {
+        this.setState({ customer: result });
+      } else {
+        localStorage.removeItem(StorageKey.TokenCachePass);
+      }
     }
   }
 
