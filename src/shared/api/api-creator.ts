@@ -51,7 +51,7 @@ export default class ApiCreator {
   }
 
   static createExistingTokenFlow(): ApiCreatorReturn {
-    const { token } = this.tokenCachePass.get();
+    const token = this.tokenCachePass.get().token || this.tokenCacheAnonym.get().token;
 
     if (!token) {
       throw new Error('Cannot find cached token');
@@ -68,7 +68,7 @@ export default class ApiCreator {
   }
 
   private static isTokenCached(): boolean {
-    return !!this.tokenCachePass.get().token && !!this.tokenCacheAnonym.get().token;
+    return !!this.tokenCachePass.get().token || !!this.tokenCacheAnonym.get().token;
   }
 
   private static tokenCachePass: TokenCache = {

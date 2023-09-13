@@ -42,13 +42,15 @@ class Store {
     if (this.getState().authFlow !== AuthFlow.ExistingToken) {
       return;
     }
-    console.log(this.getState().apiRoot);
-    const result = await CustomerRepoService.getMe(this.getState().apiRoot);
 
-    if (!isHttpErrorType(result)) {
-      this.setState({ customer: result });
-    } else {
-      localStorage.removeItem(StorageKey.TokenCachePass);
+    if (localStorage.getItem(StorageKey.TokenCachePass)) {
+      const result = await CustomerRepoService.getMe(this.getState().apiRoot);
+
+      if (!isHttpErrorType(result)) {
+        this.setState({ customer: result });
+      } else {
+        localStorage.removeItem(StorageKey.TokenCachePass);
+      }
     }
   }
 
