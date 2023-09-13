@@ -10,5 +10,10 @@ export interface ICatalogProps extends IProps {
 export interface ICatalogData {
   products: ProductProjection[];
   filters: IFilters;
+  paginationData: {
+    total: number;
+    limit: number;
+    offset: number;
+  };
   selectedFilters?: Partial<IFilters>;
 }
