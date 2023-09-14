@@ -15,7 +15,6 @@ import { IProductCardProps } from './product-card.interface';
 class ProductCard extends Component<IProductCardProps> {
   constructor(...args: IProductCardProps[]) {
     super(...args);
-    store.subscribe('customer', this);
     store.subscribe('cart', this);
   }
 
