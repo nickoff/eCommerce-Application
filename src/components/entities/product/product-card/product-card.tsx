@@ -13,7 +13,15 @@ import { btn, btnFilled } from '../../../../styles/shared/index.module.scss';
 import { IProductCardProps } from './product-card.interface';
 
 class ProductCard extends Component<IProductCardProps> {
+  constructor(...args: IProductCardProps[]) {
+    super(...args);
+    store.subscribe('customer', this);
+    store.subscribe('cart', this);
+  }
+
   private smallImages = this.props.productData.images.filter((i) => i.dimensions.w < 400);
+
+  private cartId = store.getState().cart?.id;
 
   render(): JSX.Element {
     if (this.props.expanded) return this.renderExpanded();
@@ -50,15 +58,19 @@ class ProductCard extends Component<IProductCardProps> {
         <a className={s.prodCardName} href={detailsPath} dataset={{ navigo: '' }}>
           {name}
         </a>
-        <button className={cx(btn, btnFilled, s.prodCardBtn)} onclick={this.onAddToCartClick.bind(this, id)}>
-          ADD TO CART
+        <button
+          className={cx(btn, btnFilled, s.prodCardBtn, this.isLineItemInCart(id) && s.prodCardBtnInCart)}
+          onclick={this.onAddToCartClick.bind(this, id)}
+          disabled={this.isLineItemInCart(id)}
+        >
+          {this.isLineItemInCart(id) ? 'IN CART' : 'ADD TO CART'}
         </button>
       </div>
     );
   }
 
   renderExpanded(): JSX.Element {
-    const { name, vendor, prices, description, detailsPath, discountedPrice } = this.props.productData;
+    const { name, vendor, prices, description, detailsPath, discountedPrice, id } = this.props.productData;
     return (
       <div className={cx(s.prodCard, s.prodCardExpanded)}>
         <div className={s.prodCardImgContainer}>
@@ -80,7 +92,13 @@ class ProductCard extends Component<IProductCardProps> {
               alt={this.smallImages[1].label}
             />
           </a>
-          <button className={cx(btn, btnFilled, s.prodCardBtn)}>ADD TO CART</button>
+          <button
+            className={cx(btn, btnFilled, s.prodCardBtn, this.isLineItemInCart(id) && s.prodCardBtnInCart)}
+            onclick={this.onAddToCartClick.bind(this, id)}
+            disabled={this.isLineItemInCart(id)}
+          >
+            {this.isLineItemInCart(id) ? 'IN CART' : 'ADD TO CART'}
+          </button>
         </div>
         <div className={s.prodCardBody}>
           <a href={`/${vendor.slug[LANG_CODE]}`} className={s.prodCardVendor}>
@@ -101,12 +119,17 @@ class ProductCard extends Component<IProductCardProps> {
 
   private async onAddToCartClick(id: string): Promise<void> {
     const versionCart = store.getState().cart?.version;
-    const cartId = store.getState().cart?.id;
-    if (!versionCart || !cartId) return;
-    const updateCart = await CartRepoService.addLineItemToCart(store.apiRoot, id, versionCart, cartId);
+
+    if (!versionCart || !this.cartId) return;
+    const updateCart = await CartRepoService.addLineItemToCart(store.apiRoot, id, versionCart, this.cartId);
     if (!isHttpErrorType(updateCart)) {
       store.setState({ cart: updateCart });
     }
+    this.getContent();
+  }
+
+  private isLineItemInCart(id: string): boolean {
+    return !!store.getState().cart?.lineItems.find((lineItem) => lineItem.productId === id);
   }
 }
 
