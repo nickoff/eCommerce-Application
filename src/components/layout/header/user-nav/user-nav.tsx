@@ -15,17 +15,22 @@ class UserNav extends Component {
   constructor(...args: IProps[]) {
     super(...args);
     Store.subscribe('customer', this);
+    Store.subscribe('cart', this);
   }
 
   render(): JSX.Element {
     const { customer } = Store.getState();
+    const { cart } = Store.getState();
 
     return (
       <nav>
         <ul className={s.navList}>
           <li className={cx(navItem, s.userNavItem)}>{new SearchModal().render()}</li>
           <li className={cx(navItem, s.userNavItem)}>
-            <button className={navLink}>{CartIcon}</button>
+            <button className={navLink}>
+              {CartIcon}
+              {cart && cart?.lineItems.length ? <span className={s.cartCount}>{cart?.lineItems.length}</span> : ''}
+            </button>
           </li>
           {customer ? new UserMenu({ className: s.userNavItem }).render() : this.renderAuthLinks()}
         </ul>

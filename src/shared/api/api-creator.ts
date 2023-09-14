@@ -42,6 +42,7 @@ export default class ApiCreator {
       .build();
 
     CartRepoService.createMeCart(this.createApiRoot(client), { currency: 'USD', country: 'BY' });
+
     return [this.createApiRoot(client), AuthFlow.Anonymous, client];
   }
 

@@ -7,6 +7,7 @@ import { centsToMoney } from '@shared/utils/misc';
 import { LANG_CODE } from '@shared/constants/misc';
 import CartRepoService from '@shared/api/cart/cart-repo.service';
 import store from '@app/store/store';
+import { isHttpErrorType } from '@shared/utils/type-guards';
 import * as s from './product-card.module.scss';
 import { btn, btnFilled } from '../../../../styles/shared/index.module.scss';
 import { IProductCardProps } from './product-card.interface';
@@ -98,11 +99,14 @@ class ProductCard extends Component<IProductCardProps> {
     );
   }
 
-  private onAddToCartClick(id: string): void {
+  private async onAddToCartClick(id: string): Promise<void> {
     const versionCart = store.getState().cart?.version;
     const cartId = store.getState().cart?.id;
     if (!versionCart || !cartId) return;
-    CartRepoService.addLineItemToCart(store.apiRoot, id, versionCart, cartId);
+    const updateCart = await CartRepoService.addLineItemToCart(store.apiRoot, id, versionCart, cartId);
+    if (!isHttpErrorType(updateCart)) {
+      store.setState({ cart: updateCart });
+    }
   }
 }
 
