@@ -10,7 +10,6 @@ import {
   getPassAuthMiddlewareOptions,
   getAnonymousAuthMiddlewareOptions,
 } from './middlewares.config';
-import CartRepoService from './cart/cart-repo.service';
 
 const initialToken: TokenStore = {
   token: '',
@@ -40,8 +39,6 @@ export default class ApiCreator {
       .withAnonymousSessionFlow(options)
       .withHttpMiddleware(httpMiddlewareOptions)
       .build();
-
-    CartRepoService.createMeCart(this.createApiRoot(client), { currency: 'USD', country: 'BY' });
 
     return [this.createApiRoot(client), AuthFlow.Anonymous, client];
   }

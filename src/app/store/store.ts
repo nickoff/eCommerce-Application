@@ -40,10 +40,6 @@ class Store {
   }
 
   async init(): Promise<void> {
-    if (this.getState().authFlow !== AuthFlow.ExistingToken) {
-      return;
-    }
-
     if (localStorage.getItem(StorageKey.TokenCachePass)) {
       const result = await CustomerRepoService.getMe(this.getState().apiRoot);
 
@@ -51,6 +47,14 @@ class Store {
         this.setState({ customer: result });
       } else {
         localStorage.removeItem(StorageKey.TokenCachePass);
+      }
+    }
+
+    if (this.getState().authFlow === AuthFlow.Anonymous) {
+      const newCart = await CartRepoService.createMeCart(this.getState().apiRoot, { currency: 'USD', country: 'BY' });
+
+      if (!isHttpErrorType(newCart)) {
+        this.setState({ cart: newCart });
       }
     }
 
@@ -71,15 +75,35 @@ class Store {
     this.observers[property] = observers;
   }
 
-  login(customer: Customer, apiRoot: ApiRoot, authFlow: AuthFlow, apiClient: Client): void {
+  async login(customer: Customer, apiRoot: ApiRoot, authFlow: AuthFlow, apiClient: Client): Promise<void> {
     this.setState({ customer, apiRoot, authFlow, apiClient });
+
+    const activeCart = await CartRepoService.getMyActiveCart(this.getState().apiRoot);
+
+    if (!isHttpErrorType(activeCart)) {
+      this.setState({ cart: activeCart });
+    }
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
     localStorage.removeItem(StorageKey.TokenCachePass);
     localStorage.removeItem(StorageKey.TokenCacheAnonym);
     const [apiRoot, authFlow, apiClient] = ApiCreator.createAnonymousFlow();
     this.setState({ customer: null, apiRoot, authFlow, apiClient });
+
+    if (this.getState().authFlow === AuthFlow.Anonymous) {
+      const newCart = await CartRepoService.createMeCart(this.getState().apiRoot, { currency: 'USD', country: 'BY' });
+
+      if (!isHttpErrorType(newCart)) {
+        this.setState({ cart: newCart });
+      }
+    }
+
+    const activeCart = await CartRepoService.getMyActiveCart(this.getState().apiRoot);
+
+    if (!isHttpErrorType(activeCart)) {
+      this.setState({ cart: activeCart });
+    }
   }
 
   setState(newState: Partial<IState>): void {
