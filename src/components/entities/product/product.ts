@@ -4,6 +4,8 @@ import { LANG_CODE } from '@shared/constants/misc';
 import createProductAttributesObject from './createProductAttributesObject';
 
 export default class Product implements IProduct {
+  readonly id: string;
+
   readonly name: string;
 
   readonly description: string;
@@ -25,6 +27,7 @@ export default class Product implements IProduct {
   readonly discountedPrice?: number;
 
   constructor(prod: ProductProjection) {
+    this.id = prod.id;
     this.name = prod.name?.[LANG_CODE];
     this.description = prod.description?.[LANG_CODE] ?? '';
     this.prices = prod.masterVariant.prices as IProduct['prices'];

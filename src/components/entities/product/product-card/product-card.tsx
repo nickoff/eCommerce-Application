@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Component } from '@shared/lib';
 import { centsToMoney } from '@shared/utils/misc';
 import { LANG_CODE } from '@shared/constants/misc';
+import CartRepoService from '@shared/api/cart/cart-repo.service';
+import store from '@app/store/store';
 import * as s from './product-card.module.scss';
 import { btn, btnFilled } from '../../../../styles/shared/index.module.scss';
 import { IProductCardProps } from './product-card.interface';
@@ -14,7 +17,7 @@ class ProductCard extends Component<IProductCardProps> {
   render(): JSX.Element {
     if (this.props.expanded) return this.renderExpanded();
 
-    const { name, prices, detailsPath, vendor, discountedPrice } = this.props.productData;
+    const { name, prices, detailsPath, vendor, discountedPrice, id } = this.props.productData;
 
     return (
       <div className={s.prodCard}>
@@ -46,7 +49,9 @@ class ProductCard extends Component<IProductCardProps> {
         <a className={s.prodCardName} href={detailsPath} dataset={{ navigo: '' }}>
           {name}
         </a>
-        <button className={cx(btn, btnFilled, s.prodCardBtn)}>ADD TO CART</button>
+        <button className={cx(btn, btnFilled, s.prodCardBtn)} onclick={this.onAddToCartClick.bind(this, id)}>
+          ADD TO CART
+        </button>
       </div>
     );
   }
@@ -91,6 +96,13 @@ class ProductCard extends Component<IProductCardProps> {
         </div>
       </div>
     );
+  }
+
+  private onAddToCartClick(id: string): void {
+    const versionCart = store.getState().cart?.version;
+    const cartId = store.getState().cart?.id;
+    if (!versionCart || !cartId) return;
+    CartRepoService.addLineItemToCart(store.apiRoot, id, versionCart, cartId);
   }
 }
 

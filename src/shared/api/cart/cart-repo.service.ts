@@ -45,6 +45,31 @@ class CartRepoService {
       .execute()
       .then(({ body }) => body);
   }
+
+  @extractHttpError
+  static async addLineItemToCart(
+    apiRoot: ApiRoot,
+    productId: string,
+    versionCart: number,
+    cartId: string,
+  ): Promise<Cart | HttpErrorType> {
+    return apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: versionCart,
+          actions: [
+            {
+              action: 'addLineItem',
+              productId,
+            },
+          ],
+        },
+      })
+      .execute()
+      .then(({ body }) => body);
+  }
 }
 
 export default CartRepoService;
