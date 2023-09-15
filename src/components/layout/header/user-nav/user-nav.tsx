@@ -29,7 +29,11 @@ class UserNav extends Component {
           <li className={cx(navItem, s.userNavItem)}>
             <button className={navLink}>
               {CartIcon}
-              {cart && cart?.lineItems.length ? <span className={s.cartCount}>{cart?.lineItems.length}</span> : ''}
+              {cart && cart?.lineItems.length ? (
+                <span className={s.cartCount}>{cart?.lineItems.reduce((total, item) => total + item.quantity, 0)}</span>
+              ) : (
+                ''
+              )}
             </button>
           </li>
           {customer ? new UserMenu({ className: s.userNavItem }).render() : this.renderAuthLinks()}
