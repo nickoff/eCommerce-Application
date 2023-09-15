@@ -52,6 +52,7 @@ class CartRepoService {
     productId: string,
     versionCart: number,
     cartId: string,
+    quantity?: number,
   ): Promise<Cart | HttpErrorType> {
     return apiRoot
       .carts()
@@ -63,6 +64,34 @@ class CartRepoService {
             {
               action: 'addLineItem',
               productId,
+              quantity,
+            },
+          ],
+        },
+      })
+      .execute()
+      .then(({ body }) => body);
+  }
+
+  @extractHttpError
+  static async removeLineItemToCart(
+    apiRoot: ApiRoot,
+    lineItemId: string,
+    versionCart: number,
+    cartId: string,
+    quantity?: number,
+  ): Promise<Cart | HttpErrorType> {
+    return apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: versionCart,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+              quantity,
             },
           ],
         },
