@@ -21,10 +21,19 @@ class AuthService {
     return this.login({ email, password });
   }
 
-  static async login(credentials: ICustomerCredentials): Promise<AuthResult> {
+  static async login(
+    credentials: ICustomerCredentials,
+    anonymousId?: string,
+    anonymousCartId?: string,
+  ): Promise<AuthResult> {
     try {
       const [apiRoot, ...rest] = ApiRootCreator.createPasswordFlow(credentials);
-      const result = await CustomerRepoService.getCustomerByCredentials(apiRoot, credentials);
+      const result = await CustomerRepoService.getCustomerByCredentials(
+        apiRoot,
+        credentials,
+        anonymousId,
+        anonymousCartId,
+      );
 
       if (!isHttpErrorType(result)) {
         Store.login(result, apiRoot, ...rest);
