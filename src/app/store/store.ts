@@ -62,6 +62,8 @@ class Store {
 
     if (!isHttpErrorType(activeCart)) {
       this.setState({ cart: activeCart });
+    } else {
+      localStorage.removeItem(StorageKey.TokenCacheAnonym);
     }
   }
 

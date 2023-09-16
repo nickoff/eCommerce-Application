@@ -124,7 +124,6 @@ class ProductCard extends Component<IProductCardProps> {
     if (!isHttpErrorType(updateCart)) {
       store.setState({ cart: updateCart });
     }
-    this.getContent();
   }
 
   private isLineItemInCart(id: string): boolean {

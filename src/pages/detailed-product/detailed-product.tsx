@@ -81,6 +81,11 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
           >
             {this.isLineItemInCart(id) ? 'IN CART' : 'ADD TO CART'}
           </button>
+          {this.isLineItemInCart(id) && (
+            <button className={cx(btn, btnFilled, s.addToCartBtn)} onclick={this.onRemoveToCartClick.bind(this, id)}>
+              REMOVE
+            </button>
+          )}
         </div>
         <div className={cx(s.card, s.desc)}>
           <p className={s.cardHeading}>Description</p>
@@ -136,7 +141,17 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
     if (!isHttpErrorType(updateCart)) {
       store.setState({ cart: updateCart });
     }
-    this.getContent();
+  }
+
+  private async onRemoveToCartClick(id: string): Promise<void> {
+    const versionCart = store.getState().cart?.version;
+    const lineItemId = store.getState().cart?.lineItems.find((lineItem) => lineItem.productId === id)?.id;
+
+    if (!versionCart || !this.cartId || !lineItemId) return;
+    const updateCart = await CartRepoService.removeLineItemToCart(store.apiRoot, lineItemId, versionCart, this.cartId);
+    if (!isHttpErrorType(updateCart)) {
+      store.setState({ cart: updateCart });
+    }
   }
 }
 
