@@ -10,8 +10,9 @@ import Expandable from '@components/shared/ui/expandable/expandable';
 import store from '@app/store/store';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import CartRepoService from '@shared/api/cart/cart-repo.service';
+import TrashIcon from '@assets/icons/trash.element.svg';
 import { IDetailedProductPageProps } from './detailed-product.interface';
-import { btn, btnFilled } from '../../styles/shared/index.module.scss';
+import { btn, btnFilled, btnOutLine } from '../../styles/shared/index.module.scss';
 import * as s from './detailed-product.module.scss';
 import '@fancyapps/ui/dist/carousel/carousel.css';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
@@ -82,8 +83,8 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
             {this.isLineItemInCart(id) ? 'IN CART' : 'ADD TO CART'}
           </button>
           {this.isLineItemInCart(id) && (
-            <button className={cx(btn, btnFilled, s.addToCartBtn)} onclick={this.onRemoveToCartClick.bind(this, id)}>
-              REMOVE
+            <button className={cx(btn, btnOutLine, s.addToCartBtn)} onclick={this.onRemoveToCartClick.bind(this, id)}>
+              {TrashIcon}
             </button>
           )}
         </div>
