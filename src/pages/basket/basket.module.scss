@@ -1,0 +1,26 @@
+.basket-page-header {
+  @include flex-vertical-center;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 3.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 1.143px;
+  }
+
+  button {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 25px;
+    text-decoration-line: underline;
+    opacity: 0.5;
+    background: none;
+
+    &:hover {
+      color: $primary-color;
+      opacity: 1;
+    }
+  }
+}

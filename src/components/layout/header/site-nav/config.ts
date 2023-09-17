@@ -5,7 +5,7 @@ enum LinkText {
   Headphones = 'HEADPHONES',
   Speakers = 'SPEAKERS',
   Earphones = 'EARPHONES',
-  AboutUs = 'ABOUT US',
+  AboutUs = 'ABOUT',
 }
 
 export const linksConfig = [

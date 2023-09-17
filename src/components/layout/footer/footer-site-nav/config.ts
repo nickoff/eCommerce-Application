@@ -2,7 +2,7 @@ import { Route } from '@app/router';
 
 enum LinkText {
   Home = 'HOME',
-  AboutUs = 'ABOUT US',
+  AboutUs = 'ABOUT',
   Headphones = 'HEADPHONES',
   Speakers = 'SPEAKERS',
   Earphones = 'EARPHONES',
