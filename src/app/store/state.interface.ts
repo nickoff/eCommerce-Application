@@ -1,5 +1,5 @@
 import { type Client } from '@commercetools/sdk-client-v2';
-import { type Customer } from '@commercetools/platform-sdk';
+import { Cart, type Customer } from '@commercetools/platform-sdk';
 import { type AuthFlow } from '@shared/enums/auth-flow.enum';
 import { type ApiRoot } from '@shared/types';
 
@@ -8,4 +8,5 @@ export default interface IState {
   apiRoot: ApiRoot;
   authFlow: AuthFlow;
   apiClient: Client;
+  cart: Cart | null;
 }

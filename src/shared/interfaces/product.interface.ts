@@ -2,6 +2,7 @@ import { type ProductVariant, type ProductType, type Category } from '@commercet
 import { type IProductAttributes } from './product-attributes';
 
 export interface IProduct {
+  readonly id: string;
   readonly name: string;
   readonly description: string;
   readonly slug: string;

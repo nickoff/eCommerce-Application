@@ -12,6 +12,7 @@ import { AuthResult } from '@shared/types';
 import * as s from './login.module.scss';
 import { btn, btnFilled } from '../../styles/shared/index.module.scss';
 import { controls, LoginPageText } from './config';
+import Store from '../../app/store/store';
 
 @PageTitle('Login')
 class PageLogin extends Component {
@@ -65,7 +66,9 @@ class PageLogin extends Component {
     }
 
     const credentials = buildFormData<ICustomerCredentials>(this.form);
-    const result = await AuthService.login(credentials);
+    const anonymousId = Store.getState().cart?.anonymousId;
+    const anonymousCartId = Store.getState().cart?.id;
+    const result = await AuthService.login(credentials, anonymousId, anonymousCartId);
     this.handleLoginResult(result);
   }
 
