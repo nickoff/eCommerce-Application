@@ -18,6 +18,7 @@ import { LocalizedString } from '@commercetools/platform-sdk';
 import { SITE_TITLE } from '@shared/constants/seo';
 import UserProfilePage from '@pages/user-profile/user-profile';
 import AboutUs from '@pages/about-us/about-us';
+import BasketPage from '@pages/basket/basket';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -56,6 +57,7 @@ const initRouter = (): void => {
     .on({
       [Route.Home]: () => Main.setProps({ page: new PageHome(), showBreadcrumps: false }),
       [Route.AboutUs]: () => Main.setProps({ page: new AboutUs(), showBreadcrumps: false }),
+      [Route.Basket]: () => Main.setProps({ page: new BasketPage(), showBreadcrumps: false }),
       [Route.Login]: {
         as: 'login-page',
         uses: () => Main.setProps({ page: new PageLogin(), showBreadcrumps: false }),
