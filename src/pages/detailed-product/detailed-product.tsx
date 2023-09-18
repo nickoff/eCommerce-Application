@@ -83,7 +83,10 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
             {this.isLineItemInCart(id) ? 'IN CART' : 'ADD TO CART'}
           </button>
           {this.isLineItemInCart(id) && (
-            <button className={cx(btn, btnOutLine, s.addToCartBtn)} onclick={this.onRemoveToCartClick.bind(this, id)}>
+            <button
+              className={cx(btn, btnOutLine, s.removeToCartBtn)}
+              onclick={this.onRemoveToCartClick.bind(this, id)}
+            >
               {TrashIcon}
             </button>
           )}

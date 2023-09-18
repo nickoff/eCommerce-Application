@@ -99,6 +99,17 @@ class CartRepoService {
       .execute()
       .then(({ body }) => body);
   }
+
+  @extractHttpError
+  static async removeAllCart(apiRoot: ApiRoot, cartId: string, versionCart: number): Promise<Cart | HttpErrorType> {
+    return apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cartId })
+      .delete({ queryArgs: { version: versionCart } })
+      .execute()
+      .then(({ body }) => body);
+  }
 }
 
 export default CartRepoService;

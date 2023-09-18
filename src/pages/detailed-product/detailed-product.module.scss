@@ -134,6 +134,10 @@
   line-height: normal;
 }
 
+.remove-to-cart-btn:hover {
+  color: $color-error-validation;
+}
+
 .add-btn__in-cart {
   background-color: $second-color;
   &:hover {

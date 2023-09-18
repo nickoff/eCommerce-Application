@@ -2,7 +2,7 @@ import { element, fragment } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Component } from '@shared/lib';
 import Store from '@app/store/store';
-import { Route } from '@app/router';
+import { Route, router } from '@app/router';
 import { btn, btnFilled } from '../../../../styles/shared/button-like.module.scss';
 import { navItem, navLink } from '../common.module.scss';
 import * as s from './user-nav.module.scss';
@@ -27,7 +27,7 @@ class UserNav extends Component {
         <ul className={s.navList}>
           <li className={cx(navItem, s.userNavItem)}>{new SearchModal().render()}</li>
           <li className={cx(navItem, s.userNavItem)}>
-            <button className={navLink}>
+            <button className={navLink} onclick={this.onBasketClick.bind(this)}>
               {CartIcon}
               {cart && cart?.lineItems.length ? (
                 <span className={s.cartCount}>{cart?.lineItems.reduce((total, item) => total + item.quantity, 0)}</span>
@@ -77,6 +77,10 @@ class UserNav extends Component {
         </li>
       </>
     );
+  }
+
+  private onBasketClick(): void {
+    router.navigate(Route.Basket);
   }
 }
 
