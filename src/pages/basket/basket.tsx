@@ -6,6 +6,8 @@ import store from '@app/store/store';
 import { isHttpErrorType } from '@shared/utils/type-guards';
 import { btn } from '@styles/shared/index.module.scss';
 import CartRepoService from '@shared/api/cart/cart-repo.service';
+import LineItemCard from '@components/entities/line-item/line-item-card/line-item-card';
+import CartLineItem from '@components/entities/line-item/line-item';
 import * as s from './basket.module.scss';
 import { BasketPageText, linksConfig } from './config';
 
@@ -16,13 +18,17 @@ class BasketPage extends Component {
     store.subscribe('cart', this);
   }
 
-  private cartId = store.getState().cart?.id;
+  private myCart = store.getState().cart;
+
+  private cartId = this.myCart?.id;
+
+  private lineItems = this.myCart?.lineItems;
 
   render(): JSX.Element {
     const { cart } = store.getState();
     return (
-      <div className={s.basketPageWrapper}>
-        <div className={s.basketPageHeader}>
+      <div className={cx(s.basketPageWrapper)}>
+        <div className={cx(s.basketPageHeader)}>
           <h3>{BasketPageText.Title}</h3>
           {cart && cart?.lineItems.length > 0 && (
             <button className={cx(btn)} onclick={this.onRemoveAllCartClick.bind(this)}>
@@ -30,14 +36,14 @@ class BasketPage extends Component {
             </button>
           )}
         </div>
-        {cart && cart?.lineItems.length ? <div>1</div> : this.emptyCart()}
+        {cart && cart?.lineItems.length ? this.lineItemsList() : this.emptyCart()}
       </div>
     );
   }
 
   private emptyCart(): JSX.Element {
     return (
-      <div className={s.basketEmpty}>
+      <div className={cx(s.basketEmpty)}>
         <p className={cx(s.basketEmptyArticle)}>{BasketPageText.EmptyCart}</p>
         <ul className={cx(s.basketEmptyNavList)}>
           {linksConfig.map((link) => (
@@ -48,6 +54,19 @@ class BasketPage extends Component {
             </li>
           ))}
         </ul>
+      </div>
+    );
+  }
+
+  private lineItemsList(): JSX.Element {
+    return (
+      <div className={cx(s.basketLineItems)}>
+        {this.lineItems &&
+          this.lineItems.map((lineItem) => new LineItemCard({ lineItemData: new CartLineItem(lineItem) }).render())}
+        <div className={cx(s.basketPageTotal)}>
+          <h5>{BasketPageText.Total}</h5>
+          <p>{`$ ${this.myCart && this.myCart.totalPrice.centAmount / 100}`}</p>
+        </div>
       </div>
     );
   }

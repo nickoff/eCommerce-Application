@@ -4,6 +4,7 @@ export enum BasketPageText {
   Title = 'Cart',
   BntRemoveAll = 'Remove all',
   EmptyCart = 'Your cart is empty. Let’s change that.',
+  Total = 'Total:',
 }
 
 enum LinkText {

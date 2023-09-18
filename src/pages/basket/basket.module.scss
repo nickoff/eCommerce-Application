@@ -49,3 +49,25 @@
     }
   }
 }
+
+.basket-page-total {
+  @include flex-vertical-center;
+  justify-content: space-between;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  margin-top: 10px;
+  color: $primary-color;
+
+  h5 {
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    margin-top: 10px;
+    color: $second-color;
+    opacity: 0.5;
+  }
+}
