@@ -11,6 +11,7 @@
 
   &__left-side {
     @include flex-vertical-center;
+    flex-wrap: wrap;
   }
 
   &__right-side {
@@ -19,8 +20,10 @@
 }
 
 .prod__name {
+  max-width: 200px;
   font-size: 1.3rem;
   padding-left: 10px;
+  margin-bottom: 0;
 }
 
 .prod__photo {
@@ -34,6 +37,7 @@
   font-weight: 700;
   opacity: 0.5;
   text-transform: none;
+  margin-bottom: 0;
 }
 
 .prodPricePerUnit {
@@ -43,6 +47,7 @@
   letter-spacing: normal;
   opacity: 0.5;
   margin-left: 10px;
+  margin-bottom: 0;
 }
 
 .prod__total-item {
@@ -51,4 +56,13 @@
   text-align: right;
   min-width: 70px;
   letter-spacing: normal;
+  margin-bottom: 0;
+}
+
+.remove-to-cart-btn {
+  background-color: $default-color;
+
+  :hover {
+    color: $color-error-validation;
+  }
 }

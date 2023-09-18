@@ -52,21 +52,24 @@
 
 .basket-page-total {
   @include flex-vertical-center;
-  justify-content: space-between;
-  font-size: 2.4rem;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: normal;
-  text-transform: uppercase;
-  margin-top: 10px;
-  color: $primary-color;
-
-  h5 {
+  justify-content: end;
+  p {
+    font-size: 2.4rem;
     font-weight: 700;
-    line-height: normal;
+    line-height: 32px;
     letter-spacing: normal;
     text-transform: uppercase;
-    margin-top: 10px;
+    margin: 10px 10px;
+    color: $primary-color;
+  }
+
+  h5 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    margin: 10px 10px;
     color: $second-color;
     opacity: 0.5;
   }

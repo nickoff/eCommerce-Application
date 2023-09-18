@@ -18,11 +18,9 @@ class BasketPage extends Component {
     store.subscribe('cart', this);
   }
 
-  private myCart = store.getState().cart;
+  private cartId = store.getState().cart?.id;
 
-  private cartId = this.myCart?.id;
-
-  private lineItems = this.myCart?.lineItems;
+  private lineItems = store.getState().cart?.lineItems;
 
   render(): JSX.Element {
     const { cart } = store.getState();
@@ -59,13 +57,16 @@ class BasketPage extends Component {
   }
 
   private lineItemsList(): JSX.Element {
+    const { cart } = store.getState();
+
     return (
       <div className={cx(s.basketLineItems)}>
-        {this.lineItems &&
-          this.lineItems.map((lineItem) => new LineItemCard({ lineItemData: new CartLineItem(lineItem) }).render())}
+        {cart &&
+          cart.lineItems &&
+          cart.lineItems.map((lineItem) => new LineItemCard({ lineItemData: new CartLineItem(lineItem) }).render())}
         <div className={cx(s.basketPageTotal)}>
           <h5>{BasketPageText.Total}</h5>
-          <p>{`$ ${this.myCart && this.myCart.totalPrice.centAmount / 100}`}</p>
+          <p>{`$ ${cart && cart.totalPrice.centAmount / 100}`}</p>
         </div>
       </div>
     );
