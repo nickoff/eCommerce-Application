@@ -32,17 +32,10 @@
   background-color: $grey;
 }
 
-.prod__quantity {
-  font-size: 1.5rem;
-  font-weight: 700;
-  opacity: 0.5;
-  text-transform: none;
-  margin-bottom: 0;
-}
-
 .prodPricePerUnit {
   font-size: 1.5rem;
   font-weight: 700;
+  text-align: center;
   min-width: 70px;
   letter-spacing: normal;
   opacity: 0.5;
@@ -54,7 +47,8 @@
   font-size: 1.5rem;
   font-weight: 700;
   text-align: right;
-  min-width: 70px;
+  line-height: 48px;
+  min-width: 110px;
   letter-spacing: normal;
   margin-bottom: 0;
 }
@@ -64,5 +58,39 @@
 
   :hover {
     color: $color-error-validation;
+  }
+}
+
+.quantity-counter {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  background-color: #f1f1f1;
+  width: 120px;
+  height: 48px;
+  font-size: 1.3rem;
+  margin: 0 10px;
+  opacity: 1;
+
+  @media (max-width: 400px) {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  & * {
+    width: 100%;
+  }
+
+  output {
+    font-size: 1.5rem;
+    font-weight: 700;
+    opacity: 1;
+    text-transform: none;
+  }
+
+  button {
+    @include bg-border-none;
+    height: 100%;
+    opacity: 1;
   }
 }
