@@ -1,7 +1,8 @@
 const STORAGE_KEY_PREFIX = 'audio_ecommerce_2023';
 
 export enum StorageKey {
-  TokenCache = 'token_cache',
+  TokenCachePass = 'token_cache_pass',
+  TokenCacheAnonym = 'token_cache_anonym',
 }
 
 // Prefix Storage keys

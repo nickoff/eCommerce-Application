@@ -28,7 +28,12 @@ export const EMAIL_SCHEMA = DEFAULT_STRING_SCHEMA.required(Message.REQUIRED)
   .test('has-domain', Message.EMAIL.domain, (value) => value.includes('.'))
   .test('has-at-symbol', Message.EMAIL.atSymbol, (value) => value.includes('@'));
 
-export const EMAIL_UNIQUE_SCHEMA = yup.string().ensure().test('is-unique', Message.EMAIL.exist, isEmailUniqueDebounced);
+export const EMAIL_UNIQUE_SCHEMA = yup
+  .string()
+  .ensure()
+  .when('$currentEmail', ([currentEmail], schema) =>
+    schema.test('is-unique', Message.EMAIL.exist, (value) => isEmailUniqueDebounced(value, currentEmail)),
+  );
 
 export const DATE_OF_BIRTH_SCHEMA = yup
   .date()

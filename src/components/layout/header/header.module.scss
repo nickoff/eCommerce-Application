@@ -1,5 +1,19 @@
 .header-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 200;
   background: #000;
+  padding-right: var(--fancybox-scrollbar-compensate);
+}
+
+html {
+  &[data-scrollbar-compensate] {
+    .header-wrapper {
+      padding-right: var(--scrollbar-compensate);
+    }
+  }
 }
 
 .header {

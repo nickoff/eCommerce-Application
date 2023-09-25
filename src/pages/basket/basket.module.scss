@@ -1,0 +1,76 @@
+.basket-page-header {
+  @include flex-vertical-center;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 3.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 1.143px;
+  }
+
+  button {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 25px;
+    text-decoration-line: underline;
+    opacity: 0.5;
+    background: none;
+
+    &:hover {
+      color: $primary-color;
+      opacity: 1;
+    }
+  }
+}
+
+.basket-empty {
+  &__article {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 1.286px;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  &__nav-list {
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  &__nav-link {
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+.basket-page-total {
+  @include flex-vertical-center;
+  justify-content: end;
+  p {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    margin: 10px 10px;
+    color: $primary-color;
+  }
+
+  h5 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    margin: 10px 10px;
+    color: $second-color;
+    opacity: 0.5;
+  }
+}

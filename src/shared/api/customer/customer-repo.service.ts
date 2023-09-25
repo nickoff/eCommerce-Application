@@ -1,6 +1,7 @@
-import { BaseAddress, type Customer, type CustomerDraft } from '@commercetools/platform-sdk';
+/* eslint-disable max-lines-per-function */
+import { BaseAddress, CustomerSignin, type Customer, type CustomerDraft } from '@commercetools/platform-sdk';
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
-import { INewCustomer, ICustomerCredentials } from '@shared/interfaces';
+import { INewCustomer } from '@shared/interfaces';
 import { AddressType } from '@shared/enums';
 import { ApiRoot } from '@shared/types';
 import extractHttpError from '../extract-http-error.decorator';
@@ -8,49 +9,55 @@ import extractHttpError from '../extract-http-error.decorator';
 class CustomerRepoService {
   @extractHttpError
   static async createCustomer(apiRoot: ApiRoot, customerDraft: CustomerDraft): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot
+    return apiRoot
       .customers()
       .post({
         body: customerDraft,
       })
-      .execute();
-
-    const { customer } = response.body;
-    return customer;
+      .execute()
+      .then(({ body }) => body.customer);
   }
 
   @extractHttpError
   static async getCustomerByCredentials(
     apiRoot: ApiRoot,
-    { email, password }: ICustomerCredentials,
+    { email, password }: CustomerSignin,
+    anonymousId?: string,
+    anonymousCartId?: string,
   ): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot
-      .me()
+    return apiRoot
       .login()
       .post({
         body: {
           email,
           password,
+          anonymousId,
+          anonymousCartId,
+          anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
+          updateProductData: true,
         },
       })
-      .execute();
-
-    const { customer } = response.body;
-    return customer;
+      .execute()
+      .then(({ body }) => body.customer);
   }
 
   @extractHttpError
   static async getMe(apiRoot: ApiRoot): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot.me().get().execute();
-    return response.body;
+    return apiRoot
+      .me()
+      .get()
+      .execute()
+      .then(({ body }) => body);
   }
 
   @extractHttpError
   static async getCustomerById(apiRoot: ApiRoot, ID: string): Promise<Customer | HttpErrorType> {
-    const response = await apiRoot.customers().withId({ ID }).get().execute();
-    const customer = response.body;
-
-    return customer;
+    return apiRoot
+      .customers()
+      .withId({ ID })
+      .get()
+      .execute()
+      .then(({ body }) => body);
   }
 
   static async isEmailUnique(apiRoot: ApiRoot, email: string): Promise<boolean> {
@@ -69,7 +76,11 @@ class CustomerRepoService {
     }
   }
 
-  static createCustomerDraft(customerData: INewCustomer): CustomerDraft {
+  static createCustomerDraft(
+    customerData: INewCustomer,
+    anonymousId?: string,
+    anonymousCartId?: string,
+  ): CustomerDraft {
     const {
       firstName,
       lastName,
@@ -83,8 +94,12 @@ class CustomerRepoService {
 
     const addresses = [this.createBaseAddress(customerData, AddressType.Shipping)];
 
+    const shippingAddresses = [0];
+    const billingAddresses = [0];
+
     if (!useShippingAddress) {
       addresses.push(this.createBaseAddress(customerData, AddressType.Billing));
+      billingAddresses[0] = 1;
     }
 
     const customerDraft: CustomerDraft = {
@@ -94,6 +109,10 @@ class CustomerRepoService {
       password,
       dateOfBirth,
       addresses,
+      shippingAddresses,
+      billingAddresses,
+      anonymousId,
+      anonymousCartId,
     };
 
     if (isDefaultShipping) {

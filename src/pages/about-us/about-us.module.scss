@@ -1,0 +1,74 @@
+.about-us {
+  h3 {
+    font-size: 3.2rem;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 1.143px;
+    text-transform: uppercase;
+  }
+
+  h5 {
+    margin-top: 5px;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 1.714px;
+    text-transform: uppercase;
+  }
+
+  h6 {
+    margin-top: 5px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 1.286px;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin-left: 15%;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: normal;
+    line-height: 25px;
+    opacity: 0.5;
+  }
+
+  ul {
+    margin-left: 15%;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: normal;
+    line-height: 25px;
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      opacity: 0.5;
+
+      &:hover {
+        color: $primary-color;
+        opacity: 1;
+      }
+    }
+
+    svg {
+      margin: 0;
+      margin-right: 3px;
+    }
+  }
+
+  svg {
+    margin-bottom: 30px;
+    margin-left: 15%;
+  }
+}
+.team-member-img {
+  img {
+    margin: 10px 0;
+    width: 200pxn;
+    height: 200px;
+  }
+}

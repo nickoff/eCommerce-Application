@@ -1,0 +1,52 @@
+.expandable-wrapper {
+  box-sizing: content-box;
+  overflow: hidden;
+  position: relative;
+  @include transition(max-height);
+
+  &[data-expanded='true'] {
+    .expandable-limit::before {
+      display: none;
+    }
+  }
+}
+
+.expandable-content {
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+
+.expandable-limit {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  padding: 10px 0 15px;
+  background-color: $default-color;
+
+  &::before {
+    position: absolute;
+    content: '';
+    bottom: 100%;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    pointer-events: none;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4) 15%, white);
+  }
+}
+
+.expandable-btn {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding-inline: 0;
+  color: $primary-color;
+  @include bg-border-none;
+  @include expand-click-area(10px);
+  @include transition(color);
+
+  &:hover {
+    color: $primary-color-hover;
+  }
+}

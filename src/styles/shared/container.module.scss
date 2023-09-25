@@ -1,7 +1,11 @@
 .container {
-  max-width: 1125px;
-  padding-inline: 15px;
+  max-width: 1440px;
+  padding-inline: 40px;
   margin: auto;
+
+  @include breakpoint($tablet, $max) {
+    padding-inline: 20px;
+  }
 
   @include breakpoint($mobile, $max) {
     padding-inline: 10px;

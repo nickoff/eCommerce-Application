@@ -1,0 +1,29 @@
+.accordion-item {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.accordion-body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.accordion-btn,
+.accordion-btn:not(.collapsed) {
+  padding-left: 19px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.929px;
+  text-transform: uppercase;
+  color: $primary-color;
+  background: none;
+  box-shadow: none;
+  position: relative;
+
+  &::after {
+    background-image: url('./assets/chevron.svg');
+    position: absolute;
+    left: 0;
+  }
+}

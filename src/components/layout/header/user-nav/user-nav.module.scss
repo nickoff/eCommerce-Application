@@ -6,7 +6,7 @@
 }
 
 .user-nav__item {
-  margin-inline: 10px;
+  margin-right: 10px;
 
   &:first-of-type {
     margin-left: 0;
@@ -17,7 +17,7 @@
   }
 
   @include breakpoint($sign-up-hide, $max) {
-    margin-inline: 5px;
+    margin-inline: 0px;
   }
 }
 
@@ -33,8 +33,44 @@
   }
 }
 
-.sign-up-item {
+.sign-up-item,
+.sign-in-item {
   @include breakpoint($sign-up-hide, $max) {
     display: none;
   }
+}
+
+.auth-dropdown {
+  display: none;
+
+  @include breakpoint($sign-up-hide, $max) {
+    display: block;
+  }
+
+  a {
+    font-size: 1.5rem;
+    padding-block: 5px;
+  }
+}
+
+.dropdown-toggle {
+  &::after {
+    all: unset;
+  }
+}
+
+.cart-count {
+  text-align: center;
+  position: absolute;
+  top: 25px;
+  transform: translateX(-35%);
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  line-height: 1;
+  padding: 2px 2px;
+  background-color: $primary-color;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
 }

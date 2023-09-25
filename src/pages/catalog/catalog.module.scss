@@ -1,0 +1,42 @@
+.catalog-container {
+  display: flex;
+  overflow-x: hidden;
+}
+
+.products-container {
+  max-width: 1080px;
+}
+
+.products__toolbar {
+  margin-bottom: 20px;
+}
+
+.products__collection {
+  text-decoration: none;
+
+  &--list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.products__filter-tree {
+  @media (max-width: 1280px) {
+    width: 260px !important;
+  }
+
+  @media (max-width: 1000px) {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -30px;
+    z-index: 150;
+    translate: 100% 0;
+    @include transition(translate);
+
+    &.show {
+      translate: 0 0;
+    }
+  }
+}
