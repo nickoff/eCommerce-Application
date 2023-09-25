@@ -390,7 +390,7 @@ class UserProfilePage extends Component<IUserProfilePageProps> {
 
     if (!isHttpErrorType(response)) {
       const { email } = response;
-      localStorage.removeItem(StorageKey.TokenCache);
+      localStorage.removeItem(StorageKey.TokenCachePass);
       AuthService.login({ email, password: newPassword } as ICustomerCredentials);
       const msg = 'Your password has been changed';
       this.formMsgContainer?.replaceChildren(this.renderUpdateInfoMessage('success', msg));

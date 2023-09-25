@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { element } from 'tsx-vanilla';
 import { Component, Child } from '@shared/lib';
 import Product from '@components/entities/product/product';
@@ -6,8 +7,12 @@ import { centsToMoney } from '@shared/utils/misc';
 import { Carousel, Fancybox } from '@fancyapps/ui';
 import { SITE_TITLE } from '@shared/constants/seo';
 import Expandable from '@components/shared/ui/expandable/expandable';
+import store from '@app/store/store';
+import { isHttpErrorType } from '@shared/utils/type-guards';
+import CartRepoService from '@shared/api/cart/cart-repo.service';
+import TrashIcon from '@assets/icons/trash.element.svg';
 import { IDetailedProductPageProps } from './detailed-product.interface';
-import { btn, btnFilled } from '../../styles/shared/index.module.scss';
+import { btn, btnFilled, btnOutLine } from '../../styles/shared/index.module.scss';
 import * as s from './detailed-product.module.scss';
 import '@fancyapps/ui/dist/carousel/carousel.css';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
@@ -15,6 +20,10 @@ import './carousel-override.scss';
 
 class DetailedProductPage extends Component<IDetailedProductPageProps> {
   private product = new Product(this.props.productData);
+
+  private cartId = store.getState().cart?.id;
+
+  private quantity = 1;
 
   @Child('#myCarousel', true) carouselContainer!: HTMLElement;
 
@@ -25,6 +34,7 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
   constructor(props: IDetailedProductPageProps) {
     super(props);
     document.title = `${this.product.name} | ${SITE_TITLE}`;
+    store.subscribe('cart', this);
   }
 
   protected componentDidRender(): void {
@@ -39,7 +49,7 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
   }
 
   render(): JSX.Element {
-    const { name, description, attributes, prices, discountedPrice } = this.product;
+    const { name, description, attributes, prices, discountedPrice, id } = this.product;
 
     return (
       <div className={s.layoutContainer}>
@@ -53,11 +63,33 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
             <span className={s.prodOldPrice}>{discountedPrice && `$${centsToMoney(prices[0].value.centAmount)}`}</span>
           </p>
           <div className={s.quantityCounter}>
-            <button onclick={this.decreaseQuantity.bind(this)}>-</button>
-            <output>1</output>
-            <button onclick={this.increaseQuantity.bind(this)}>+</button>
+            <button onclick={this.decreaseQuantity.bind(this)} disabled={this.isLineItemInCart(id)}>
+              -
+            </button>
+            <output>
+              {this.isLineItemInCart(id)
+                ? store.getState().cart?.lineItems.find((lineItem) => lineItem.productId === id)?.quantity
+                : this.quantity}
+            </output>
+            <button onclick={this.increaseQuantity.bind(this)} disabled={this.isLineItemInCart(id)}>
+              +
+            </button>
           </div>
-          <button className={cx(btn, btnFilled, s.addToCartBtn)}>ADD TO CART</button>
+          <button
+            className={cx(btn, btnFilled, s.addToCartBtn, this.isLineItemInCart(id) && s.addBtnInCart)}
+            disabled={this.isLineItemInCart(id)}
+            onclick={this.onAddToCartClick.bind(this, id)}
+          >
+            {this.isLineItemInCart(id) ? 'IN CART' : 'ADD TO CART'}
+          </button>
+          {this.isLineItemInCart(id) && (
+            <button
+              className={cx(btn, btnOutLine, s.removeToCartBtn)}
+              onclick={this.onRemoveToCartClick.bind(this, id)}
+            >
+              {TrashIcon}
+            </button>
+          )}
         </div>
         <div className={cx(s.card, s.desc)}>
           <p className={s.cardHeading}>Description</p>
@@ -98,6 +130,32 @@ class DetailedProductPage extends Component<IDetailedProductPageProps> {
   private increaseQuantity(): void {
     const quantity = +this.quantityOutput.value;
     this.quantityOutput.value = String(quantity + 1);
+  }
+
+  private isLineItemInCart(id: string): boolean {
+    return !!store.getState().cart?.lineItems.find((lineItem) => lineItem.productId === id);
+  }
+
+  private async onAddToCartClick(id: string): Promise<void> {
+    const versionCart = store.getState().cart?.version;
+    const quantity = +this.quantityOutput.value;
+
+    if (!versionCart || !this.cartId) return;
+    const updateCart = await CartRepoService.addLineItemToCart(store.apiRoot, id, versionCart, this.cartId, quantity);
+    if (!isHttpErrorType(updateCart)) {
+      store.setState({ cart: updateCart });
+    }
+  }
+
+  private async onRemoveToCartClick(id: string): Promise<void> {
+    const versionCart = store.getState().cart?.version;
+    const lineItemId = store.getState().cart?.lineItems.find((lineItem) => lineItem.productId === id)?.id;
+
+    if (!versionCart || !this.cartId || !lineItemId) return;
+    const updateCart = await CartRepoService.removeLineItemToCart(store.apiRoot, lineItemId, versionCart, this.cartId);
+    if (!isHttpErrorType(updateCart)) {
+      store.setState({ cart: updateCart });
+    }
   }
 }
 

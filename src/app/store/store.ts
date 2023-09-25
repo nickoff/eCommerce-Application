@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Customer } from '@commercetools/platform-sdk';
 import { Component } from '@shared/lib';
 import { isKeyOf, isHttpErrorType } from '@shared/utils/type-guards';
@@ -7,6 +8,7 @@ import { ApiRoot } from '@shared/types';
 import ApiCreator from '@shared/api/api-creator';
 import { AuthFlow } from '@shared/enums/auth-flow.enum';
 import { Client } from '@commercetools/sdk-client-v2';
+import CartRepoService from '@shared/api/cart/cart-repo.service';
 import IState from './state.interface';
 
 class Store {
@@ -38,16 +40,30 @@ class Store {
   }
 
   async init(): Promise<void> {
-    if (this.getState().authFlow !== AuthFlow.ExistingToken) {
-      return;
+    if (localStorage.getItem(StorageKey.TokenCachePass)) {
+      const result = await CustomerRepoService.getMe(this.getState().apiRoot);
+
+      if (!isHttpErrorType(result)) {
+        this.setState({ customer: result });
+      } else {
+        localStorage.removeItem(StorageKey.TokenCachePass);
+      }
     }
 
-    const result = await CustomerRepoService.getMe(this.getState().apiRoot);
+    if (this.getState().authFlow === AuthFlow.Anonymous) {
+      const newCart = await CartRepoService.createMeCart(this.getState().apiRoot, { currency: 'USD', country: 'BY' });
 
-    if (!isHttpErrorType(result)) {
-      this.setState({ customer: result });
+      if (!isHttpErrorType(newCart)) {
+        this.setState({ cart: newCart });
+      }
+    }
+
+    const activeCart = await CartRepoService.getMyActiveCart(this.getState().apiRoot);
+
+    if (!isHttpErrorType(activeCart)) {
+      this.setState({ cart: activeCart });
     } else {
-      localStorage.removeItem(StorageKey.TokenCache);
+      localStorage.removeItem(StorageKey.TokenCacheAnonym);
     }
   }
 
@@ -61,14 +77,35 @@ class Store {
     this.observers[property] = observers;
   }
 
-  login(customer: Customer, apiRoot: ApiRoot, authFlow: AuthFlow, apiClient: Client): void {
+  async login(customer: Customer, apiRoot: ApiRoot, authFlow: AuthFlow, apiClient: Client): Promise<void> {
     this.setState({ customer, apiRoot, authFlow, apiClient });
+
+    const activeCart = await CartRepoService.getMyActiveCart(this.getState().apiRoot);
+
+    if (!isHttpErrorType(activeCart)) {
+      this.setState({ cart: activeCart });
+    }
   }
 
-  logout(): void {
-    const [apiRoot, authFlow, apiClient] = ApiCreator.createCredentialsFlow();
+  async logout(): Promise<void> {
+    localStorage.removeItem(StorageKey.TokenCachePass);
+    localStorage.removeItem(StorageKey.TokenCacheAnonym);
+    const [apiRoot, authFlow, apiClient] = ApiCreator.createAnonymousFlow();
     this.setState({ customer: null, apiRoot, authFlow, apiClient });
-    localStorage.removeItem(StorageKey.TokenCache);
+
+    if (this.getState().authFlow === AuthFlow.Anonymous) {
+      const newCart = await CartRepoService.createMeCart(this.getState().apiRoot, { currency: 'USD', country: 'BY' });
+
+      if (!isHttpErrorType(newCart)) {
+        this.setState({ cart: newCart });
+      }
+    }
+
+    const activeCart = await CartRepoService.getMyActiveCart(this.getState().apiRoot);
+
+    if (!isHttpErrorType(activeCart)) {
+      this.setState({ cart: activeCart });
+    }
   }
 
   setState(newState: Partial<IState>): void {
@@ -82,4 +119,4 @@ class Store {
 
 const [apiRoot, authFlow, apiClient] = ApiCreator.initFlow();
 
-export default new Store({ customer: null, apiRoot, authFlow, apiClient });
+export default new Store({ customer: null, cart: null, apiRoot, authFlow, apiClient });

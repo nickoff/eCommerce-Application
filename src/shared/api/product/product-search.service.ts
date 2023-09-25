@@ -17,7 +17,7 @@ class ProductSearchService {
     [FilterName.PriceRange]: 'variants.price.centAmount:range (0 to *) as priceRange',
   };
 
-  static async fetchProductsByProductType(typeKey: string): Promise<ICatalogData | null> {
+  static async fetchProductsByProductType(typeKey: string, page?: number): Promise<ICatalogData | null> {
     const productType = await ProductRepoService.getProductTypeByKey(typeKey);
 
     if (isHttpErrorType(productType)) {
@@ -27,6 +27,7 @@ class ProductSearchService {
     const productsResp = await ProductRepoService.getProductsByProductType(
       productType.id,
       Object.values(this.facets).flat(),
+      page,
     );
 
     if (isHttpErrorType(productsResp)) {
@@ -39,10 +40,15 @@ class ProductSearchService {
       selectedFilters: { [FilterName.Type]: [productType] },
       products: productsResp.results,
       filters,
+      paginationData: {
+        total: productsResp.total as number,
+        limit: productsResp.limit,
+        offset: productsResp.offset,
+      },
     };
   }
 
-  static async fetchProductsByCategory(categorySlug: string): Promise<ICatalogData | null> {
+  static async fetchProductsByCategory(categorySlug: string, page?: number): Promise<ICatalogData | null> {
     const vendorCategory = await ProductRepoService.getCategoryBySlug(categorySlug);
 
     if (!vendorCategory || isHttpErrorType(vendorCategory)) {
@@ -52,6 +58,7 @@ class ProductSearchService {
     const productsResp = await ProductRepoService.getProductsByCategory(
       vendorCategory.id,
       Object.values(this.facets).flat(),
+      page,
     );
 
     if (isHttpErrorType(productsResp)) {
@@ -64,6 +71,11 @@ class ProductSearchService {
       selectedFilters: { [FilterName.Vendor]: [vendorCategory] },
       products: productsResp.results,
       filters,
+      paginationData: {
+        total: productsResp.total as number,
+        limit: productsResp.limit,
+        offset: productsResp.offset,
+      },
     };
   }
 
@@ -71,6 +83,7 @@ class ProductSearchService {
     filter: IFilters,
     lastFilter?: FilterName,
     sort?: ISortBy,
+    page?: number,
   ): Promise<ICatalogData | null> {
     const facetsToApply = Object.entries(this.facets).reduce((acc, [name, facet]) => {
       if (name !== lastFilter) {
@@ -89,7 +102,7 @@ class ProductSearchService {
       facetsToApply.splice(priceRangeFacetIndex, 1, facet);
     }
 
-    const response = await ProductRepoService.getProductsWithFilter(filter, facetsToApply, sort);
+    const response = await ProductRepoService.getProductsWithFilter(filter, facetsToApply, sort, page);
 
     if (isHttpErrorType(response)) {
       return null;
@@ -100,6 +113,11 @@ class ProductSearchService {
     return {
       products: response.results,
       filters,
+      paginationData: {
+        total: response.total as number,
+        limit: response.limit,
+        offset: response.offset,
+      },
     };
   }
 

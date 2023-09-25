@@ -4,7 +4,12 @@ import { ApiRoot } from '@shared/types';
 import { ICustomerCredentials } from '@shared/interfaces';
 import { StorageKey, AuthFlow } from '@shared/enums';
 import { PROJECT_KEY } from './constants';
-import { httpMiddlewareOptions, authMiddlewareOptions, getPassAuthMiddlewareOptions } from './middlewares.config';
+import {
+  httpMiddlewareOptions,
+  authMiddlewareOptions,
+  getPassAuthMiddlewareOptions,
+  getAnonymousAuthMiddlewareOptions,
+} from './middlewares.config';
 
 const initialToken: TokenStore = {
   token: '',
@@ -15,7 +20,7 @@ type ApiCreatorReturn = [ApiRoot, AuthFlow, Client];
 
 export default class ApiCreator {
   static initFlow(): ApiCreatorReturn {
-    return this.isTokenCached() ? this.createExistingTokenFlow() : this.createCredentialsFlow();
+    return this.isTokenCached() ? this.createExistingTokenFlow() : this.createAnonymousFlow();
   }
 
   static createCredentialsFlow(): ApiCreatorReturn {
@@ -27,15 +32,26 @@ export default class ApiCreator {
     return [this.createApiRoot(client), AuthFlow.Credentials, client];
   }
 
+  static createAnonymousFlow(): ApiCreatorReturn {
+    const options = getAnonymousAuthMiddlewareOptions(this.tokenCacheAnonym);
+
+    const client = new ClientBuilder()
+      .withAnonymousSessionFlow(options)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .build();
+
+    return [this.createApiRoot(client), AuthFlow.Anonymous, client];
+  }
+
   static createPasswordFlow({ email: username, password }: ICustomerCredentials): ApiCreatorReturn {
-    const options = getPassAuthMiddlewareOptions({ username, password }, this.tokenCache);
+    const options = getPassAuthMiddlewareOptions({ username, password }, this.tokenCachePass);
 
     const client = new ClientBuilder().withPasswordFlow(options).withHttpMiddleware(httpMiddlewareOptions).build();
     return [this.createApiRoot(client), AuthFlow.Password, client];
   }
 
   static createExistingTokenFlow(): ApiCreatorReturn {
-    const { token } = this.tokenCache.get();
+    const token = this.tokenCachePass.get().token || this.tokenCacheAnonym.get().token;
 
     if (!token) {
       throw new Error('Cannot find cached token');
@@ -52,16 +68,26 @@ export default class ApiCreator {
   }
 
   private static isTokenCached(): boolean {
-    return !!this.tokenCache.get().token;
+    return !!this.tokenCachePass.get().token || !!this.tokenCacheAnonym.get().token;
   }
 
-  private static tokenCache: TokenCache = {
+  private static tokenCachePass: TokenCache = {
     get: (): TokenStore => {
-      const cache = localStorage.getItem(StorageKey.TokenCache);
+      const cache = localStorage.getItem(StorageKey.TokenCachePass);
       return cache ? JSON.parse(cache) : initialToken;
     },
     set: (cache: TokenStore): void => {
-      localStorage.setItem(StorageKey.TokenCache, JSON.stringify(cache));
+      localStorage.setItem(StorageKey.TokenCachePass, JSON.stringify(cache));
+    },
+  };
+
+  private static tokenCacheAnonym: TokenCache = {
+    get: (): TokenStore => {
+      const cache = localStorage.getItem(StorageKey.TokenCacheAnonym);
+      return cache ? JSON.parse(cache) : initialToken;
+    },
+    set: (cache: TokenStore): void => {
+      localStorage.setItem(StorageKey.TokenCacheAnonym, JSON.stringify(cache));
     },
   };
 

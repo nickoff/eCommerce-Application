@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
-import { BaseAddress, type Customer, type CustomerDraft } from '@commercetools/platform-sdk';
+import { BaseAddress, CustomerSignin, type Customer, type CustomerDraft } from '@commercetools/platform-sdk';
 import { type HttpErrorType } from '@commercetools/sdk-client-v2';
-import { INewCustomer, ICustomerCredentials } from '@shared/interfaces';
+import { INewCustomer } from '@shared/interfaces';
 import { AddressType } from '@shared/enums';
 import { ApiRoot } from '@shared/types';
 import extractHttpError from '../extract-http-error.decorator';
@@ -21,15 +21,20 @@ class CustomerRepoService {
   @extractHttpError
   static async getCustomerByCredentials(
     apiRoot: ApiRoot,
-    { email, password }: ICustomerCredentials,
+    { email, password }: CustomerSignin,
+    anonymousId?: string,
+    anonymousCartId?: string,
   ): Promise<Customer | HttpErrorType> {
     return apiRoot
-      .me()
       .login()
       .post({
         body: {
           email,
           password,
+          anonymousId,
+          anonymousCartId,
+          anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
+          updateProductData: true,
         },
       })
       .execute()
@@ -71,7 +76,11 @@ class CustomerRepoService {
     }
   }
 
-  static createCustomerDraft(customerData: INewCustomer): CustomerDraft {
+  static createCustomerDraft(
+    customerData: INewCustomer,
+    anonymousId?: string,
+    anonymousCartId?: string,
+  ): CustomerDraft {
     const {
       firstName,
       lastName,
@@ -102,6 +111,8 @@ class CustomerRepoService {
       addresses,
       shippingAddresses,
       billingAddresses,
+      anonymousId,
+      anonymousCartId,
     };
 
     if (isDefaultShipping) {

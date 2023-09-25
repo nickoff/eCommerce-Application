@@ -2,7 +2,7 @@ import { element, fragment } from 'tsx-vanilla';
 import cx from 'clsx';
 import { Component } from '@shared/lib';
 import Store from '@app/store/store';
-import { Route } from '@app/router';
+import { Route, router } from '@app/router';
 import { btn, btnFilled } from '../../../../styles/shared/button-like.module.scss';
 import { navItem, navLink } from '../common.module.scss';
 import * as s from './user-nav.module.scss';
@@ -15,17 +15,26 @@ class UserNav extends Component {
   constructor(...args: IProps[]) {
     super(...args);
     Store.subscribe('customer', this);
+    Store.subscribe('cart', this);
   }
 
   render(): JSX.Element {
     const { customer } = Store.getState();
+    const { cart } = Store.getState();
 
     return (
       <nav>
         <ul className={s.navList}>
           <li className={cx(navItem, s.userNavItem)}>{new SearchModal().render()}</li>
           <li className={cx(navItem, s.userNavItem)}>
-            <button className={navLink}>{CartIcon}</button>
+            <button className={navLink} onclick={this.onBasketClick.bind(this)}>
+              {CartIcon}
+              {cart && cart?.lineItems.length ? (
+                <span className={s.cartCount}>{cart?.lineItems.reduce((total, item) => total + item.quantity, 0)}</span>
+              ) : (
+                ''
+              )}
+            </button>
           </li>
           {customer ? new UserMenu({ className: s.userNavItem }).render() : this.renderAuthLinks()}
         </ul>
@@ -68,6 +77,10 @@ class UserNav extends Component {
         </li>
       </>
     );
+  }
+
+  private onBasketClick(): void {
+    router.navigate(Route.Basket);
   }
 }
 

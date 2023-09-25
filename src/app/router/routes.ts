@@ -6,4 +6,6 @@ export enum Route {
   Speakers = '/speakers',
   Earphones = '/earphones',
   UserProfile = '/user-profile',
+  AboutUs = '/about-us',
+  Basket = '/basket',
 }

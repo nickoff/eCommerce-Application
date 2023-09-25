@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable no-console */
 import Main from '@components/layout/main/main';
-import Navigo from 'navigo';
+import Navigo, { Match } from 'navigo';
 import PageLogin from '@pages/login/login';
 import PageReg from '@pages/registration/registration';
 import PageHome from '@pages/home/home';
@@ -17,6 +17,8 @@ import { LANG_CODE } from '@shared/constants/misc';
 import { LocalizedString } from '@commercetools/platform-sdk';
 import { SITE_TITLE } from '@shared/constants/seo';
 import UserProfilePage from '@pages/user-profile/user-profile';
+import AboutUs from '@pages/about-us/about-us';
+import BasketPage from '@pages/basket/basket';
 import { Route } from './routes';
 
 const router = new Navigo('/');
@@ -39,11 +41,23 @@ const userProfileBeforeHook = (done: (p?: boolean) => void): void => {
   }
 };
 
+const getPageParam = (match: Match): number | undefined => {
+  if (!(match.params && match.params.page)) {
+    return undefined;
+  }
+
+  const page = parseInt(match.params.page, 10);
+
+  return Number.isNaN(page) ? undefined : page;
+};
+
 const initRouter = (): void => {
   router
     .on(() => Main.setProps({ page: new PageHome() }))
     .on({
       [Route.Home]: () => Main.setProps({ page: new PageHome(), showBreadcrumps: false }),
+      [Route.AboutUs]: () => Main.setProps({ page: new AboutUs(), showBreadcrumps: false }),
+      [Route.Basket]: () => Main.setProps({ page: new BasketPage(), showBreadcrumps: false }),
       [Route.Login]: {
         as: 'login-page',
         uses: () => Main.setProps({ page: new PageLogin(), showBreadcrumps: false }),
@@ -92,7 +106,9 @@ const initRouter = (): void => {
       if (match && match.data) {
         const productTypeKey = match.data[0];
 
-        const catalogData = await ProductSearchService.fetchProductsByProductType(productTypeKey);
+        const page = getPageParam(match);
+
+        const catalogData = await ProductSearchService.fetchProductsByProductType(productTypeKey, page);
 
         if (catalogData) {
           Main.setProps({
@@ -115,8 +131,9 @@ const initRouter = (): void => {
     .on('/:vendorSlug', async (match) => {
       if (match && match.data) {
         const { vendorSlug } = match.data;
+        const page = getPageParam(match);
 
-        const catalogData = await ProductSearchService.fetchProductsByCategory(vendorSlug);
+        const catalogData = await ProductSearchService.fetchProductsByCategory(vendorSlug, page);
 
         if (catalogData) {
           Main.setProps({

@@ -8,7 +8,9 @@ import Store from './store/store';
 class AuthService {
   static async register(customerData: INewCustomer): Promise<AuthResult> {
     const { apiRoot } = Store.getState();
-    const customerDraft = CustomerRepoService.createCustomerDraft(customerData);
+    const anonymousId = Store.getState().cart?.anonymousId;
+    const anonymousCartId = Store.getState().cart?.id;
+    const customerDraft = CustomerRepoService.createCustomerDraft(customerData, anonymousId, anonymousCartId);
     const result = await CustomerRepoService.createCustomer(apiRoot, customerDraft);
 
     if (isHttpErrorType(result)) {
@@ -19,10 +21,19 @@ class AuthService {
     return this.login({ email, password });
   }
 
-  static async login(credentials: ICustomerCredentials): Promise<AuthResult> {
+  static async login(
+    credentials: ICustomerCredentials,
+    anonymousId?: string,
+    anonymousCartId?: string,
+  ): Promise<AuthResult> {
     try {
       const [apiRoot, ...rest] = ApiRootCreator.createPasswordFlow(credentials);
-      const result = await CustomerRepoService.getCustomerByCredentials(apiRoot, credentials);
+      const result = await CustomerRepoService.getCustomerByCredentials(
+        apiRoot,
+        credentials,
+        anonymousId,
+        anonymousCartId,
+      );
 
       if (!isHttpErrorType(result)) {
         Store.login(result, apiRoot, ...rest);

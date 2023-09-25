@@ -1,0 +1,23 @@
+.pagination {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination__list {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+}
+
+.pagination__btn {
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  line-height: normal;
+
+  &--current {
+    background: $second-color !important;
+    color: $default-color !important;
+  }
+}

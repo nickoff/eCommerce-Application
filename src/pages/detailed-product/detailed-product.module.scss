@@ -134,6 +134,17 @@
   line-height: normal;
 }
 
+.remove-to-cart-btn:hover {
+  color: $color-error-validation;
+}
+
+.add-btn__in-cart {
+  background-color: $second-color;
+  &:hover {
+    background-color: $second-color;
+  }
+}
+
 .prod-old-price {
   color: $primary-color-hover;
   text-decoration: line-through $primary-color-hover 2px;
