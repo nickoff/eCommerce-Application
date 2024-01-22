@@ -1,0 +1,6 @@
+name,type,attributeConstraint,isRequired,isSearchable,displayGroup,label.ru-BY,enumKey,enumLabel,label.en-US,inputTip.en-US,inputTip.ru-BY,textInputHint
+vendor,enum,SameForAll,true,true,Other,,klipsch,Klipsch,vendor,,,SingleLine
+,,,,,,,b&w,Bowers & Wilkins,,,,
+,,,,,,,focal,Focal,,,,
+,,,,,,,polk-audio,Polk Audio,,,,
+color,text,None,true,true,Other,,,,color,,,SingleLine
